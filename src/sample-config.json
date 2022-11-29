@@ -1,0 +1,34 @@
+{
+  "name": "Magento",
+  "description": "Magento Plugin",
+  "version": "1.0.0",
+  "other": {
+    "works": "Yes"
+  },
+  "options": {
+    "add": {
+      "username": {
+        "key": "username",
+        "label": "Username",
+        "rules": "required|string",
+        "default": null,
+        "type": "text"
+      },
+      "password": {
+        "key": "password",
+        "label": "Password",
+        "rules": "required|string",
+        "default": null,
+        "type": "password"
+      },
+      "base_url": {
+        "key": "base_url",
+        "label": "Base Url",
+        "rules": "required|url",
+        "default": null,
+        "type": "url"
+      }
+    },
+    "remove": []
+  }
+}

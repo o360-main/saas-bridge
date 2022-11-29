@@ -5,4 +5,6 @@
  */
 return [
 
+    'core_url' => env('SAAS_CORE_URL', 'http://core.o360-core.test'),
+
 ];

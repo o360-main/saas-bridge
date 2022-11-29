@@ -3,6 +3,7 @@
 namespace O360Main\SaasBridge;
 
 use Illuminate\Support\ServiceProvider;
+use O360Main\SaasBridge\Services\SaasHttpClient;
 
 class SaasBridgeServiceProvider extends ServiceProvider
 {
@@ -26,15 +27,20 @@ class SaasBridgeServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'saas-bridge');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'saas_bridge');
+
 
         // Register the main class to use with the facade
         $this->app->singleton('saas-bridge', function () {
             return new SaasBridgeService;
         });
 
-        $this->app->singleton(SaasAgent::class, function () {
-            return new SaasAgent();
+        $this->app->bind(SaasAgent::class, function () {
+            return SaasAgent::getInstance();
+        });
+
+        $this->app->bind(PluginConfig::class, function () {
+            return new PluginConfig();
         });
     }
 }

@@ -3,42 +3,45 @@
 namespace O360Main\SaasBridge;
 
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
 
 class SaasAgent
 {
-    private array $auth = [];
-    private $platform;
+    //make singleton
+    private static ?SaasAgent $instance = null;
 
-    private PendingRequest $client;
-
-    public function setAuth(array $auth): self
+    private function __construct()
     {
-        $this->auth = $auth;
-
-        $this->client = Http::withToken($this->auth['token'])
-            ->withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ]);
-
-        return $this;
     }
 
-    public function setPlatform($platform): self
+    public static function getInstance(): self
     {
-        $this->platform = $platform;
-        return $this;
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
-    public function validate(): bool
+    /**
+     * @var PendingRequest
+     */
+    private PendingRequest $_saasApi;
+
+    public function setSaasApi(PendingRequest $saasApi): void
     {
-        return true;
+        $this->_saasApi = $saasApi;
     }
 
-    public function client(): PendingRequest
+    //getter setter
+    public function saasApi(): PendingRequest
     {
-        return $this->client;
+        return $this->_saasApi;
     }
+
+    //call with magic method also return above function
+//    public function __call($name, $arguments)
+//    {
+//        return $this->saasApi()->$name(...$arguments);
+//    }
 
 }
+
