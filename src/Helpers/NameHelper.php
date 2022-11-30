@@ -3,7 +3,6 @@
 namespace O360Main\SaasBridge\Helpers;
 
 use Exception;
-use Modules\Core\Entities\Attribute;
 
 class NameHelper
 {
