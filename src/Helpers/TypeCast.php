@@ -4,6 +4,7 @@ namespace O360Main\SaasBridge\Helpers;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use JetBrains\PhpStorm\Pure;
 
 class TypeCast
 {
@@ -11,11 +12,11 @@ class TypeCast
     /**
      * @var mixed
      */
-    protected $value;
+    protected mixed $value;
     /**
      * @var mixed|null
      */
-    private $defaultValue = null;
+    private mixed $defaultValue = null;
 
     public function __construct($value)
     {
