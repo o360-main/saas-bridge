@@ -8,6 +8,7 @@ class SaasAgent
 {
     //make singleton
     private static ?SaasAgent $instance = null;
+    private array $_config;
 
     private function __construct()
     {
@@ -35,6 +36,17 @@ class SaasAgent
     public function saasApi(): PendingRequest
     {
         return $this->_saasApi;
+    }
+
+
+    public function setConfig(array $config): void
+    {
+        $this->_config = $config;
+    }
+
+    public function config(): array
+    {
+        return $this->_config;
     }
 
     //call with magic method also return above function
