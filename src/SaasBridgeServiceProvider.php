@@ -3,6 +3,7 @@
 namespace O360Main\SaasBridge;
 
 use Illuminate\Support\ServiceProvider;
+use O360Main\SaasBridge\Commands\ConfigChecker;
 use O360Main\SaasBridge\Services\SaasHttpClient;
 
 class SaasBridgeServiceProvider extends ServiceProvider
@@ -18,6 +19,14 @@ class SaasBridgeServiceProvider extends ServiceProvider
             ], 'config');
 
             // $this->commands([]);
+
+            $this->app->bind('saas:config-check', ConfigChecker::class);
+
+            //load commands folder
+            $this->commands([
+                'saas:config-check',
+            ]);
+
         }
     }
 
