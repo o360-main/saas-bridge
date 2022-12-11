@@ -7,7 +7,7 @@ use Illuminate\Http\Client\PendingRequest;
 class SaasAgent
 {
     //make singleton
-    private static ?SaasAgent $instance = null;
+    private static self|null $instance = null;
     private array $_config;
 
     private function __construct()
