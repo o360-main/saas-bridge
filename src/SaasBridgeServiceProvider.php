@@ -26,8 +26,10 @@ class SaasBridgeServiceProvider extends ServiceProvider
             $this->commands([
                 'saas:config-check',
             ]);
-
         }
+
+
+
     }
 
     /**
@@ -51,5 +53,7 @@ class SaasBridgeServiceProvider extends ServiceProvider
         $this->app->bind(PluginConfig::class, function () {
             return new PluginConfig();
         });
+
+
     }
 }

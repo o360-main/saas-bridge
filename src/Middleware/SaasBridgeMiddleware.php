@@ -16,7 +16,17 @@ class SaasBridgeMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if (!function_exists('ray')) {
+            function ray(...$args)
+            {
+                return $args;
+            }
+        }
+
         try {
+            //ray request
+            ray($request->url(), $request->all());
+
             $boot = new SaasCredentialsBoot($request);
             $boot->run();
             //-------
