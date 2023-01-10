@@ -73,7 +73,7 @@ class SaasCredentialsBoot
     private function validate(): void
     {
 
-        $response = $this->saasApi->get('/validate');
+        $response = $this->saasApi->get('/connection/validate');
 
         if ($response->status() !== 200) {
 //            throw new \Exception('Invalid Access Key');
