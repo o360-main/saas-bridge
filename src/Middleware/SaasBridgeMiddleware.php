@@ -17,11 +17,12 @@ class SaasBridgeMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!function_exists('ray')) {
-            function ray(...$args)
+            function ray(...$args): array
             {
                 return $args;
             }
         }
+
 
         try {
             //ray request
@@ -31,6 +32,7 @@ class SaasBridgeMiddleware
             $boot->run();
             //-------
         } catch (\Exception $e) {
+
             return response()->json(['message' => 'Unauthorized'], 401);
         } finally {
             return $next($request);

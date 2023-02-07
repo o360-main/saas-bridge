@@ -10,7 +10,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SaasCredentialsBoot
 {
-
     /**
      * @var \Illuminate\Http\Request
      */
@@ -35,7 +34,7 @@ class SaasCredentialsBoot
     /**
      * @throws \Exception
      */
-    public function run()
+    public function run(): void
     {
         //todo initiate token and http client
         $this->initSaasApi();
@@ -69,6 +68,7 @@ class SaasCredentialsBoot
 
     /**
      * @throws \Exception
+     *
      */
     private function validate(): void
     {
