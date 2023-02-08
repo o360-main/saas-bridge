@@ -10,6 +10,8 @@ class SaasAgent
     private static self|null $instance = null;
     private array $_config;
 
+    private array $_moduleConfig;
+
     private function __construct()
     {
     }
@@ -47,6 +49,17 @@ class SaasAgent
     public function config(): array
     {
         return $this->_config;
+    }
+
+
+    public function setModuleConfig(array $config): void
+    {
+        $this->_moduleConfig = $config;
+    }
+
+    public function moduleConfig(): array
+    {
+        return $this->_moduleConfig;
     }
 
     //call with magic method also return above function

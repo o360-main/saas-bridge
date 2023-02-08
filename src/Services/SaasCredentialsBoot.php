@@ -10,7 +10,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SaasCredentialsBoot
 {
-
     /**
      * @var \Illuminate\Http\Request
      */
@@ -20,6 +19,8 @@ class SaasCredentialsBoot
     private SaasAgent $saasAgent;
     private PendingRequest $saasApi;
 
+
+    private $validated = false;
 
     public function __construct(Request $request)
     {
@@ -35,7 +36,7 @@ class SaasCredentialsBoot
     /**
      * @throws \Exception
      */
-    public function run()
+    public function run(): void
     {
         //todo initiate token and http client
         $this->initSaasApi();
@@ -69,9 +70,13 @@ class SaasCredentialsBoot
 
     /**
      * @throws \Exception
+     *
      */
     private function validate(): void
     {
+        if ($this->validated) {
+            return;
+        }
 
         $response = $this->saasApi->get('/connection/validate');
 
@@ -82,7 +87,8 @@ class SaasCredentialsBoot
 
         $this->validated = true;
 
-        $this->saasAgent->setConfig($response->json('config'));
+        $this->saasAgent->setConfig($response->json('config', []));
+        $this->saasAgent->setModuleConfig($response->json('module_config', []));
     }
 
 
