@@ -1,7 +1,6 @@
 <?php
-namespace O360Main\SaasBridge\Contracts;
 
-use O360Main\SaasBridge\SaasAgent;
+namespace O360Main\SaasBridge\Contracts;
 
 trait MakeSingleton
 {

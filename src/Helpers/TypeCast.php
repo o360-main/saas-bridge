@@ -4,11 +4,9 @@ namespace O360Main\SaasBridge\Helpers;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use JetBrains\PhpStorm\Pure;
 
 class TypeCast
 {
-
     /**
      * @var mixed
      */
@@ -74,7 +72,7 @@ class TypeCast
         }
 
         return (string)$this->value;
-//        return $this->value ? trim(strval($this->value)) : $default;
+        //        return $this->value ? trim(strval($this->value)) : $default;
     }
 
     public function toInt($default = null): ?int

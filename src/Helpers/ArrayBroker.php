@@ -177,7 +177,7 @@ class ArrayBroker
         }
 
         if ($merge) {
-//            $this->array = $this->array->push($key, $value);
+            //            $this->array = $this->array->push($key, $value);
             $values = $this->get($key)->toOriginal();
 
             if (is_array($values)) {

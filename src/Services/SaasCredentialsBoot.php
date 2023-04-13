@@ -24,7 +24,7 @@ class SaasCredentialsBoot
 
     public function __construct(Request $request)
     {
-//        $this->saasAgent = app(SaasAgent::class);
+        //        $this->saasAgent = app(SaasAgent::class);
         $this->saasAgent = SaasAgent::getInstance();
 
         $this->request = $request;
@@ -81,7 +81,7 @@ class SaasCredentialsBoot
         $response = $this->saasApi->get('/connection/validate');
 
         if ($response->status() !== 200) {
-//            throw new \Exception('Invalid Access Key');
+            //            throw new \Exception('Invalid Access Key');
             throw new AccessDeniedHttpException('Invalid Access Key');
         }
 

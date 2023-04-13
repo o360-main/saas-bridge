@@ -3,14 +3,13 @@
 namespace O360Main\SaasBridge\Commands;
 
 use Illuminate\Console\Command as BaseCommand;
-use Illuminate\Validation\Validator;
 use Symfony\Component\Console\Command\Command;
 
 class ConfigChecker extends BaseCommand
 {
     /**
      * The name and signature of the console command.
-     *
+     *çn
      * @var string
      */
     protected $signature = 'saas:config-check';
@@ -29,10 +28,8 @@ class ConfigChecker extends BaseCommand
      */
     public function handle()
     {
-
         //check if file exists app/config.json
-
-        $file = base_path('app/config.json');
+        $file = base_path('app/manifest.json');
 
         if (!file_exists($file)) {
             $this->error('File not found: ' . $file);
