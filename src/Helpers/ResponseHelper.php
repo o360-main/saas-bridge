@@ -2,7 +2,7 @@
 
 namespace O360Main\SaasBridge\Helpers;
 
-class ResponseHelper
+final class ResponseHelper
 {
     private function __construct()
     {
