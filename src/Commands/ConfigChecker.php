@@ -12,7 +12,7 @@ class ConfigChecker extends BaseCommand
      *çn
      * @var string
      */
-    protected $signature = 'saas:config-check';
+    protected $signature = 'saas:manifest-test';
 
     /**
      * The console command description.

@@ -8,7 +8,7 @@ class SaasAgent
 {
     //make singleton
     private static self|null $instance = null;
-    private array $_config;
+    private array $_credentials;
 
     private array $_moduleConfig;
 
@@ -41,14 +41,14 @@ class SaasAgent
     }
 
 
-    public function setConfig(array $config): void
+    public function setCredentials(array $credentials): void
     {
-        $this->_config = $config;
+        $this->_credentials = $credentials;
     }
 
-    public function config(): array
+    public function credentials(): array
     {
-        return $this->_config;
+        return $this->_credentials;
     }
 
 

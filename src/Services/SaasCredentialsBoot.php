@@ -6,6 +6,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use O360Main\SaasBridge\SaasAgent;
+use O360Main\SaasBridge\SaasBridgeService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SaasCredentialsBoot
@@ -20,7 +21,7 @@ class SaasCredentialsBoot
     private PendingRequest $saasApi;
 
 
-    private $validated = false;
+    private bool $validated = false;
 
     public function __construct(Request $request)
     {
@@ -45,18 +46,25 @@ class SaasCredentialsBoot
         $this->validate();
 
         //todo other info
+        app()->singleton('saas-bridge', function () {
+            return new SaasBridgeService($this->saasAgent);
+        });
     }
 
     /**
      * @throws \Exception
      */
-    private function initSaasApi()
+    private function initSaasApi(): void
     {
         if (!isset($this->auth['token'])) {
             throw new \Exception('Token not found');
         }
 
-        $baseUrl = config('saas_bridge.core_url', 'core.test');
+        $baseUrl = config('saas_bridge.saas_api_url');
+
+        if (empty($baseUrl)) {
+            throw new \Exception('CoreApi url not set');
+        }
 
         $this->saasApi = Http::baseUrl($baseUrl)
             ->withHeaders([
@@ -78,16 +86,17 @@ class SaasCredentialsBoot
             return;
         }
 
-        $response = $this->saasApi->get('/connection/validate');
+        $response = $this->saasApi->get(
+            config('saas_bridge.token_validate_endpoint')
+        );
 
         if ($response->status() !== 200) {
-            //            throw new \Exception('Invalid Access Key');
             throw new AccessDeniedHttpException('Invalid Access Key');
         }
 
         $this->validated = true;
 
-        $this->saasAgent->setConfig($response->json('config', []));
+        $this->saasAgent->setCredentials($response->json('config', []));
         $this->saasAgent->setModuleConfig($response->json('module_config', []));
     }
 
