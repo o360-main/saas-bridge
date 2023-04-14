@@ -13,11 +13,12 @@ class PluginSecretValidationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-
         try {
-            $boot = new SaasCredentialsBoot($request);
-            $boot->run();
-            //-------
+
+            $secret = $request->header('X-Plugin-Secret');
+
+
+
         } catch (\Exception $e) {
             return response()->json(['message' => 'Unauthorized'], 401);
         } finally {
