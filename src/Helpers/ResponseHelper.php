@@ -22,4 +22,46 @@ final class ResponseHelper
         }
     }
 
+
+    public static function trigger(
+        bool        $completed,
+        int         $progressPercentage,
+        int         $interval = 300,
+        bool        $isError = false,
+        string|null $errorMsg = null,
+        array       $data = []
+    ): \Illuminate\Http\JsonResponse
+    {
+
+        if ($progressPercentage > 100) {
+            $progressPercentage = 100;
+        }
+
+        return response()->json([
+            'progress' => $progressPercentage,
+            'completed' => $completed,
+            'data' => $data,
+            'interval' => $interval,
+            'error' => $isError,
+        ]);
+    }
+
+    public static function import(mixed $data, bool $status, string $message = null): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'data' => $data,
+            'status' => $status,
+            'message' => $message,
+        ]);
+    }
+
+    public static function export(mixed $data, bool $status, string $message = null): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'data' => $data,
+            'status' => $status,
+            'message' => $message,
+        ]);
+    }
+
 }
