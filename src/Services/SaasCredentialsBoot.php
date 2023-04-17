@@ -33,6 +33,11 @@ class SaasCredentialsBoot
         $this->auth['token'] = $this->request->bearerToken();
     }
 
+    public static function make(Request $request): self
+    {
+        return new self($request);
+    }
+
 
     /**
      * @throws \Exception
@@ -73,6 +78,7 @@ class SaasCredentialsBoot
                 'Content-Type' => 'application/json',
             ]);
 
+
         $this->saasAgent->setSaasApi($this->saasApi);
     }
 
@@ -90,7 +96,7 @@ class SaasCredentialsBoot
             config('saas_bridge.token_validate_endpoint')
         );
 
-        if ($response->status() !== 200) {
+        if (!$response->ok()) {
             throw new AccessDeniedHttpException('Invalid Access Key');
         }
 

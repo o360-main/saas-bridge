@@ -13,15 +13,14 @@ class SaasTokenValidationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-
         try {
-            $boot = new SaasCredentialsBoot($request);
-            $boot->run();
-            //-------
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        } finally {
+            SaasCredentialsBoot::make($request)->run();
+
             return $next($request);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => $e->getMessage()], 401);
         }
     }
 }
