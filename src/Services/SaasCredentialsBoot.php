@@ -65,7 +65,7 @@ class SaasCredentialsBoot
             throw new \Exception('Token not found');
         }
 
-        $baseUrl = config('saas_bridge.saas_api_url');
+        $baseUrl = config('saas-bridge.saas_api_url');
 
         if (empty($baseUrl)) {
             throw new \Exception('CoreApi url not set');
@@ -93,7 +93,7 @@ class SaasCredentialsBoot
         }
 
         $response = $this->saasApi->get(
-            config('saas_bridge.token_validate_endpoint')
+            config('saas-bridge.token_validate_endpoint')
         );
 
         if (!$response->ok()) {

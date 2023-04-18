@@ -39,9 +39,10 @@ class SaasBridgeServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/saas-bridge.php', 'saas-bridge');
 
         // Register the main class to use with the facade
-        $this->app->singleton('saas-bridge', static function () {
-            return new SaasBridgeService();
-        });
+
+//        $this->app->singleton('saas-bridge', static function () {
+//            return new SaasBridgeService();
+//        });
         //
         //        $this->app->bind(SaasAgent::class, static function () {
         //            return SaasAgent::getInstance();

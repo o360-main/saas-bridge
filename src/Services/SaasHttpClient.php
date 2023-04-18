@@ -29,7 +29,7 @@ class SaasHttpClient
             throw new \Exception('Token not found');
         }
 
-        $baseUrl = config('saas_bridge.core_url');
+        $baseUrl = config('saas-bridge.core_url');
 
         $this->client = Http::baseUrl($baseUrl)
             ->withHeaders([
