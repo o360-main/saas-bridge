@@ -4,8 +4,6 @@ namespace O360Main\SaasBridge\Middleware;
 
 use Illuminate\Http\Request;
 use Closure;
-use O360Main\SaasBridge\Services\SaasCredentialsBoot;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 class PluginSecretValidationMiddleware
 {
@@ -14,7 +12,7 @@ class PluginSecretValidationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-//        try {
+        //        try {
         $token = config('saas-bridge.plugin_secret');
 
         abort_if(

@@ -1,6 +1,6 @@
 <?php
 
-namespace O360Main\SaasBridge;
+namespace O360Main\SaasBridge\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -30,8 +30,7 @@ final class ResponseHelper
         bool        $isError = false,
         string|null $errorMsg = null,
         array       $data = []
-    ): \Illuminate\Http\JsonResponse
-    {
+    ): \Illuminate\Http\JsonResponse {
 
         if ($progressPercentage > 100) {
             $progressPercentage = 100;

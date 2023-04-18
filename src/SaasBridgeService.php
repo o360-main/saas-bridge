@@ -4,7 +4,6 @@ namespace O360Main\SaasBridge;
 
 class SaasBridgeService
 {
-
     public function __construct(private readonly SaasAgent $saasAgent)
     {
     }
