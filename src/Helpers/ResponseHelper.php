@@ -25,12 +25,13 @@ final class ResponseHelper
 
     public static function trigger(
         bool        $completed,
-        int         $progressPercentage,
+        int|null    $progressPercentage = null,
         int         $interval = 300,
         bool        $isError = false,
         string|null $errorMsg = null,
         array       $data = []
-    ): \Illuminate\Http\JsonResponse {
+    ): \Illuminate\Http\JsonResponse
+    {
 
         if ($progressPercentage > 100) {
             $progressPercentage = 100;
