@@ -76,6 +76,8 @@ class SaasCredentialsBoot
                 'Authorization' => 'Bearer ' . $this->auth['token'],
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
+                'X-Plugin-Secret' => $this->request->header('X-Plugin-Secret'),
+                'X-Plugin-Id' => $this->request->header('X-Plugin-Id'),
             ]);
 
 

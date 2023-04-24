@@ -8,6 +8,11 @@ class SaasBridgeService
     {
     }
 
+    public function getInstance(): self
+    {
+        return $this;
+    }
+
     // Build your next great package.
     public function api(): \Illuminate\Http\Client\PendingRequest
     {
