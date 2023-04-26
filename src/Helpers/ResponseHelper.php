@@ -2,6 +2,8 @@
 
 namespace O360Main\SaasBridge\Helpers;
 
+use Illuminate\Http\JsonResponse;
+
 final class ResponseHelper
 {
     private function __construct()
@@ -23,6 +25,7 @@ final class ResponseHelper
     }
 
 
+
     public static function trigger(
         bool        $completed,
         int|null    $progressPercentage = null,
@@ -30,7 +33,7 @@ final class ResponseHelper
         bool        $isError = false,
         string|null $errorMsg = null,
         array       $data = []
-    ): \Illuminate\Http\JsonResponse
+    ): JsonResponse
     {
 
         if ($progressPercentage > 100) {
@@ -46,7 +49,7 @@ final class ResponseHelper
         ]);
     }
 
-    public static function import(mixed $data, bool $status, string $message = null): \Illuminate\Http\JsonResponse
+    public static function import(mixed $data, bool $status, string $message = null): JsonResponse
     {
         return response()->json([
             'data' => $data,
@@ -55,7 +58,7 @@ final class ResponseHelper
         ]);
     }
 
-    public static function export(mixed $data, bool $status, string $message = null): \Illuminate\Http\JsonResponse
+    public static function export(mixed $data, bool $status, string $message = null): JsonResponse
     {
         return response()->json([
             'data' => $data,
