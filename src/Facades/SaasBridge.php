@@ -5,7 +5,7 @@ namespace O360Main\SaasBridge\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Illuminate\Http\Client\PendingRequest api()
+ * @method static \Illuminate\Http\Client\PendingRequest api($version = null)
  * @method static array credentials()
  * @method static \O360Main\SaasBridge\SaasBridgeService getInstance()
  * @method static array configs()

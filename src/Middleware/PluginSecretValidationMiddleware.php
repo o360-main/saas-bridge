@@ -12,7 +12,6 @@ class PluginSecretValidationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        //        try {
         $token = config('saas-bridge.plugin_secret');
 
         abort_if(

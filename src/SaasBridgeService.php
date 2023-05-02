@@ -14,9 +14,9 @@ class SaasBridgeService
     }
 
     // Build your next great package.
-    public function api(): \Illuminate\Http\Client\PendingRequest
+    public function api($version = null): \Illuminate\Http\Client\PendingRequest
     {
-        return $this->saasAgent->saasApi();
+        return $this->saasAgent->saasApi($version);
     }
 
     public function credentials(): array
@@ -24,7 +24,7 @@ class SaasBridgeService
         return $this->saasAgent->credentials();
     }
 
-    public function configurations()
+    public function configurations(): array
     {
         return $this->saasAgent->moduleConfig();
     }

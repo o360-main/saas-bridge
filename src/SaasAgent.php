@@ -35,8 +35,25 @@ class SaasAgent
     }
 
     //getter setter
-    public function saasApi(): PendingRequest
+
+    /**
+     * @throws \Exception
+     */
+    public function saasApi($version = null): PendingRequest
     {
+        if ($version !== null) {
+            $allowedVersions = [
+                'v1'
+            ];
+            if (!in_array($version, $allowedVersions)) {
+                throw new \Exception('Invalid version, Allowed versions ' . implode(', ', $allowedVersions));
+            }
+
+            $baseUrl = config('saas-bridge.saas_api_url') . '/' . $version;
+
+            $this->_saasApi->baseUrl($baseUrl);
+        }
+
         return $this->_saasApi;
     }
 
