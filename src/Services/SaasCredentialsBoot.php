@@ -76,7 +76,8 @@ class SaasCredentialsBoot
                 'Authorization' => 'Bearer ' . $this->auth['token'],
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'X-Plugin-Secret' => $this->request->header('X-Plugin-Secret'),
+//                'X-Plugin-Secret' => $this->request->header('X-Plugin-Secret'),
+                'X-Plugin-Secret' => config('saas-bridge.plugin_secret'),
                 'X-Plugin-Id' => $this->request->header('X-Plugin-Id'),
             ]);
 
@@ -104,9 +105,10 @@ class SaasCredentialsBoot
 
         $this->validated = true;
 
-        $this->saasAgent->setCredentials($response->json('config', []));
-        $this->saasAgent->setModuleConfig($response->json('module_config', []));
-    }
+        $data = $response->json();
 
+        $this->saasAgent->setCredentials($data['config'] ?? []);
+        $this->saasAgent->setModuleConfig($data['module_config']??[]);
+    }
 
 }
