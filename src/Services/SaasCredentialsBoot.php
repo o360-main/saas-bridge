@@ -75,11 +75,11 @@ class SaasCredentialsBoot
             'Authorization' => 'Bearer ' . $this->auth['token'],
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-//                'X-Plugin-Secret' => $this->request->header('X-Plugin-Secret'),
+            //                'X-Plugin-Secret' => $this->request->header('X-Plugin-Secret'),
             'X-Plugin-Secret' => config('saas-bridge.plugin_secret'),
             'X-Plugin-Id' => $this->request->header('X-Plugin-Id'),
         ];
-        if( $this->request->header('X-Plugin-Dev')) {
+        if ($this->request->header('X-Plugin-Dev')) {
             $hearders['X-Plugin-Dev'] = $this->request->header('X-Plugin-Dev');
         }
         $this->saasApi = Http::baseUrl($baseUrl)
@@ -111,7 +111,6 @@ class SaasCredentialsBoot
         $data = $response->json();
 
         $this->saasAgent->setCredentials($data['config'] ?? []);
-        $this->saasAgent->setModuleConfig($data['module_config']??[]);
+        $this->saasAgent->setModuleConfig($data['module_config'] ?? []);
     }
-
 }
