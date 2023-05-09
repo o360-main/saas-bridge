@@ -25,7 +25,6 @@ final class ResponseHelper
     }
 
 
-
     public static function trigger(
         bool        $completed,
         int|null    $progressPercentage = null,
@@ -59,6 +58,15 @@ final class ResponseHelper
     }
 
     public static function export(mixed $data, bool $status, string $message = null): JsonResponse
+    {
+        return response()->json([
+            'data' => $data,
+            'status' => $status,
+            'message' => $message,
+        ]);
+    }
+
+    public static function ok(mixed $data, bool $status, string $message = null): JsonResponse
     {
         return response()->json([
             'data' => $data,

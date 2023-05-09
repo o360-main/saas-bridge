@@ -44,13 +44,13 @@ class SaasCredentialsBoot
      */
     public function run(): void
     {
-        //todo initiate token and http client
+        // initiate token and http client
         $this->initSaasApi();
 
-        // todo validate token and parse url info
+        //  validate token and parse url info
         $this->validate();
 
-        //todo other info
+        // other info
         app()->singleton('saas-bridge', function () {
             return new SaasBridgeService($this->saasAgent);
         });
@@ -71,7 +71,7 @@ class SaasCredentialsBoot
             throw new \Exception('CoreApi url not set');
         }
 
-        $hearders = [
+        $headers = [
             'Authorization' => 'Bearer ' . $this->auth['token'],
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -80,10 +80,10 @@ class SaasCredentialsBoot
             'X-Plugin-Id' => $this->request->header('X-Plugin-Id'),
         ];
         if ($this->request->header('X-Plugin-Dev')) {
-            $hearders['X-Plugin-Dev'] = $this->request->header('X-Plugin-Dev');
+            $headers['X-Plugin-Dev'] = $this->request->header('X-Plugin-Dev');
         }
         $this->saasApi = Http::baseUrl($baseUrl)
-            ->withHeaders($hearders);
+            ->withHeaders($headers);
 
         $this->saasAgent->setSaasApi($this->saasApi);
     }
