@@ -28,13 +28,15 @@ final class ResponseHelper
     public static function trigger(
         bool        $completed,
         int|null    $progressPercentage = null,
-        int         $interval = 300,
-        bool        $isError = false,
+        int|null    $interval = null,
+        bool|null   $isError = null,
         string|null $errorMsg = null,
         array       $data = []
     ): JsonResponse
     {
 
+        $isError ??= false;
+        $interval ??= 300;
         if ($progressPercentage > 100) {
             $progressPercentage = 100;
         }
@@ -48,31 +50,19 @@ final class ResponseHelper
         ]);
     }
 
-    public static function import(mixed $data, bool $status, string $message = null): JsonResponse
+    public static function import(mixed $data, bool $status, string|null $message = null): JsonResponse
     {
-        return response()->json([
-            'data' => $data,
-            'status' => $status,
-            'message' => $message,
-        ]);
+        return response()->json(compact('data', 'status', 'message'));
     }
 
     public static function export(mixed $data, bool $status, string $message = null): JsonResponse
     {
-        return response()->json([
-            'data' => $data,
-            'status' => $status,
-            'message' => $message,
-        ]);
+        return response()->json(compact('data', 'status', 'message'));
     }
 
     public static function ok(mixed $data, bool $status, string $message = null): JsonResponse
     {
-        return response()->json([
-            'data' => $data,
-            'status' => $status,
-            'message' => $message,
-        ]);
+        return response()->json(compact('data', 'status', 'message'));
     }
 
 }
