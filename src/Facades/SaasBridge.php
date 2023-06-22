@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Facade;
  */
 class SaasBridge extends Facade
 {
-
     /**
      * Get the registered name of the component.
      *

@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 
 class EventResponse implements Responsable
 {
-
     private array $data = [];
     private bool $status;
     private string $message;
