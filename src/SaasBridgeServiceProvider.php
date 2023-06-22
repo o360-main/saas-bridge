@@ -4,6 +4,7 @@ namespace O360Main\SaasBridge;
 
 use Illuminate\Support\ServiceProvider;
 use O360Main\SaasBridge\Commands\ConfigChecker;
+use Illuminate\Support\Facades\Route;
 
 class SaasBridgeServiceProvider extends ServiceProvider
 {
@@ -48,5 +49,14 @@ class SaasBridgeServiceProvider extends ServiceProvider
         //            return SaasAgent::getInstance();
         //        });
 
+        //make route macro
+
+        Route::macro('module', function ($url, $controller) {
+            //Categories
+            Route::post("/{$url}/config", [$controller, 'config']);
+            Route::post("/{$url}/import", [$controller, 'import']);
+            Route::post("/{$url}/export", [$controller, 'export']);
+            Route::post("/{$url}/trigger", [$controller, 'trigger']);
+        });
     }
 }

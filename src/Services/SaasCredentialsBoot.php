@@ -5,6 +5,7 @@ namespace O360Main\SaasBridge\Services;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use O360Main\SaasBridge\SaasAgent;
 use O360Main\SaasBridge\SaasBridgeService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -101,6 +102,12 @@ class SaasCredentialsBoot
         $response = $this->saasApi->get(
             config('saas-bridge.token_validate_endpoint')
         );
+
+        \Log::info('xxx', [
+            'response' => $response->body(),
+            'headers' => $response->headers(),
+            'status' => $response->status(),
+        ]);
 
         if (!$response->ok()) {
             throw new AccessDeniedHttpException('Invalid Access Key');

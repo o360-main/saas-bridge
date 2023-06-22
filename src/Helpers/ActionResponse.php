@@ -9,8 +9,8 @@ class ActionResponse implements Responsable
     private bool $completed;
     private int|null $progressPercentage;
     private int $interval;
-    private bool $isError;
-    private string|null $errorMsg;
+    private bool $isError = false;
+    private string|null $errorMsg = null;
     private array $data;
 
     public function setCompleted(bool $completed): self
