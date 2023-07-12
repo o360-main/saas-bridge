@@ -2,9 +2,7 @@
 
 namespace O360Main\SaasBridge\Contracts;
 
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
-use O360Main\SaasBridge\SaasAgent;
 
 interface ControllerInterface
 {
