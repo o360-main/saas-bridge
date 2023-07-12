@@ -50,9 +50,8 @@ class SaasBridgeServiceProvider extends ServiceProvider
         //        });
 
         //make route macro
-
         Route::macro('module', function ($url, $controller) {
-            //Categories
+            Route::post("/{$url}/data", [$controller, 'data']);
             Route::post("/{$url}/config", [$controller, 'config']);
             Route::post("/{$url}/import", [$controller, 'import']);
             Route::post("/{$url}/export", [$controller, 'export']);
