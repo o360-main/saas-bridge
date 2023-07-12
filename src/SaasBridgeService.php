@@ -38,4 +38,9 @@ class SaasBridgeService
         return $this->saasAgent->moduleConfig();
     }
 
+    public function moduleConfig(): array
+    {
+        return $this->saasAgent->moduleConfig();
+    }
+
 }
