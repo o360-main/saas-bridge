@@ -14,6 +14,10 @@ class SaasBridgeService
     }
 
     // Build your next great package.
+
+    /**
+     * @throws \Exception
+     */
     public function api($version = null): \Illuminate\Http\Client\PendingRequest
     {
         return $this->saasAgent->saasApi($version);
@@ -25,6 +29,11 @@ class SaasBridgeService
     }
 
     public function configurations(): array
+    {
+        return $this->saasAgent->moduleConfig();
+    }
+
+    public function config(): array
     {
         return $this->saasAgent->moduleConfig();
     }

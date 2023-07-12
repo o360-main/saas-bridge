@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Client\PendingRequest api($version = null)
  * @method static array credentials()
  * @method static \O360Main\SaasBridge\SaasBridgeService getInstance()
- * @method static array configs()
+ * @method static array config()
  * @see \O360Main\SaasBridge\SaasBridgeService
  */
 class SaasBridge extends Facade
