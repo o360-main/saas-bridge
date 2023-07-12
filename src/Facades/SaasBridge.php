@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array credentials()
  * @method static \O360Main\SaasBridge\SaasBridgeService getInstance()
  * @method static array config()
+ * @method static array configurations()
  * @method static array moduleConfig()
  * @see \O360Main\SaasBridge\SaasBridgeService
  */
