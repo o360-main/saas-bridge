@@ -61,8 +61,7 @@ It will generate all above routes for you.
     //See Main ->Dashboard -> Configuration    
     SaasBridge::config(); // This contain module configs saved from Dashboard by client
 
-
-
+    $onlyForCategory = SaasBridge::config('category'); --> Only Singular Module Name
 ```
 
 

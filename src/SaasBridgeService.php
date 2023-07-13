@@ -28,19 +28,19 @@ class SaasBridgeService
         return $this->saasAgent->credentials();
     }
 
-    public function configurations(): array
+    public function configurations($key = null): array
     {
-        return $this->saasAgent->moduleConfig();
+        return $this->saasAgent->moduleConfig($key);
     }
 
-    public function config(): array
+    public function config($module = null): array
     {
-        return $this->saasAgent->moduleConfig();
+        return $this->saasAgent->moduleConfig($module);
     }
 
-    public function moduleConfig(): array
+    public function moduleConfig($key = null): array
     {
-        return $this->saasAgent->moduleConfig();
+        return $this->saasAgent->moduleConfig($key);
     }
 
 }
