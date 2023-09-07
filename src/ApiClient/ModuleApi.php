@@ -16,23 +16,12 @@ class ModuleApi
 
 
 //Route::post('/batch-delete-by-sync-ids', [$controller, 'batchDeleteBySyncIds']);//
-
-
-    public function all($pageNumber, $perPage): PromiseInterface|Response
+    public function findMany($pageNumber, $perPage, $queryParams = []): PromiseInterface|Response
     {
         return $this->http->get('/', [
             'page' => $pageNumber,
-            'perPage' => $perPage
-        ]);
-    }
-
-
-    //GET /api/v1/categories
-    public function find($pageNumber, $perPage): PromiseInterface|Response
-    {
-        return $this->http->get('/', [
-            'page' => $pageNumber,
-            'perPage' => $perPage
+            'perPage' => $perPage,
+            ...$queryParams,
         ]);
     }
 
