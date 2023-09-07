@@ -1,0 +1,102 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use O360Main\SaasBridge\Contracts\ControllerInterface;
+use O360Main\SaasBridge\Helpers\ActionResponse;
+use O360Main\SaasBridge\Helpers\ResponseHelper;
+
+class {{Modules}}Controller implements ControllerInterface
+{
+
+    public function data(Request $request): array
+    {
+        return [];
+    }
+
+    public function config(Request $request): array
+    {
+
+        //TODO : change and add your config fields
+        return [
+            'available' => true,
+            'webhook' => true,
+            'form_fields' => [
+//                FormField::number(
+//                    name: 'limit',
+//                    label: 'Limit',
+//                    default_value: null,
+//                    index: 1,
+//                    required: true
+//                ),
+            ]
+        ];
+    }
+
+
+    public function import(Request $request)
+    {
+        $payload = $request->input('payload');
+        $event = strtolower($request->input('event'));
+
+
+//        $service = new SomeService($payload);
+
+        //TODO : uncomment and add your event handler
+
+        return match ($event) {
+//            '{{module}}.created' => $service->onCreate(),
+//            '{{module}}.updated' => $service->onUpdate(),
+//            '{{module}}.deleted' => $service->onDelete(),
+            default => ResponseHelper::import(
+                [],
+                false,
+                'Event not found'
+            ),
+        };
+
+    }
+
+    public function export(Request $request): \Illuminate\Http\JsonResponse
+    {
+
+        $payload = $request->input('payload');
+        $event = strtolower($request->input('event'));
+
+        return match ($event) {
+//            '{{module}}.created' => $service->onCreate(),
+//            '{{module}}.updated' => $service->onUpdate(),
+//            '{{module}}.deleted' => $service->onDelete(),
+            default => ResponseHelper::import(
+                [],
+                false,
+                'Event not found'
+            ),
+        };
+
+    }
+
+    public function trigger(Request $request)
+    {
+
+        $payload = $request->input('payload');
+        $action = strtolower($request->input('action'));
+
+        $prevData = $request->input('data');
+
+//        $someService = new SomeService($payload);
+
+        return match ($action) {
+//            '{{module}}.import_all' => $someService->importAll(),
+            default => ActionResponse::make()
+                ->setCompleted(false)
+                ->setProgressPercentage(50)
+                ->setInterval(300)
+                ->setData([
+                    'message' => 'test'
+                ]),
+        };
+
+    }
+}

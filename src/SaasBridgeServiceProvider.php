@@ -5,6 +5,7 @@ namespace O360Main\SaasBridge;
 use Illuminate\Support\ServiceProvider;
 use O360Main\SaasBridge\Commands\ConfigChecker;
 use Illuminate\Support\Facades\Route;
+use O360Main\SaasBridge\Commands\ControllerGenerator;
 
 class SaasBridgeServiceProvider extends ServiceProvider
 {
@@ -21,10 +22,12 @@ class SaasBridgeServiceProvider extends ServiceProvider
             // $this->commands([]);
 
             $this->app->bind('saas:manifest-test', ConfigChecker::class);
+            $this->app->bind('saas:generate:controller', ControllerGenerator::class);
 
             //load commands folder
             $this->commands([
                 'saas:manifest-test',
+                'saas:generate:controller',
             ]);
         }
 
