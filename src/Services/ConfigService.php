@@ -33,7 +33,7 @@ class ConfigService
     //orders
     //sell_pricing
 
-    private $arr = [];
+    private array $arr = [];
 
     public function __construct(array $arr)
     {

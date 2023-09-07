@@ -2,6 +2,7 @@
 
 namespace O360Main\SaasBridge;
 
+use O360Main\SaasBridge\ApiClient\SaasApiClient;
 use O360Main\SaasBridge\Services\ConfigService;
 
 class SaasBridgeService
@@ -24,6 +25,16 @@ class SaasBridgeService
     {
         return $this->saasAgent->saasApi($version);
     }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function apiClient($version = null): SaasApiClient
+    {
+        return new SaasApiClient($this->saasAgent, $version);
+    }
+
 
     public function credentials(): array
     {
