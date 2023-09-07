@@ -45,7 +45,7 @@ If you discover any security related issues, please email vimal@o360integrator.c
 
 ## License
 
-The The Unlicense. Please see [License File](LICENSE.md) for more information.
+The The Unlicensed. Please see [License File](LICENSE.md) for more information.
 
 ## Laravel Package Boilerplate
 

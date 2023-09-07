@@ -5,7 +5,6 @@ namespace O360Main\SaasBridge\Services;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use O360Main\SaasBridge\SaasAgent;
 use O360Main\SaasBridge\SaasBridgeService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
