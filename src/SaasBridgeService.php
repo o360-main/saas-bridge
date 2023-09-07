@@ -2,6 +2,8 @@
 
 namespace O360Main\SaasBridge;
 
+use O360Main\SaasBridge\Services\ConfigService;
+
 class SaasBridgeService
 {
     public function __construct(private readonly SaasAgent $saasAgent)
@@ -28,19 +30,24 @@ class SaasBridgeService
         return $this->saasAgent->credentials();
     }
 
-    public function configurations(): array
+    public function configurations($key = null): array
     {
-        return $this->saasAgent->moduleConfig();
+        return $this->saasAgent->moduleConfig($key);
     }
 
-    public function config(): array
+    public function config($module = null): array
     {
-        return $this->saasAgent->moduleConfig();
+        return $this->saasAgent->moduleConfig($module);
     }
 
-    public function moduleConfig(): array
+    public function configService(): \O360Main\SaasBridge\Services\ConfigService
     {
-        return $this->saasAgent->moduleConfig();
+        return new ConfigService($this->saasAgent->moduleConfig());
+    }
+
+    public function moduleConfig($key = null): array
+    {
+        return $this->saasAgent->moduleConfig($key);
     }
 
 }

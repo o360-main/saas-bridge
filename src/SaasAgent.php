@@ -74,8 +74,12 @@ class SaasAgent
         $this->_moduleConfig = $config;
     }
 
-    public function moduleConfig(): array
+    public function moduleConfig($key = null): array
     {
+        if ($key !== null) {
+            return $this->_moduleConfig[$key] ?? [];
+        }
+
         return $this->_moduleConfig;
     }
 
