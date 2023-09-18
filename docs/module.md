@@ -5,6 +5,11 @@
 composer update o360-main/saas-bridge
 ```
 
+```bash
+# This will generate all the controllers and routes for all the modules
+php artisan saas:generate:controller 
+```
+
 
 # Routes
 
@@ -30,9 +35,9 @@ Modules have the following routes compulsory
 
 
 ### Helper
-Use following helper to generate routes for module
+Use the following helper to generate routes for the module
 Just like Route::resource() helper
-It will generate all above routes for you.
+It will generate all the above routes for you.
 
 ```php
  Route::module('categories', CategoriesController::class);
