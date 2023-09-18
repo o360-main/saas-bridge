@@ -133,7 +133,6 @@ class CodeGenerate
             $routes .= <<<PHP
 Route::module('{$module['smPlural']}',\App\Http\Controllers\\{$module['capPlural']}Controller::class);\n
 PHP;
-
         }
 
 
