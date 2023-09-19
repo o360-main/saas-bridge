@@ -11,6 +11,7 @@ class SaasAgent
     private array $_credentials;
 
     private array $_moduleConfig;
+    private array $_connection;
 
     private function __construct()
     {
@@ -63,6 +64,11 @@ class SaasAgent
         $this->_credentials = $credentials;
     }
 
+    public function setConnection(array $connection): void
+    {
+        $this->_connection = $connection;
+    }
+
     public function credentials(): array
     {
         return $this->_credentials;
@@ -83,10 +89,16 @@ class SaasAgent
         return $this->_moduleConfig;
     }
 
+
+
     //call with magic method also return above function
 //    public function __call($name, $arguments)
 //    {
 //        return $this->saasApi()->$name(...$arguments);
 //    }
+    public function connection(): array
+    {
+        return $this->_connection;
+    }
 
 }

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \O360Main\SaasBridge\ApiClient\SaasApiClient apiClient($version = null)
  * @method static array credentials()
  * @method static array config()
+ * @method static array connection()
  * @method static \O360Main\SaasBridge\Services\ConfigService configService()
  * @method static array configurations()
  * @method static array moduleConfig()

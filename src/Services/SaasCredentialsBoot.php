@@ -102,11 +102,11 @@ class SaasCredentialsBoot
             config('saas-bridge.token_validate_endpoint')
         );
 
-        \Log::info('xxx', [
-            'response' => $response->body(),
-            'headers' => $response->headers(),
-            'status' => $response->status(),
-        ]);
+//        \Log::info('xxx', [
+//            'response' => $response->body(),
+//            'headers' => $response->headers(),
+//            'status' => $response->status(),
+//        ]);
 
         if (!$response->ok()) {
             throw new AccessDeniedHttpException('Invalid Access Key');
@@ -116,6 +116,7 @@ class SaasCredentialsBoot
 
         $data = $response->json();
 
+        $this->saasAgent->setConnection($data['connection'] ?? []);
         $this->saasAgent->setCredentials($data['config'] ?? []);
         $this->saasAgent->setModuleConfig($data['module_config'] ?? []);
     }

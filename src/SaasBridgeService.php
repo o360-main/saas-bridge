@@ -61,4 +61,9 @@ class SaasBridgeService
         return $this->saasAgent->moduleConfig($key);
     }
 
+    public function connection()
+    {
+        return $this->saasAgent->connection();
+    }
+
 }
