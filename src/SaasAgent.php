@@ -51,7 +51,17 @@ class SaasAgent
                 throw new \Exception('Invalid version, Allowed versions ' . implode(', ', $allowedVersions));
             }
 
-            $baseUrl = config('saas-bridge.saas_api_url') . '/' . $version;
+//            $baseUrl = config('saas-bridge.saas_api_url') . '/' . trim($version, '/'));
+
+            $arr = [
+                config('saas-bridge.saas_api_url'),
+                $version,
+            ];
+
+            $baseUrl = collect($arr)->map(function ($item) {
+                return trim($item, '/');
+            })->implode('/');
+
 
             $this->_saasApi->baseUrl($baseUrl);
         }
