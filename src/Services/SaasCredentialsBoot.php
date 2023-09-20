@@ -119,5 +119,6 @@ class SaasCredentialsBoot
         $this->saasAgent->setConnection($data['connection'] ?? []);
         $this->saasAgent->setCredentials($data['config'] ?? []);
         $this->saasAgent->setModuleConfig($data['module_config'] ?? []);
+        $this->saasAgent->setPlugin($data['plugin'] ?? []);
     }
 }

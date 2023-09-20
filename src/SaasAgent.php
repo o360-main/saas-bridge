@@ -12,6 +12,7 @@ class SaasAgent
 
     private array $_moduleConfig;
     private array $_connection;
+    private array $_plugin;
 
     private function __construct()
     {
@@ -69,6 +70,11 @@ class SaasAgent
         $this->_connection = $connection;
     }
 
+    public function setPlugin(array $plugin)
+    {
+        $this->_plugin = $plugin;
+    }
+
     public function credentials(): array
     {
         return $this->_credentials;
@@ -99,6 +105,11 @@ class SaasAgent
     public function connection(): array
     {
         return $this->_connection;
+    }
+
+    public function plugin(): array
+    {
+        return $this->_plugin;
     }
 
 }
