@@ -6,8 +6,14 @@ use O360Main\SaasBridge\Services\ConfigService;
 
 class SaasBridgeService
 {
+    /**
+     * @var \O360Main\SaasBridge\Services\ConfigService
+     */
+    private ConfigService $configService;
+
     public function __construct(private readonly SaasAgent $saasAgent)
     {
+        $this->configService = new ConfigService($this->saasAgent->moduleConfig());
     }
 
     public function getInstance(): self
@@ -42,7 +48,7 @@ class SaasBridgeService
 
     public function configService(): \O360Main\SaasBridge\Services\ConfigService
     {
-        return new ConfigService($this->saasAgent->moduleConfig());
+        return $this->configService;
     }
 
     public function moduleConfig($key = null): array
