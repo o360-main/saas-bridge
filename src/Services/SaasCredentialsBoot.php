@@ -65,12 +65,6 @@ class SaasCredentialsBoot
             throw new \Exception('Token not found');
         }
 
-        $baseUrl = config('saas-bridge.saas_api_url');
-
-        if (empty($baseUrl)) {
-            throw new \Exception('CoreApi url not set');
-        }
-
         $headers = [
             'Authorization' => 'Bearer ' . $this->auth['token'],
             'Accept' => 'application/json',
@@ -82,8 +76,7 @@ class SaasCredentialsBoot
         if ($this->request->header('X-Plugin-Dev')) {
             $headers['X-Plugin-Dev'] = $this->request->header('X-Plugin-Dev');
         }
-        $this->saasApi = Http::baseUrl($baseUrl)
-            ->withHeaders($headers);
+        $this->saasApi = Http::withHeaders($headers);
 
         $this->saasAgent->setSaasApi($this->saasApi);
     }

@@ -41,8 +41,15 @@ class SaasAgent
     /**
      * @throws \Exception
      */
-    public function saasApi($version = null): PendingRequest
+    public function saasApi($version = 'v1'): PendingRequest
     {
+        $baseUrl = config('saas-bridge.saas_api_url');
+
+        if (empty($baseUrl)) {
+            throw new \Exception('CoreApi url not set');
+        }
+
+
         if ($version !== null) {
             $allowedVersions = [
                 'v1'
@@ -51,13 +58,10 @@ class SaasAgent
                 throw new \Exception('Invalid version, Allowed versions ' . implode(', ', $allowedVersions));
             }
 
-            $arr = [
-                config('saas-bridge.saas_api_url'),
-                $version,
-            ];
+            $arr = [$baseUrl, $version];
 
             //using core php
-            $baseUrl = implode('/', array_map(fn($i) => trim($i, '/'), $arr));
+            $baseUrl = implode('/', array_map(fn($i) => rtrim($i, '/'), $arr));
 
             $this->_saasApi->baseUrl($baseUrl);
         }
