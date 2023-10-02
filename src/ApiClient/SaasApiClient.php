@@ -4,8 +4,6 @@ namespace O360Main\SaasBridge\ApiClient;
 
 use O360Main\SaasBridge\SaasAgent;
 
-use O360Main\SaasBridge\ApiClient\Endpoint;
-
 class SaasApiClient
 {
     private \Illuminate\Http\Client\PendingRequest $api;
