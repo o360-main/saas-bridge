@@ -2,13 +2,20 @@
 
 namespace O360Main\SaasBridge;
 
+use Illuminate\Http\Client\PendingRequest;
 use O360Main\SaasBridge\ApiClient\SaasApiClient;
 use O360Main\SaasBridge\Services\ConfigService;
 
 class SaasBridgeService
 {
+    /**
+     * @var \O360Main\SaasBridge\Services\ConfigService
+     */
+    private readonly ConfigService $configService;
+
     public function __construct(private readonly SaasAgent $saasAgent)
     {
+        $this->configService = new ConfigService($this->saasAgent->moduleConfig());
     }
 
     public function getInstance(): self
@@ -21,7 +28,7 @@ class SaasBridgeService
     /**
      * @throws \Exception
      */
-    public function api($version = null): \Illuminate\Http\Client\PendingRequest
+    public function api($version = null): PendingRequest
     {
         return $this->saasAgent->saasApi($version);
     }
@@ -51,9 +58,9 @@ class SaasBridgeService
         return $this->saasAgent->moduleConfig($module);
     }
 
-    public function configService(): \O360Main\SaasBridge\Services\ConfigService
+    public function configService(): ConfigService
     {
-        return new ConfigService($this->saasAgent->moduleConfig());
+        return $this->configService;
     }
 
     public function moduleConfig($key = null): array
@@ -61,9 +68,14 @@ class SaasBridgeService
         return $this->saasAgent->moduleConfig($key);
     }
 
-    public function connection()
+    public function connection(): array
     {
         return $this->saasAgent->connection();
+    }
+
+    public function plugin(): array
+    {
+        return $this->saasAgent->plugin();
     }
 
 }

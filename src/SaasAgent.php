@@ -12,6 +12,7 @@ class SaasAgent
 
     private array $_moduleConfig;
     private array $_connection;
+    private array $_plugin;
 
     private function __construct()
     {
@@ -40,8 +41,15 @@ class SaasAgent
     /**
      * @throws \Exception
      */
-    public function saasApi($version = null): PendingRequest
+    public function saasApi($version = 'v1'): PendingRequest
     {
+        $baseUrl = config('saas-bridge.saas_api_url');
+
+        if (empty($baseUrl)) {
+            throw new \Exception('CoreApi url not set');
+        }
+
+
         if ($version !== null) {
             $allowedVersions = [
                 'v1'
@@ -50,7 +58,10 @@ class SaasAgent
                 throw new \Exception('Invalid version, Allowed versions ' . implode(', ', $allowedVersions));
             }
 
-            $baseUrl = config('saas-bridge.saas_api_url') . '/' . $version;
+            $arr = [$baseUrl, $version];
+
+            //using core php
+            $baseUrl = implode('/', array_map(fn($i) => rtrim($i, '/'), $arr));
 
             $this->_saasApi->baseUrl($baseUrl);
         }
@@ -67,6 +78,11 @@ class SaasAgent
     public function setConnection(array $connection): void
     {
         $this->_connection = $connection;
+    }
+
+    public function setPlugin(array $plugin): void
+    {
+        $this->_plugin = $plugin;
     }
 
     public function credentials(): array
@@ -99,6 +115,11 @@ class SaasAgent
     public function connection(): array
     {
         return $this->_connection;
+    }
+
+    public function plugin(): array
+    {
+        return $this->_plugin;
     }
 
 }
