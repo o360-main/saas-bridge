@@ -50,7 +50,7 @@ class ActionResponse implements Responsable
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
 
         if ($this->progressPercentage > 100) {
@@ -67,8 +67,8 @@ class ActionResponse implements Responsable
         ];
     }
 
-    public function toResponse($request)
+    public function toResponse($request): array|\Symfony\Component\HttpFoundation\Response
     {
-        $this->toArray();
+        return $this->toArray();
     }
 }
