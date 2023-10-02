@@ -1,8 +1,9 @@
 <?php
 
+
 namespace O360Main\SaasBridge\ApiClient;
 
-enum Endpoint: string
+enum EndPoint: string
 {
     case currency = 'currencies';
     case store = 'stores';

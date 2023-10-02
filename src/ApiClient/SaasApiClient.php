@@ -31,7 +31,7 @@ class SaasApiClient
      */
     public function currencies(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::currency);
+        return new ModuleApi($this->api, EndPoint::currency);
     }
 
     //now follow same as upper with all the EndPoints
@@ -40,72 +40,72 @@ class SaasApiClient
     //stores
     public function stores(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::store);
+        return new ModuleApi($this->api, EndPoint::store);
 
     }
 
     //tax
     public function taxes(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::tax);
+        return new ModuleApi($this->api, EndPoint::tax);
     }
 
     //attribute
     public function attributes(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::attribute);
+        return new ModuleApi($this->api, EndPoint::attribute);
     }
 
 
     //category
     public function categories(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::category);
+        return new ModuleApi($this->api, EndPoint::category);
     }
 
     //payment-method
     public function payment_methods(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::payment_method);
+        return new ModuleApi($this->api, EndPoint::payment_method);
     }
 
 
     //tier-group
     public function tier_groups(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::tier_group);
+        return new ModuleApi($this->api, EndPoint::tier_group);
 
     }
 
     //product
     public function products(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::product);
+        return new ModuleApi($this->api, EndPoint::product);
     }
 
     //inventory
     public function inventories(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::inventory);
+        return new ModuleApi($this->api, EndPoint::inventory);
     }
 
     //customer
     public function customers(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::customer);
+        return new ModuleApi($this->api, EndPoint::customer);
     }
 
     //seller
     public function sellers(): ModuleApi
     {
 
-        return new ModuleApi($this->api, Endpoint::seller);
+        return new ModuleApi($this->api, EndPoint::seller);
 
     }
 
     //order
     public function orders(): ModuleApi
     {
-        return new ModuleApi($this->api, Endpoint::order);
+        return new ModuleApi($this->api, EndPoint::order);
     }
 }

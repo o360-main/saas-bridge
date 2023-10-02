@@ -5,15 +5,14 @@ namespace O360Main\SaasBridge\ApiClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Route;
 
 class ModuleApi
 {
 
     private readonly PendingRequest $http;
-    private readonly Endpoint $endpoint;
+    private readonly EndPoint $endpoint;
 
-    public function __construct(PendingRequest $http, Endpoint $endpoint)
+    public function __construct(PendingRequest $http, EndPoint $endpoint)
     {
         $this->endpoint = $endpoint;
         $this->http = $http;
