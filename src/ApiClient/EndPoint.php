@@ -2,7 +2,7 @@
 
 namespace O360Main\SaasBridge\ApiClient;
 
-enum EndPoint: string
+enum Endpoint: string
 {
     case currency = 'currencies';
     case store = 'stores';
@@ -17,6 +17,5 @@ enum EndPoint: string
     case customer = 'customers';
     case seller = 'sellers';
     case order = 'orders';
-
 
 }
