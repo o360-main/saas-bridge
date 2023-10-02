@@ -34,7 +34,7 @@ class SaasApiClient
         return new ModuleApi($this->api, Endpoint::currency);
     }
 
-    //now follow same as upper with all the endpoints
+    //now follow same as upper with all the EndPoints
 
 
     //stores
