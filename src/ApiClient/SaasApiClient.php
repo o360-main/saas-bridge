@@ -31,9 +31,7 @@ class SaasApiClient
      */
     public function currencies(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::currency->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::currency);
     }
 
     //now follow same as upper with all the endpoints
@@ -42,90 +40,72 @@ class SaasApiClient
     //stores
     public function stores(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::store->value);
+        return new ModuleApi($this->api, Endpoint::store);
 
-        return new ModuleApi($api);
     }
 
     //tax
     public function taxes(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::tax->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::tax);
     }
 
     //attribute
     public function attributes(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::attribute->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::attribute);
     }
 
 
     //category
     public function categories(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::category->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::category);
     }
 
     //payment-method
     public function payment_methods(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::payment_method->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::payment_method);
     }
 
 
     //tier-group
     public function tier_groups(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::tier_group->value);
+        return new ModuleApi($this->api, Endpoint::tier_group);
 
-        return new ModuleApi($api);
     }
 
     //product
     public function products(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::product->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::product);
     }
 
     //inventory
     public function inventories(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::inventory->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::inventory);
     }
 
     //customer
     public function customers(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::customer->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::customer);
     }
 
     //seller
     public function sellers(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::seller->value);
 
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::seller);
+
     }
 
     //order
     public function orders(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::order->value);
-
-        return new ModuleApi($api);
+        return new ModuleApi($this->api, Endpoint::order);
     }
 }
