@@ -31,18 +31,18 @@ class SaasApiClient
      */
     public function currencies(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::currency->value);
+        $api = $this->api->baseUrl(EndPoint::currency->value);
 
         return new ModuleApi($api);
     }
 
-    //now follow same as upper with all the endpoints
+    //now follow same as upper with all the EndPoints
 
 
     //stores
     public function stores(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::store->value);
+        $api = $this->api->baseUrl(EndPoint::store->value);
 
         return new ModuleApi($api);
     }
@@ -50,7 +50,7 @@ class SaasApiClient
     //tax
     public function taxes(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::tax->value);
+        $api = $this->api->baseUrl(EndPoint::tax->value);
 
         return new ModuleApi($api);
     }
@@ -58,7 +58,7 @@ class SaasApiClient
     //attribute
     public function attributes(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::attribute->value);
+        $api = $this->api->baseUrl(EndPoint::attribute->value);
 
         return new ModuleApi($api);
     }
@@ -67,7 +67,7 @@ class SaasApiClient
     //category
     public function categories(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::category->value);
+        $api = $this->api->baseUrl(EndPoint::category->value);
 
         return new ModuleApi($api);
     }
@@ -75,7 +75,7 @@ class SaasApiClient
     //payment-method
     public function payment_methods(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::payment_method->value);
+        $api = $this->api->baseUrl(EndPoint::payment_method->value);
 
         return new ModuleApi($api);
     }
@@ -84,7 +84,7 @@ class SaasApiClient
     //tier-group
     public function tier_groups(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::tier_group->value);
+        $api = $this->api->baseUrl(EndPoint::tier_group->value);
 
         return new ModuleApi($api);
     }
@@ -92,7 +92,7 @@ class SaasApiClient
     //product
     public function products(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::product->value);
+        $api = $this->api->baseUrl(EndPoint::product->value);
 
         return new ModuleApi($api);
     }
@@ -100,7 +100,7 @@ class SaasApiClient
     //inventory
     public function inventories(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::inventory->value);
+        $api = $this->api->baseUrl(EndPoint::inventory->value);
 
         return new ModuleApi($api);
     }
@@ -108,7 +108,7 @@ class SaasApiClient
     //customer
     public function customers(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::customer->value);
+        $api = $this->api->baseUrl(EndPoint::customer->value);
 
         return new ModuleApi($api);
     }
@@ -116,7 +116,7 @@ class SaasApiClient
     //seller
     public function sellers(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::seller->value);
+        $api = $this->api->baseUrl(EndPoint::seller->value);
 
         return new ModuleApi($api);
     }
@@ -124,7 +124,7 @@ class SaasApiClient
     //order
     public function orders(): ModuleApi
     {
-        $api = $this->api->baseUrl(Endpoint::order->value);
+        $api = $this->api->baseUrl(EndPoint::order->value);
 
         return new ModuleApi($api);
     }
