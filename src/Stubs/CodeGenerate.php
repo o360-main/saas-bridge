@@ -55,7 +55,6 @@ class CodeGenerate
          * - stores
          * - taxes
          * - tier_groups
-         *
          * - accounts
          * - customers
          * - inventories
