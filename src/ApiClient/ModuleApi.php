@@ -47,31 +47,29 @@ class ModuleApi
     }
 
     //POST /api/v1/categories/find-by-sync-id
-    public function findBySyncId(array $syncId): PromiseInterface|Response
+    public function findBySyncId(array $body): PromiseInterface|Response
     {
         $url = $this->makeUrl('/find-by-sync-id');
 
-        return $this->http->post($url, [
-            'syncId' => $syncId
-        ]);
+        return $this->http->post($url, $body);
     }
 
 
     // POST /api/v1/categories/sync
-    public function sync($data): PromiseInterface|Response
+    public function sync(array $body): PromiseInterface|Response
     {
         $url = $this->makeUrl('/sync');
 
-        return $this->http->post($url, $data);
+        return $this->http->post($url, $body);
     }
 
 
     //POST /api/v1/categories/update-sync-id/1
-    public function updateSyncId(string $saasId, $data): PromiseInterface|Response
+    public function updateSyncId(string $saasId, array $body): PromiseInterface|Response
     {
         $url = $this->makeUrl('/update-sync-id', $saasId);
 
-        return $this->http->post($url, $data);
+        return $this->http->post($url, $body);
     }
 
 
@@ -85,48 +83,46 @@ class ModuleApi
     }
 
     //DELETE /api/v1/categories/delete-by-sync-id
-    public function deleteBySyncId(array $syncId): PromiseInterface|Response
+    public function deleteBySyncId(array $body): PromiseInterface|Response
     {
         $url = $this->makeUrl('/delete-by-sync-id');
 
-        return $this->http->delete($url, [
-            'syncId' => $syncId
-        ]);
+        return $this->http->delete($url, $body);
     }
 
 
     //POST /api/v1/categories/batch-sync
-    public function batchSync($data): PromiseInterface|Response
+    public function batchSync(array $body): PromiseInterface|Response
     {
         $url = $this->makeUrl('/batch-sync');
 
-        return $this->http->post($url, $data);
+        return $this->http->post($url, $body);
     }
 
 
     //POST /api/v1/categories/batch-update-sync-ids
-    public function batchUpdateSyncIds($data): PromiseInterface|Response
+    public function batchUpdateSyncIds(array $body): PromiseInterface|Response
     {
         $url = $this->makeUrl('/batch-update-sync-ids');
 
-        return $this->http->post($url, $data);
+        return $this->http->post($url, $body);
     }
 
 
     //POST /api/v1/categories/batch-delete-by-ids
-    public function batchDeleteBySaasIds($data): PromiseInterface|Response
+    public function batchDeleteBySaasIds(array $body): PromiseInterface|Response
     {
         $url = $this->makeUrl('/batch-delete-by-ids');
 
-        return $this->http->post($url, $data);
+        return $this->http->post($url, $body);
     }
 
     //POST /api/v1/categories/batch-delete-by-sync-ids
-    public function batchDeleteBySyncIds($data): PromiseInterface|Response
+    public function batchDeleteBySyncIds(array $body): PromiseInterface|Response
     {
         $url = $this->makeUrl('/batch-delete-by-sync-ids');
 
-        return $this->http->post($url, $data);
+        return $this->http->post($url, $body);
     }
 
 }

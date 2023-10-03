@@ -49,7 +49,6 @@ class SaasAgent
             throw new \Exception('CoreApi url not set');
         }
 
-
         if ($version !== null) {
             $allowedVersions = [
                 'v1'
