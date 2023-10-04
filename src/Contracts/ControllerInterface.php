@@ -2,12 +2,10 @@
 
 namespace O360Main\SaasBridge\Contracts;
 
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use O360Main\SaasBridge\Config\ConfigResponse;
-use O360Main\SaasBridge\Config\DataResponse;
-use O360Main\SaasBridge\Config\TriggerResponse;
+use O360Main\SaasBridge\Responses\ConfigResponse;
+use O360Main\SaasBridge\Responses\DataResponse;
+use O360Main\SaasBridge\Responses\TriggerResponse;
 
 interface ControllerInterface
 {

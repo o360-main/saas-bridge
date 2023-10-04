@@ -1,6 +1,6 @@
 <?php
 
-namespace O360Main\SaasBridge\Config;
+namespace O360Main\SaasBridge\Responses;
 
 use Illuminate\Contracts\Support\Responsable;
 

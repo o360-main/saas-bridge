@@ -4,6 +4,10 @@ namespace O360Main\SaasBridge\Helpers;
 
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @deprecated use ExportResponse and ImportResponse and TriggerResponse instead from
+ * @see \O360Main\SaasBridge\Responses\{ExportResponse, ImportResponse, TriggerResponse}
+ */
 final class ResponseHelper
 {
     private function __construct()
@@ -32,7 +36,8 @@ final class ResponseHelper
         bool|null   $isError = null,
         string|null $errorMsg = null,
         array       $data = []
-    ): JsonResponse {
+    ): JsonResponse
+    {
 
         $isError ??= false;
         $interval ??= 300;

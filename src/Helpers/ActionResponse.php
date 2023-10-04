@@ -4,6 +4,9 @@ namespace O360Main\SaasBridge\Helpers;
 
 use Illuminate\Contracts\Support\Responsable;
 
+/**
+ * @deprecated use TriggerResponse instead
+ */
 class ActionResponse implements Responsable
 {
     private bool $completed;

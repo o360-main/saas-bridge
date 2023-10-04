@@ -5,6 +5,9 @@ namespace O360Main\SaasBridge\Helpers;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @deprecated use ExportResponse and ImportResponse instead from
+ */
 class EventResponse implements Responsable
 {
     private array $data = [];
