@@ -78,4 +78,9 @@ class SaasBridgeService
         return $this->saasAgent->plugin();
     }
 
+    public function pluginId(): string
+    {
+        return $this->saasAgent->plugin()['id'];
+    }
+
 }
