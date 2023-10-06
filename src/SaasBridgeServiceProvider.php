@@ -32,6 +32,12 @@ class SaasBridgeServiceProvider extends ServiceProvider
         }
 
 
+
+        foreach (glob(__DIR__ . '/Helpers/functions/*.php') as $filename) {
+            require_once $filename;
+        }
+
+
     }
 
     /**
