@@ -32,7 +32,6 @@ class SaasBridgeServiceProvider extends ServiceProvider
         }
 
 
-
         foreach (glob(__DIR__ . '/Helpers/functions/*.php') as $filename) {
             require_once $filename;
         }
@@ -60,6 +59,16 @@ class SaasBridgeServiceProvider extends ServiceProvider
 
         //make route macro
         Route::macro('module', function ($url, $controller) {
+
+//            throw if $controller is not an instance of ControllerInterface
+
+            if (config('saas-bridge.strict_mode')) {
+                $controllerValidationService = new Services\ControllerValidationService();
+                $controllerValidationService->validate($controller);
+            }
+
+
+
             Route::post("/{$url}/data", [$controller, 'data']);
             Route::post("/{$url}/config", [$controller, 'config']);
             Route::post("/{$url}/import", [$controller, 'import']);

@@ -6,16 +6,26 @@ use Illuminate\Http\Request;
 use O360Main\SaasBridge\Contracts\ControllerInterface;
 use O360Main\SaasBridge\Helpers\ActionResponse;
 use O360Main\SaasBridge\Helpers\ResponseHelper;
+use O360Main\SaasBridge\Http\Requests\ConfigRequest;
+use O360Main\SaasBridge\Http\Requests\DataRequest;
+use O360Main\SaasBridge\Http\Requests\ExportRequest;
+use O360Main\SaasBridge\Http\Requests\ImportRequest;
+use O360Main\SaasBridge\Http\Requests\TriggerRequest;
+use O360Main\SaasBridge\Http\Responses\ConfigResponse;
+use O360Main\SaasBridge\Http\Responses\DataResponse;
+use O360Main\SaasBridge\Http\Responses\ExportResponse;
+use O360Main\SaasBridge\Http\Responses\ImportResponse;
+use O360Main\SaasBridge\Http\Responses\TriggerResponse;
 
 class {{Modules}}Controller implements ControllerInterface
 {
 
-    public function data(Request $request): array
+    public function data(DataRequest $request): DataResponse
     {
         return [];
     }
 
-    public function config(Request $request): array
+    public function config(ConfigRequest $request): ConfigResponse
     {
 
         //TODO : change and add your config fields
@@ -35,7 +45,7 @@ class {{Modules}}Controller implements ControllerInterface
     }
 
 
-    public function import(Request $request)
+    public function import(ImportRequest $request):ImportResponse
     {
         $payload = $request->input('payload');
         $event = strtolower($request->input('event'));
@@ -58,7 +68,7 @@ class {{Modules}}Controller implements ControllerInterface
 
     }
 
-    public function export(Request $request): \Illuminate\Http\JsonResponse
+    public function export(ExportRequest $request): ExportResponse
     {
 
         $payload = $request->input('payload');
@@ -77,7 +87,7 @@ class {{Modules}}Controller implements ControllerInterface
 
     }
 
-    public function trigger(Request $request)
+    public function trigger(TriggerRequest $request):TriggerResponse
     {
 
         $payload = $request->input('payload');

@@ -73,7 +73,6 @@ class SaasCredentialsBoot
         }
 
 
-
         $headers = [
             'Authorization' => 'Bearer ' . $this->auth['token'],
             'Accept' => 'application/json',
@@ -82,7 +81,7 @@ class SaasCredentialsBoot
             'X-Plugin-Secret' => config('saas-bridge.plugin_secret'),
             'X-Plugin-Id' => $this->request->header('X-Plugin-Id'),
         ];
-        if ($this->request->header('X-Plugin-Dev')) {
+        if ($this->request->header('X-Plugin-Dev', false)) {
             $headers['X-Plugin-Dev'] = $this->request->header('X-Plugin-Dev');
         }
         $this->saasApi = Http::baseUrl($baseUrl)->withHeaders($headers);

@@ -26,12 +26,16 @@ class ControllerGenerator extends BaseCommand
      * Execute the console command.
      *
      * @return int
+     * @throws \Exception
      */
     public function handle(): int
     {
         $x = new CodeGenerate();
 
         $x->run();
+
+
+        return Command::SUCCESS;
 
     }
 }

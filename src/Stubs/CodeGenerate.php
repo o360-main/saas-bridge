@@ -2,39 +2,40 @@
 
 namespace O360Main\SaasBridge\Stubs;
 
+use O360Main\SaasBridge\Module;
+
 class CodeGenerate
 {
-
+    /**
+     * @throws \Exception
+     */
     public function run()
     {
-
         //get all modules
-
-        $modules = $this->getModules();
-
-        foreach ($modules as $module) {
-
-            $content = $this->modStub($module);
-            $file = "{$module['capPlural']}Controller.php";
-
-            $path = app_path('Http/Controllers') . '/' . $file;
-
-            if (file_exists($path)) {
-                continue;
-            }
-
-            file_put_contents($path, $content);
+        foreach (Module::cases() as $module) {
+            $this->generateController($module);
         }
 
-        $this->generateRoutes($modules);
-
+        $this->generateRoutes();
     }
 
 
-    protected function modStub($module)
+    /**
+     * @throws \Exception
+     */
+    protected function modStub(Module $module): array|bool|string
     {
 
         $stub = $this->getStub();
+
+        $detail = $module->detail();
+
+        $module = [
+            'capName' => $module->name,
+            'smName' => $module->value,
+            'capPlural' => $detail['label'],
+            'smPlural' => $detail['plural'],
+        ];
 
         $stub = str_replace('{{Module}}', $module['capName'], $stub);
         $stub = str_replace('{{module}}', $module['smName'], $stub);
@@ -44,96 +45,30 @@ class CodeGenerate
     }
 
 
-    protected function getModules(): array
-    {
-        /**
-         * Modules
-         * - attributes
-         * - categories
-         * - currencies
-         * - payment_methods
-         * - stores
-         * - taxes
-         * - tier_groups
-         * - accounts
-         * - customers
-         * - inventories
-         * - orders
-         * - products
-         * - sellers
-         */
-
-
-        return [
-            ['capName' => 'Attribute', 'smName' => 'attribute', 'capPlural' => 'Attributes', 'smPlural' => 'attributes'],
-            [
-                'capName' => 'Category',
-                'smName' => 'category',
-                'capPlural' => 'Categories',
-                'smPlural' => 'categories'
-            ],
-            [
-                'capName' => 'Currency',
-                'smName' => 'currency',
-                'capPlural' => 'Currencies',
-                'smPlural' => 'currencies'
-            ],
-            [
-                'capName' => 'PaymentMethod',
-                'smName' => 'payment_method',
-                'capPlural' => 'PaymentMethods',
-                'smPlural' => 'payment_methods'
-            ],
-            ['capName' => 'Store', 'smName' => 'store', 'capPlural' => 'Stores', 'smPlural' => 'stores'],
-            ['capName' => 'Tax', 'smName' => 'tax', 'capPlural' => 'Taxes', 'smPlural' => 'taxes'],
-            [
-                'capName' => 'TierGroup',
-                'smName' => 'tier_group',
-                'capPlural' => 'TierGroups',
-                'smPlural' => 'tier_groups'
-            ],
-            ['capName' => 'Account', 'smName' => 'account', 'capPlural' => 'Accounts', 'smPlural' => 'accounts'],
-            [
-                'capName' => 'Customer',
-                'smName' => 'customer',
-                'capPlural' => 'Customers',
-                'smPlural' => 'customers'
-            ],
-            [
-                'capName' => 'Inventory',
-                'smName' => 'inventory',
-                'capPlural' => 'Inventories',
-                'smPlural' => 'inventories'
-            ],
-            ['capName' => 'Order', 'smName' => 'order', 'capPlural' => 'Orders', 'smPlural' => 'orders'],
-            ['capName' => 'Product', 'smName' => 'product', 'capPlural' => 'Products', 'smPlural' => 'products'],
-            ['capName' => 'Seller', 'smName' => 'seller', 'capPlural' => 'Sellers', 'smPlural' => 'sellers'],
-        ];
-
-    }
-
-
     protected function getStub(): bool|string
     {
         $file = __DIR__ . '/ModuleController.php.stub';
-
         return file_get_contents($file);
     }
 
-    private function generateRoutes(array $modules)
+    /**
+     * @throws \Exception
+     */
+    private function generateRoutes(): void
     {
-
         $routeFile = base_path('routes/api.php');
 
         $routes = '//--SaasBridge--//' . PHP_EOL;
 
-        foreach ($modules as $module) {
+        foreach (Module::cases() as $module) {
+
+            $plural = $module->detail('plural');
+            $controller = $module->detail('label') . 'Controller';
 
             $routes .= <<<PHP
-Route::module('{$module['smPlural']}',\App\Http\Controllers\\{$module['capPlural']}Controller::class);\n
+Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
         }
-
 
         $content = file_get_contents($routeFile);
 
@@ -142,5 +77,26 @@ PHP;
         //append
         file_put_contents($routeFile, $content);
 
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function generateController(Module $module): void
+    {
+        $controllerName = $module->detail('label');
+
+        $content = $this->modStub($module);
+        $file = "{$controllerName}Controller.php";
+
+        $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
+
+        $path = app_path('Http/Controllers') . $folder . $file;
+
+        if (file_exists($path)) {
+            return;
+        }
+
+        file_put_contents($path, $content);
     }
 }
