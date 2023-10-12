@@ -9,6 +9,16 @@ class ControllerValidationService
 
     /**
      * @throws \ReflectionException
+     */
+    public static function check(string $controller): void
+    {
+        $instance = new self();
+        $instance->validate($controller);
+    }
+
+
+    /**
+     * @throws \ReflectionException
      * @throws \Exception
      */
     public function validate($controller): void

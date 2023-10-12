@@ -3,24 +3,22 @@
 namespace O360Main\SaasBridge\Http\Requests;
 
 use O360Main\SaasBridge\Contracts\BaseRequest;
+use O360Main\SaasBridge\ModuleEvent;
 
 class ExportRequest extends BaseRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'id' => 'required',
+            'payload' => 'required|array',
+            'payload.id' => 'required|string',
+            'event' => 'required|string',
         ];
     }
 
     public function saasId()
     {
-        return $this->input('id');
+        return $this->input('payload.id');
     }
 
 
@@ -30,10 +28,11 @@ class ExportRequest extends BaseRequest
     }
 
 
-    public function event(): string
+    public function event(): ModuleEvent
     {
-        return strtolower($this->input('event', ''));
-    }
+        $str = event_action_extract($this->input('event'));
 
+        return ModuleEvent::from($str);
+    }
 
 }

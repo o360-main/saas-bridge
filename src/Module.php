@@ -30,92 +30,107 @@ enum Module: string
         $value = match ($this) {
             self::category => [
                 'name' => 'category',
-                'label' => 'Category',
                 'plural' => 'categories',
+                'label' => 'Category',
+                'label_plural' => 'Categories',
                 'simple' => true,
             ],
 
             self::store => [
                 'name' => 'store',
-                'label' => 'Store',
                 'plural' => 'stores',
+
+                'label' => 'Store',
+                'label_plural' => 'Stores',
                 'simple' => true,
             ],
 
             self::attribute => [
                 'name' => 'attribute',
-                'label' => 'Attribute',
                 'plural' => 'attributes',
+                'label' => 'Attribute',
+                'label_plural' => 'Attributes',
                 'simple' => true,
             ],
 
             self::tax => [
                 'name' => 'tax',
-                'label' => 'Tax',
                 'plural' => 'taxes',
+                'label' => 'Tax',
+                'label_plural' => 'Taxes',
                 'simple' => true,
             ],
 
             self::currency => [
                 'name' => 'currency',
-                'label' => 'Currency',
                 'plural' => 'currencies',
+                'label' => 'Currency',
+                'label_plural' => 'Currencies',
                 'simple' => true,
             ],
 
             self::paymentMethod => [
                 'name' => 'payment_method',
-                'label' => 'PaymentMethod',
                 'plural' => 'payment_methods',
+                'label' => 'PaymentMethod',
+                'label_plural' => 'PaymentMethods',
                 'simple' => true,
             ],
 
             self::tierGroup => [
                 'name' => 'tier_group',
-                'label' => 'TierGroup',
                 'plural' => 'tier_groups',
+
+                'label' => 'TierGroup',
+                'label_plural' => 'TierGroups',
                 'simple' => true,
             ],
 
             self::customer => [
                 'name' => 'customer',
-                'label' => 'Customer',
                 'plural' => 'customers',
+                'label' => 'Customer',
+                'label_plural' => 'Customers',
                 'simple' => false,
             ],
 
             self::product => [
                 'name' => 'product',
-                'label' => 'Product',
                 'plural' => 'products',
+                'label' => 'Product',
+                'label_plural' => 'Products',
                 'simple' => false,
             ],
 
             self::inventory => [
                 'name' => 'inventory',
-                'label' => 'Inventory',
                 'plural' => 'inventories',
+                'label' => 'Inventory',
+                'label_plural' => 'Inventories',
                 'simple' => false,
             ],
 
             self::order => [
                 'name' => 'order',
-                'label' => 'Order',
                 'plural' => 'orders',
+                'label' => 'Order',
+                'label_plural' => 'Orders',
                 'simple' => false,
             ],
 
             self::seller => [
                 'name' => 'seller',
-                'label' => 'Seller',
                 'plural' => 'sellers',
+                'label' => 'Seller',
+                'label_plural' => 'Sellers',
                 'simple' => false,
             ],
 
             self::account => [
                 'name' => 'account',
-                'label' => 'Account',
                 'plural' => 'accounts',
+                'label' => 'Account',
+                'label_plural' => 'Accounts',
                 'simple' => false,
             ],
 
@@ -146,8 +161,14 @@ enum Module: string
     /**
      * @throws \Exception
      */
-    public function event($event): string
+    public function event(ModuleEvent $event): string
     {
-        return $this->detail('name') . '.' . $event;
+        return $this->name . ' . ' . $event->value;
+    }
+
+
+    public function str(string $append): string
+    {
+        return $this->name . ' . ' . $append;
     }
 }
