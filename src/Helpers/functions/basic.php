@@ -30,14 +30,12 @@ function url_make(...$path): string
 
 function array_get(array $arr, $key, $default = null)
 {
-    return $arr[$key] ?? $default;
+    return Arr::get($arr, $key, $default);
 }
 
 function array_pull(array &$arr, $key, $default = null)
 {
-    $value = $arr[$key] ?? $default;
-    unset($arr[$key]);
-    return $value;
+    return Arr::pull($arr, $key, $default);
 }
 
 
