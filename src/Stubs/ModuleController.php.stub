@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\Simple\Category\CategoryService;
 use O360Main\SaasBridge\Contracts\ControllerInterface;
-use O360Main\SaasBridge\Helpers\ActionResponse;
-use O360Main\SaasBridge\Helpers\ResponseHelper;
 use O360Main\SaasBridge\Http\Requests\ConfigRequest;
 use O360Main\SaasBridge\Http\Requests\DataRequest;
 use O360Main\SaasBridge\Http\Requests\ExportRequest;
@@ -16,97 +15,83 @@ use O360Main\SaasBridge\Http\Responses\DataResponse;
 use O360Main\SaasBridge\Http\Responses\ExportResponse;
 use O360Main\SaasBridge\Http\Responses\ImportResponse;
 use O360Main\SaasBridge\Http\Responses\TriggerResponse;
+use O360Main\SaasBridge\ModuleAction;
+use O360Main\SaasBridge\ModuleEvent;
+use O360Main\SaasBridge\Config\FormField;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Exception;
+
 
 class {{Modules}}Controller implements ControllerInterface
 {
 
-    public function data(DataRequest $request): DataResponse
-    {
-        return [];
-    }
-
-    public function config(ConfigRequest $request): ConfigResponse
-    {
-
-        //TODO : change and add your config fields
-        return [
-            'available' => true,
-            'webhook' => true,
-            'form_fields' => [
-//                FormField::number(
-//                    name: 'limit',
-//                    label: 'Limit',
-//                    default_value: null,
-//                    index: 1,
-//                    required: true
-//                ),
-            ]
-        ];
-    }
+      public function data(DataRequest $request): DataResponse
+      {
+          return new DataResponse();
+      }
 
 
-    public function import(ImportRequest $request):ImportResponse
-    {
-        $payload = $request->input('payload');
-        $event = strtolower($request->input('event'));
+      public function config(ConfigRequest $request): ConfigResponse
+      {
+          return new ConfigResponse(
+              available: true,
+              webhook: false,
+              form_fields: [
+                FormField::select(
+                                  name: 'test',
+                                  label: 'Test',
+                                  options: [
+                                      ['label' => 'Test', 'value' => 'test'],
+                                      ['label' => 'Test 2', 'value' => 'test2'],
+                                  ],
+                                  default_value: 'test',
+                                  index: 1,
+                                  required: true,
+                                  multiple: true,
+                              ),
+              ],
+          );
+      }
+
+      public function import(ImportRequest $request): ImportResponse
+      {
+          //If webhook = false
+           throw new NotFoundHttpException('Feature not found');
+      }
+
+      /**
+       * @throws \Exception
+       */
+      public function export(ExportRequest $request): ExportResponse
+      {
+          $categoryService = new {{Module}}Service();
+
+          return match ($request->event()) {
+              //if event is created or updated
+              ModuleEvent::created, ModuleEvent::updated => ${{module}}Service->export($request),
+
+              //if event is deleted
+              ModuleEvent::deleted => throw new Exception('Not implemented'),
+
+              //in case of any other event
+              default => throw new NotFoundHttpException('Event not found')
+          };
+      }
 
 
-//        $service = new SomeService($payload);
+      /**
+       * @throws \Exception
+       */
+      public function trigger(TriggerRequest $request): TriggerResponse // return this function
+      {
+          $categoryService = new CategoryService();
 
-        //TODO : uncomment and add your event handler
+          return match ($request->action()) {
+              //if action is import_all
+              ModuleAction::import_all => $categoryService->importAllForTrigger($request),
 
-        return match ($event) {
-//            '{{module}}.created' => $service->onCreate(),
-//            '{{module}}.updated' => $service->onUpdate(),
-//            '{{module}}.deleted' => $service->onDelete(),
-            default => ResponseHelper::import(
-                [],
-                false,
-                'Event not found'
-            ),
-        };
+              default => throw new NotFoundHttpException('Action not found')
+          };
+      }
 
-    }
-
-    public function export(ExportRequest $request): ExportResponse
-    {
-
-        $payload = $request->input('payload');
-        $event = strtolower($request->input('event'));
-
-        return match ($event) {
-//            '{{module}}.created' => $service->onCreate(),
-//            '{{module}}.updated' => $service->onUpdate(),
-//            '{{module}}.deleted' => $service->onDelete(),
-            default => ResponseHelper::import(
-                [],
-                false,
-                'Event not found'
-            ),
-        };
-
-    }
-
-    public function trigger(TriggerRequest $request):TriggerResponse
-    {
-
-        $payload = $request->input('payload');
-        $action = strtolower($request->input('action'));
-
-        $prevData = $request->input('data');
-
-//        $someService = new SomeService($payload);
-
-        return match ($action) {
-//            '{{module}}.import_all' => $someService->importAll(),
-            default => ActionResponse::make()
-                ->setCompleted(false)
-                ->setProgressPercentage(50)
-                ->setInterval(300)
-                ->setData([
-                    'message' => 'test'
-                ]),
-        };
-
-    }
 }

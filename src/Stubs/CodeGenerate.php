@@ -9,7 +9,7 @@ class CodeGenerate
     /**
      * @throws \Exception
      */
-    public function run()
+    public function run(): void
     {
         //get all modules
         foreach (Module::cases() as $module) {
@@ -65,6 +65,8 @@ class CodeGenerate
             $plural = $module->detail('plural');
             $controller = $module->detail('label_plural') . 'Controller';
 
+            $controller = $module->isSimple() ? 'Simple\\' . $controller : 'Complex\\' . $controller;
+
             $routes .= <<<PHP
 Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
@@ -86,11 +88,17 @@ PHP;
         $controllerName = $module->detail('label_plural');
 
         $content = $this->modStub($module);
-        $file = "{$controllerName}Controller.php";
+        $file = "{$controllerName}Controller.phpx";
 
         $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
 
-        $path = app_path('Http/Controllers') . $folder . $file;
+
+        if (!file_exists(app_path('Http/Controllers/Stubs') . $folder)) {
+            mkdir(app_path('Http/Controllers/Stubs') . $folder, 0777, true);
+        }
+
+        $path = app_path('Http/Controllers/Stubs') . $folder . $file;
+
 
         if (file_exists($path)) {
             return;
@@ -98,4 +106,5 @@ PHP;
 
         file_put_contents($path, $content);
     }
+
 }

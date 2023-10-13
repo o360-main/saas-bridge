@@ -22,6 +22,11 @@ class TriggerResponse implements Responsable
 
     public function toResponse($request): \Illuminate\Http\JsonResponse
     {
+
+
+        $version = config('saas-bridge.main_version');
+
+
         return response()->json([
             'completed' => $this->completed,
             'progress_in_percentage' => $this->progress_in_percentage,
