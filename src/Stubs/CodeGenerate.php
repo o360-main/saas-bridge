@@ -16,6 +16,8 @@ class CodeGenerate
             $this->generateController($module);
         }
 
+        $this->generateSampleService();
+
         $this->generateRoutes();
     }
 
@@ -25,23 +27,8 @@ class CodeGenerate
      */
     protected function modStub(Module $module): array|bool|string
     {
-
         $stub = $this->getStub();
-
-        $detail = $module->detail();
-
-        $module = [
-            'capName' => $detail['label'],
-            'smName' => $detail['name'],
-            'capPlural' => $detail['label_plural'],
-            'smPlural' => $detail['plural'],
-        ];
-
-        $stub = str_replace('{{Module}}', $module['capName'], $stub);
-        $stub = str_replace('{{module}}', $module['smName'], $stub);
-        $stub = str_replace('{{Modules}}', $module['capPlural'], $stub);
-        return str_replace('{{modules}}', $module['smPlural'], $stub);
-
+        return $this->compileTemplate($stub, $module);
     }
 
 
@@ -88,7 +75,7 @@ PHP;
         $controllerName = $module->detail('label_plural');
 
         $content = $this->modStub($module);
-        $file = "{$controllerName}Controller.phpx";
+        $file = "{$controllerName}Controller.php.stub";
 
         $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
 
@@ -101,10 +88,77 @@ PHP;
 
 
         if (file_exists($path)) {
-            return;
+            //remove
+            unlink($path);
+//            return;
         }
 
         file_put_contents($path, $content);
     }
 
+
+    /**
+     * @throws \Exception
+     */
+    public function generateSampleService(): void
+    {
+
+        $files = [
+            [
+                'file' => 'ModuleService.php.stub',
+                'path' => 'app/Services/Stubs/Category/CategoryService.php.stub',
+            ],
+            [
+                'file' => 'ModuleMapper.php.stub',
+                'path' => 'app/Services/Stubs/Category/CategoryMapper.php.stub',
+            ]
+        ];
+
+        foreach ($files as $f) {
+
+            $file = __DIR__ . '/' . $f['file'];
+            $path = $f['path'];
+
+            $content = file_get_contents($file);
+            $content = $this->compileTemplate($content, Module::category);
+
+            if (!file_exists(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
+
+            file_put_contents($path, $content);
+        }
+
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function compileTemplate(string $stub, Module $module)
+    {
+        $detail = $module->detail();
+
+        $module = [
+            'capName' => $detail['label'],
+            'smName' => $detail['name'],
+            'capPlural' => $detail['label_plural'],
+            'smPlural' => $detail['plural'],
+        ];
+
+        return str_replace([
+            '{{Module}}',
+            '{{module}}',
+            '{{Modules}}',
+            '{{modules}}',
+        ], [
+            $module['capName'],
+            $module['smName'],
+            $module['capPlural'],
+            $module['smPlural'],
+        ], $stub);
+    }
 }

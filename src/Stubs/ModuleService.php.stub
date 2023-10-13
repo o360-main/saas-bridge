@@ -1,0 +1,150 @@
+<?php
+
+namespace App\Services\Simple\{{Module}};
+
+use App\Services\Loader;
+use Exception;
+use Illuminate\Http\Client\PendingRequest;
+use O360Main\SaasBridge\ApiClient\SaasApiClient;
+use O360Main\SaasBridge\Http\Requests\ExportRequest;
+use O360Main\SaasBridge\Http\Requests\TriggerRequest;
+use O360Main\SaasBridge\Http\Responses\ExportResponse;
+use O360Main\SaasBridge\Http\Responses\TriggerResponse;
+
+
+/**
+// This File is for EXAMPLE. do things as you want as per particular SYSTEM.
+class {{Module}}Service
+{
+    private Loader $loader;
+
+    public function __construct()
+    {
+        $this->loader = app(Loader::class);
+
+        $this->saasApiClient = $this->loader->saasClient();
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function importAllForTrigger(TriggerRequest $request): TriggerResponse
+    {
+
+        $data = $request->data();
+
+        $data = array_deep_default($data, [
+            'page_size' => 100,
+            'processed' => 0,
+            'processed_pages' => 0,
+            'version' => [
+                'min' => 0,
+                'max' => 0,
+            ]
+        ]);
+
+        $vendResponse = $this->loader->system()->get('{{modules}}', [
+            'page_size' => $data['page_size'],
+            'after' => $data['version']['max'],
+        ])->throw()->json();
+
+        ${{modules}} = $vendResponse['data'];
+        $data['version'] = $vendResponse['version'];
+
+        $after = $data['version']['max'] ?? null;
+
+        $isCompleted = $after == null && empty(${{modules}});
+
+        if ($isCompleted) {
+            return new TriggerResponse(
+                completed: true,
+                progress_in_percentage: 100,
+                interval_in_seconds: 300,
+                data: $data
+            );
+        }
+
+        $mapper = new {{Module}}Mapper();
+        $mapped{{Modules}} = [];
+        foreach (${{modules}} as ${{module}}) {
+            $mapped{{Modules}}[] = $mapper->vendHqToSaas(${{module}});
+        }
+
+        $response = $this->saasApiClient->{{modules}}()->batchSync([
+            '{{modules}}' => $mapped{{Modules}},
+        ]);
+
+        if ($response->successful()) {
+            $data['processed'] = intval($data['processed'] ?? 0) + count($mapped{{Modules}});
+            $data['processed_pages'] = intval($data['processed_pages'] ?? 0) + 1;
+        } else {
+            throw new \Exception('Saas post error');
+        }
+
+        return new TriggerResponse(
+            completed: false,
+            progress_in_percentage: null,
+            interval_in_seconds: 60,
+            data: $data
+        );
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function export(ExportRequest $request): ExportResponse
+    {
+        $saasId = $request->saasId();
+
+        $response = $this->saasApiClient->{{modules}}()->findById($saasId);
+
+        if ($response->failed()) {
+            throw new \Exception('{{Module}} not found');
+        }
+
+        $saas{{Module}} = $response->json();
+
+        ${{module}}Mapper = new {{Module}}Mapper();
+
+        $mapped = ${{module}}Mapper->saasToVendHq($saas{{Module}});
+
+        //if sync_id is not null then we update
+        $syncId = \Arr::get($saas{{Module}}, 'sync_id.value', null);
+
+        $response = match ($syncId) {
+            null => $this->vendHq->post('product_types', $mapped),
+            default => $this->vendHq->put('product_types/' . $syncId, $mapped),
+        };
+
+
+        if ($response->successful()) {
+
+            $vend{{Module}} = $response->json();
+            $syncId = $vend{{Module}}['id'];
+            $this->saasApiClient->{{modules}}()->updateSyncId($saasId, [
+                'sync_id' => [
+                    'key' => 'id',
+                    'value' => $syncId
+                ]
+            ]);
+
+            return new ExportResponse(
+                status: true,
+                message: '{{Module}} updated successfully',
+                data: $vend{{Module}}
+            );
+
+        }
+
+        return new ExportResponse(
+            status: false,
+            message: '{{Module}} not updated',
+            data: $response->json([]),
+        );
+
+    }
+
+
+}
