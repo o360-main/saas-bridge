@@ -2,145 +2,163 @@
 
 namespace O360Main\SaasBridge\Stubs;
 
+use O360Main\SaasBridge\Module;
+
 class CodeGenerate
 {
-
-    public function run()
+    /**
+     * @throws \Exception
+     */
+    public function run(): void
     {
-
         //get all modules
-
-        $modules = $this->getModules();
-
-        foreach ($modules as $module) {
-
-            $content = $this->modStub($module);
-            $file = "{$module['capPlural']}Controller.php";
-
-            $path = app_path('Http/Controllers') . '/' . $file;
-
-            if (file_exists($path)) {
-                continue;
-            }
-
-            file_put_contents($path, $content);
+        foreach (Module::cases() as $module) {
+            $this->generateController($module);
         }
 
-        $this->generateRoutes($modules);
+        $this->generateSampleService();
 
+        $this->generateRoutes();
     }
 
 
-    protected function modStub($module)
+    /**
+     * @throws \Exception
+     */
+    protected function modStub(Module $module): array|bool|string
     {
-
         $stub = $this->getStub();
-
-        $stub = str_replace('{{Module}}', $module['capName'], $stub);
-        $stub = str_replace('{{module}}', $module['smName'], $stub);
-        $stub = str_replace('{{Modules}}', $module['capPlural'], $stub);
-        return str_replace('{{modules}}', $module['smPlural'], $stub);
-
-    }
-
-
-    protected function getModules(): array
-    {
-        /**
-         * Modules
-         * - attributes
-         * - categories
-         * - currencies
-         * - payment_methods
-         * - stores
-         * - taxes
-         * - tier_groups
-         * - accounts
-         * - customers
-         * - inventories
-         * - orders
-         * - products
-         * - sellers
-         */
-
-
-        return [
-            ['capName' => 'Attribute', 'smName' => 'attribute', 'capPlural' => 'Attributes', 'smPlural' => 'attributes'],
-            [
-                'capName' => 'Category',
-                'smName' => 'category',
-                'capPlural' => 'Categories',
-                'smPlural' => 'categories'
-            ],
-            [
-                'capName' => 'Currency',
-                'smName' => 'currency',
-                'capPlural' => 'Currencies',
-                'smPlural' => 'currencies'
-            ],
-            [
-                'capName' => 'PaymentMethod',
-                'smName' => 'payment_method',
-                'capPlural' => 'PaymentMethods',
-                'smPlural' => 'payment_methods'
-            ],
-            ['capName' => 'Store', 'smName' => 'store', 'capPlural' => 'Stores', 'smPlural' => 'stores'],
-            ['capName' => 'Tax', 'smName' => 'tax', 'capPlural' => 'Taxes', 'smPlural' => 'taxes'],
-            [
-                'capName' => 'TierGroup',
-                'smName' => 'tier_group',
-                'capPlural' => 'TierGroups',
-                'smPlural' => 'tier_groups'
-            ],
-            ['capName' => 'Account', 'smName' => 'account', 'capPlural' => 'Accounts', 'smPlural' => 'accounts'],
-            [
-                'capName' => 'Customer',
-                'smName' => 'customer',
-                'capPlural' => 'Customers',
-                'smPlural' => 'customers'
-            ],
-            [
-                'capName' => 'Inventory',
-                'smName' => 'inventory',
-                'capPlural' => 'Inventories',
-                'smPlural' => 'inventories'
-            ],
-            ['capName' => 'Order', 'smName' => 'order', 'capPlural' => 'Orders', 'smPlural' => 'orders'],
-            ['capName' => 'Product', 'smName' => 'product', 'capPlural' => 'Products', 'smPlural' => 'products'],
-            ['capName' => 'Seller', 'smName' => 'seller', 'capPlural' => 'Sellers', 'smPlural' => 'sellers'],
-        ];
-
+        return $this->compileTemplate($stub, $module);
     }
 
 
     protected function getStub(): bool|string
     {
         $file = __DIR__ . '/ModuleController.php.stub';
-
         return file_get_contents($file);
     }
 
-    private function generateRoutes(array $modules)
+    /**
+     * @throws \Exception
+     */
+    private function generateRoutes(): void
     {
-
         $routeFile = base_path('routes/api.php');
 
         $routes = '//--SaasBridge--//' . PHP_EOL;
 
-        foreach ($modules as $module) {
+        foreach (Module::cases() as $module) {
+
+            $plural = $module->detail('plural');
+            $controller = $module->detail('label_plural') . 'Controller';
+
+            $controller = $module->isSimple() ? 'Simple\\' . $controller : 'Complex\\' . $controller;
 
             $routes .= <<<PHP
-Route::module('{$module['smPlural']}',\App\Http\Controllers\\{$module['capPlural']}Controller::class);\n
+Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
         }
-
 
         $content = file_get_contents($routeFile);
 
         $content = str_replace('//--SaasBridge--//', $routes, $content);
-
         //append
         file_put_contents($routeFile, $content);
 
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function generateController(Module $module): void
+    {
+        $controllerName = $module->detail('label_plural');
+
+        $content = $this->modStub($module);
+        $file = "{$controllerName}Controller.php.stub";
+
+        $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
+
+
+        if (!file_exists(app_path('Http/Controllers/Stubs') . $folder)) {
+            mkdir(app_path('Http/Controllers/Stubs') . $folder, 0777, true);
+        }
+
+        $path = app_path('Http/Controllers/Stubs') . $folder . $file;
+
+
+        if (file_exists($path)) {
+            //remove
+            unlink($path);
+//            return;
+        }
+
+        file_put_contents($path, $content);
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function generateSampleService(): void
+    {
+
+        $files = [
+            [
+                'file' => 'ModuleService.php.stub',
+                'path' => 'app/Services/Stubs/Category/CategoryService.php.stub',
+            ],
+            [
+                'file' => 'ModuleMapper.php.stub',
+                'path' => 'app/Services/Stubs/Category/CategoryMapper.php.stub',
+            ]
+        ];
+
+        foreach ($files as $f) {
+
+            $file = __DIR__ . '/' . $f['file'];
+            $path = $f['path'];
+
+            $content = file_get_contents($file);
+            $content = $this->compileTemplate($content, Module::category);
+
+            if (!file_exists(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
+
+            file_put_contents($path, $content);
+        }
+
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function compileTemplate(string $stub, Module $module)
+    {
+        $detail = $module->detail();
+
+        $module = [
+            'capName' => $detail['label'],
+            'smName' => $detail['name'],
+            'capPlural' => $detail['label_plural'],
+            'smPlural' => $detail['plural'],
+        ];
+
+        return str_replace([
+            '{{Module}}',
+            '{{module}}',
+            '{{Modules}}',
+            '{{modules}}',
+        ], [
+            $module['capName'],
+            $module['smName'],
+            $module['capPlural'],
+            $module['smPlural'],
+        ], $stub);
     }
 }

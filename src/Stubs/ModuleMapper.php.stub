@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Services\Simple\Category;
+
+use Illuminate\Support\Str;
+use O360Main\SaasBridge\Helpers\ArrayBroker;
+
+class CategoryMapper
+{
+    /**
+     * @throws \Exception
+     */
+    public function vendHqToSaas($vendHqCategory): array
+    {
+        $data = ArrayBroker::use($vendHqCategory);
+        $categoryID = $data->string('id');
+        $name = $data->string('name');
+        $slug = Str::slug($name);
+
+        return [
+            'sync_id' => [
+                'key' => 'id',
+                'value' => $categoryID
+            ],
+            'uid' => $categoryID,
+            'name' => $name,
+            'slug' => $slug,
+            'description' => $name,
+            'is_active' => false,
+            '_data' => $data->toArray()
+        ];
+    }
+
+
+    public function saasToVendHq($saasCategory): array
+    {
+        $data = ArrayBroker::use($saasCategory);
+
+        return [
+            'id' => $data->string('uid'),
+            'name' => 'Categories 111',
+            'leaf_category' => true,
+            'category_path' => [
+                [
+                    'id' => $data->string('uid'),
+                    'name' => $data->string('name'),
+                ]
+            ]
+        ];
+    }
+
+}

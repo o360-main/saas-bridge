@@ -2,9 +2,12 @@
 
 namespace O360Main\SaasBridge\Services;
 
+use Config;
+use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\UnauthorizedException;
 use O360Main\SaasBridge\SaasAgent;
 use O360Main\SaasBridge\SaasBridgeService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -61,30 +64,50 @@ class SaasCredentialsBoot
      */
     private function initSaasApi(): void
     {
+        //check token is exists on header
         if (!isset($this->auth['token'])) {
-            throw new \Exception('Token not found');
+            throw new UnauthorizedException('Invalid Access Key');
         }
 
-
+        //check base url is existing on config
         $baseUrl = config('saas-bridge.saas_api_url');
-
         if (empty($baseUrl)) {
-            throw new \Exception('CoreApi url not set');
+            throw new Exception('CoreApi url not set');
         }
 
+        $headers = [];
+
+        //check plugin id is existing on header
+        $pluginId = $this->request->header('X-Plugin-Id');
+        if (!$pluginId) {
+            throw new UnauthorizedException('Plugin id not found');
+        }
+
+        $headers['X-Plugin-Id'] = $pluginId;
+        Config::set('saas-bridge.plugin_id', $pluginId);
 
 
+        //check is in dev mode
+        $isInDev = $this->request->header('X-Plugin-Dev', false);
+        if ($isInDev) {
+            $headers['X-Plugin-Dev'] = $isInDev;
+            Config::set('saas-bridge.plugin_dev', $isInDev);
+        }
+
+        //check the main version
+        $mainVersion = $this->request->header('X-Main-Version', 'v1');
+        Config::set('saas-bridge.main_version', $mainVersion);
+        $headers['X-Main-Version'] = $mainVersion;
+
+        //Set headers
         $headers = [
             'Authorization' => 'Bearer ' . $this->auth['token'],
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            //                'X-Plugin-Secret' => $this->request->header('X-Plugin-Secret'),
             'X-Plugin-Secret' => config('saas-bridge.plugin_secret'),
-            'X-Plugin-Id' => $this->request->header('X-Plugin-Id'),
+            ...$headers,
         ];
-        if ($this->request->header('X-Plugin-Dev')) {
-            $headers['X-Plugin-Dev'] = $this->request->header('X-Plugin-Dev');
-        }
+
         $this->saasApi = Http::baseUrl($baseUrl)->withHeaders($headers);
 
         $this->saasAgent->setSaasApi($this->saasApi);
@@ -103,12 +126,6 @@ class SaasCredentialsBoot
         $response = $this->saasApi->get(
             config('saas-bridge.token_validate_endpoint')
         );
-
-//        \Log::info('xxx', [
-//            'response' => $response->body(),
-//            'headers' => $response->headers(),
-//            'status' => $response->status(),
-//        ]);
 
         if (!$response->ok()) {
             throw new AccessDeniedHttpException('Invalid Access Key');
