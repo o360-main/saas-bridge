@@ -34,7 +34,6 @@ class ControllerGenerator extends BaseCommand
 
         $x->run();
 
-
         return Command::SUCCESS;
 
     }
