@@ -2,11 +2,23 @@
 
 namespace O360Main\SaasBridge\Http\Requests;
 
-use O360Main\SaasBridge\Contracts\BaseRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use O360Main\SaasBridge\ModuleEvent;
 
-class ExportRequest extends BaseRequest
+class ExportRequest extends FormRequest
 {
+
+
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+
+
     public function rules(): array
     {
         return [

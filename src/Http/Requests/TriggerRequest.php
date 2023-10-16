@@ -2,11 +2,20 @@
 
 namespace O360Main\SaasBridge\Http\Requests;
 
-use O360Main\SaasBridge\Contracts\BaseRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use O360Main\SaasBridge\ModuleAction;
 
-class TriggerRequest extends BaseRequest
+class TriggerRequest extends FormRequest
 {
+
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
 
     public function rules(): array
     {
@@ -16,6 +25,11 @@ class TriggerRequest extends BaseRequest
         ];
     }
 
+
+    /**
+     * Extra Functions
+     */
+
     public function payload(): array
     {
         return $this->input('payload', []);
@@ -23,39 +37,23 @@ class TriggerRequest extends BaseRequest
 
     public function data(): array
     {
-//        return $this->payload()['data'] ?? [];
-        return $this->payload(); //for now payload as data - but latter it will be $payload['data']
+
+        $version = config('saas-bridge.version');
+
+        if ($version == 'v1') {
+            return $this->payload();
+        }
+
+        return $this->payload()['data'] ?? [];
     }
 
 
     public function action(): ModuleAction
     {
-        $str = event_action_extract($this->input('action'));
 
-        return ModuleAction::from($str);
+        [$module, $action] = explode('.', $this->input('action'));
+
+        return ModuleAction::from($action);
     }
 
-
-//    /**
-//     * @throws \Exception
-//     */
-//    public function module(): Module
-//    {
-//        $module = $this->input('module', null);
-//
-//        if (is_null($module)) {
-//
-//            $module = collect(Module::cases())->filter(function ($module) {
-//                return str_contains(request()->url(), $module->plural());
-//            })->first();
-//
-//
-//            if (is_null($module)) {
-//                throw new \Exception('Module not found');
-//            }
-//
-//        }
-//
-//        return $module;
-//    }
 }
