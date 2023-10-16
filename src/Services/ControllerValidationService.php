@@ -23,10 +23,18 @@ class ControllerValidationService
      */
     public function validate($controller): void
     {
+
+        $strictMode = config('saas-bridge.strict_mode');
+
+        if (!$strictMode) {
+            return;
+        }
+
+
         $reflection = new ReflectionClass($controller);
 
         if (!$reflection->implementsInterface(\O360Main\SaasBridge\Contracts\ControllerInterface::class)) {
-            throw new \Exception("Controller must implement ControllerInterface");
+            throw new \Exception("{$controller} must implement ControllerInterface");
         }
 
 
