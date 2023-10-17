@@ -2,6 +2,7 @@
 
 namespace O360Main\SaasBridge\Stubs;
 
+use Illuminate\Support\Str;
 use O360Main\SaasBridge\Module;
 
 class CodeGenerate
@@ -76,6 +77,8 @@ class CodeGenerate
     {
         $routeFile = base_path('routes/api.php');
 
+        $content = file_get_contents($routeFile);
+
         $routes = '//--SaasBridge--//' . PHP_EOL;
 
         foreach (Module::cases() as $module) {
@@ -87,12 +90,17 @@ class CodeGenerate
 
             $controller = $folder . $controller;
 
-            $routes .= <<<PHP
+            $_ro = <<<PHP
 //Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
+
+            if (!Str::contains($content, $_ro))
+            {
+                $routes .= $_ro;
+            }
+
         }
 
-        $content = file_get_contents($routeFile);
 
         $content = str_replace('//--SaasBridge--//', $routes, $content);
         //append
