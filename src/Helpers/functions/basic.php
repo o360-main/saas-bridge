@@ -39,12 +39,5 @@ function array_pull(array &$arr, $key, $default = null)
 }
 
 
-function event_action_extract(string $str): string
-{
-    $arr = explode('.', $str);
-    return end($arr);
-
-}
-
 
 

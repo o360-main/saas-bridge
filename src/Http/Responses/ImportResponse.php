@@ -9,7 +9,7 @@ class ImportResponse implements Responsable
 {
 
     public function __construct(
-        public bool    $status = false,
+        public bool    $success = false,
         public ?string $message = null,
         public array   $data = [],
     )
@@ -20,7 +20,7 @@ class ImportResponse implements Responsable
     {
         return response()->json([
             'data' => $this->data,
-            'status' => $this->status,
+            'success' => $this->success,
             'message' => $this->message,
         ]);
     }
