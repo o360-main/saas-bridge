@@ -10,7 +10,6 @@ class ControllerGenerator extends BaseCommand
 {
     /**
      * The name and signature of the console command.
-     *çn
      * @var string
      */
     protected $signature = 'saas:generate:controller';

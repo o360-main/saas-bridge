@@ -6,17 +6,32 @@ use O360Main\SaasBridge\Module;
 
 class CodeGenerate
 {
+
+
+    public function __construct(
+        protected bool $stub = false,
+        protected bool $routes = false,
+    )
+    {
+    }
+
+
     /**
      * @throws \Exception
      */
     public function run()
     {
+
         //get all modules
         foreach (Module::cases() as $module) {
             $this->generateController($module);
         }
 
-        $this->generateRoutes();
+
+        if ($this->routes) {
+            $this->generateRoutes();
+
+        }
     }
 
 
@@ -86,7 +101,13 @@ PHP;
         $controllerName = $module->detail('label_plural');
 
         $content = $this->modStub($module);
-        $file = "{$controllerName}Controller.php";
+
+        $file = match ($this->stub)
+        {
+            true => "{$controllerName}Controller.php.stub",
+            default => "{$controllerName}Controller.php",
+        };
+
 
         $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
 
