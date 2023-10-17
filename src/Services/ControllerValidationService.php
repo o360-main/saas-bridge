@@ -26,7 +26,7 @@ class ControllerValidationService
         $reflection = new ReflectionClass($controller);
 
         if (!$reflection->implementsInterface(\O360Main\SaasBridge\Contracts\ControllerInterface::class)) {
-            throw new \Exception("Controller must implement ControllerInterface");
+            throw new \Exception("Controller must implement \O360Main\SaasBridge\Contracts\ControllerInterface::class");
         }
 
 

@@ -46,8 +46,8 @@ class ControllerGenerator extends BaseCommand
         }
 
         $x = new CodeGenerate(
-//            stub: $stub,
-//            routes: $routes
+            stub: $stub,
+            routes: $routes
         );
 
         $x->run();
