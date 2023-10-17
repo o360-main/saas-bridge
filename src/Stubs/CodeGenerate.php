@@ -29,6 +29,9 @@ class CodeGenerate
         }
 
 
+        $this->generateSampleService();
+
+
         if ($this->routes) {
             $this->generateRoutes();
 
@@ -144,5 +147,72 @@ PHP;
         }
 
         file_put_contents($path, $content);
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function generateSampleService(): void
+    {
+
+        $files = [
+            [
+                'file' => 'ModuleService.php.stub',
+                'path' => 'app/Services/Simple/Category/CategoryService.php.stub',
+            ],
+            [
+                'file' => 'ModuleMapper.php.stub',
+                'path' => 'app/Services/Simple/Category/CategoryMapper.php.stub',
+            ]
+        ];
+
+        foreach ($files as $f) {
+
+            $file = __DIR__ . '/' . $f['file'];
+            $path = $f['path'];
+
+            $content = file_get_contents($file);
+            $content = $this->compileTemplate($content, Module::category);
+
+            if (!file_exists(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
+
+            file_put_contents($path, $content);
+        }
+
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    private function compileTemplate(string $stub, Module $module)
+    {
+        $detail = $module->detail();
+
+        $module = [
+            'capName' => $detail['label'],
+            'smName' => $detail['name'],
+            'capPlural' => $detail['label_plural'],
+            'smPlural' => $detail['plural'],
+        ];
+
+        return str_replace([
+            '{{Module}}',
+            '{{module}}',
+            '{{Modules}}',
+            '{{modules}}',
+        ], [
+            $module['capName'],
+            $module['smName'],
+            $module['capPlural'],
+            $module['smPlural'],
+        ], $stub);
     }
 }
