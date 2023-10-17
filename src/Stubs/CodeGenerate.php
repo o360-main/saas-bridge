@@ -80,6 +80,10 @@ class CodeGenerate
             $plural = $module->detail('plural');
             $controller = $module->detail('label_plural') . 'Controller';
 
+            $folder = $module->isSimple() ? 'Simple\\' : 'Complex\\';
+
+            $controller = $folder . $controller;
+
             $routes .= <<<PHP
 Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
