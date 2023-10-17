@@ -112,7 +112,11 @@ PHP;
 
         $folder = app_path('Http/Controllers') . $folder;
 
-        mkdir($folder, recursive: true);
+
+//        mkdir($folder, recursive: true);
+        if (!file_exists($folder)) {
+            mkdir($folder, recursive: true);
+        }
 
         $path =  $folder . $file;
 
