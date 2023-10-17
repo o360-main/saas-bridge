@@ -42,7 +42,10 @@ class ControllerGenerator extends BaseCommand
         $routes = false;
         $ask = $this->ask('Do you want to generate routes? (y/n)');
         if ($ask === 'y') {
+            $this->info('Generating routes...');
             $routes = true;
+        }else{
+            $this->info('Skipping routes generation...');
         }
 
         $x = new CodeGenerate(
