@@ -2,22 +2,11 @@
 
 namespace O360Main\SaasBridge\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use O360Main\SaasBridge\Contracts\BaseRequest;
 use O360Main\SaasBridge\ModuleEvent;
 
-class ImportRequest extends FormRequest
+class ImportRequest extends BaseRequest
 {
-
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-
-
     public function rules(): array
     {
         return [

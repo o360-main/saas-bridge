@@ -8,11 +8,6 @@ class ManifestResponse implements Responsable
 {
 
 
-    public static function fromJson($filePath): ?\Illuminate\Http\JsonResponse
-    {
-        return self::json($filePath);
-    }
-
     public static function json($filePath)
     {
         if (!file_exists($filePath)) {
