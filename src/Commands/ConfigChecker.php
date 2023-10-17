@@ -2,6 +2,7 @@
 
 namespace O360Main\SaasBridge\Commands;
 
+use App\Http\Controllers\PluginController;
 use Illuminate\Console\Command as BaseCommand;
 use Symfony\Component\Console\Command\Command;
 
@@ -25,22 +26,11 @@ class ConfigChecker extends BaseCommand
      * Execute the console command.
      *
      * @return int
+     * @throws \Exception
      */
     public function handle()
     {
-        //check if file exists app/config.json
-        $file = base_path('app/manifest.json');
-
-        if (!file_exists($file)) {
-            $this->error('File not found: ' . $file);
-
-            //create file
-            $this->info('Suggest: Creating file: ' . $file);
-
-            return Command::FAILURE;
-        }
-
-        $data = json_decode(file_get_contents($file), true);
+        $data = (new PluginController())->manifest();
 
         $arr = [
             'erp', 'ecom', 'pos'
