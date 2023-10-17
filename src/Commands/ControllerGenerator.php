@@ -32,12 +32,12 @@ class ControllerGenerator extends BaseCommand
         //prompt for ask only stub file
         $this->info('Generating Controller...');
 
-        $ask = $this->ask('Do you want to generate only stub file? (y/n)');
-
-        $stub = false;
-        if ($ask === 'y') {
-            $stub = true;
-        }
+//        $ask = $this->ask('Do you want to generate only stub file? (y/n)');
+//
+//        $stub = false;
+//        if ($ask === 'y') {
+//            $stub = true;
+//        }
 
         $routes = false;
         $ask = $this->ask('Do you want to generate routes? (y/n)');
@@ -46,7 +46,7 @@ class ControllerGenerator extends BaseCommand
         }
 
         $x = new CodeGenerate(
-            stub: $stub,
+            stub: true,
             routes: $routes
         );
 
