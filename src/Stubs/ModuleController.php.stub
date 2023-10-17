@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\{{type}};
 
 
 use App\Services\Simple\Category\CategoryService;
@@ -27,7 +27,9 @@ class {{Modules}}Controller implements ControllerInterface
 
       public function data(DataRequest $request): DataResponse
       {
-          return new DataResponse();
+          return new DataResponse(
+            //.. will added more in future
+          );
       }
 
 
@@ -36,6 +38,8 @@ class {{Modules}}Controller implements ControllerInterface
           return new ConfigResponse(
               available: true,
               webhook: false,
+                          //.. will added more in future
+
               form_fields: [
                 FormField::select(
                                   name: 'test',

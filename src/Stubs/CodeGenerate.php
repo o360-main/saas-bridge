@@ -45,12 +45,15 @@ class CodeGenerate
 
         $detail = $module->detail();
 
+        $stub = str_replace('{{type}}',$module->isSimple() ? 'Simple' : 'Complex',$stub);
+
         $module = [
             'capName' => $detail['label'],
             'smName' => $detail['name'],
             'capPlural' => $detail['label_plural'],
             'smPlural' => $detail['plural'],
         ];
+
 
         $stub = str_replace('{{Module}}', $module['capName'], $stub);
         $stub = str_replace('{{module}}', $module['smName'], $stub);
@@ -85,7 +88,7 @@ class CodeGenerate
             $controller = $folder . $controller;
 
             $routes .= <<<PHP
-Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
+//Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
         }
 
@@ -106,11 +109,13 @@ PHP;
 
         $content = $this->modStub($module);
 
-        $file = match ($this->stub)
-        {
-            true => "{$controllerName}Controller.php.stub",
-            default => "{$controllerName}Controller.php",
-        };
+//        $file = match ($this->stub)
+//        {
+//            true => "{$controllerName}Controller.php.stub",
+//            default => "{$controllerName}Controller.php",
+//        };
+
+        $file ="{$controllerName}Controller.php.stub";
 
         $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
 
@@ -124,8 +129,10 @@ PHP;
 
         $path =  $folder . $file;
 
+        //if file exists then overwrite
+
         if (file_exists($path)) {
-            return;
+            unlink($path);
         }
 
         file_put_contents($path, $content);
