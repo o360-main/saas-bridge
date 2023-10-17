@@ -91,12 +91,12 @@ class CodeGenerate
             $controller = $folder . $controller;
 
             $_ro = <<<PHP
-//Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
+Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
 
             if (!Str::contains($content, $_ro))
             {
-                $routes .= $_ro;
+                $routes .= "//".$_ro;// ->make commented routes
             }
 
         }
