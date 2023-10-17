@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\{{type}};
+namespace App\Http\Controllers\ {
+    {
+        type}
+};
 
 
 use App\Services\Simple\Category\CategoryService;
@@ -25,50 +28,50 @@ use Exception;
 class {{Modules}}Controller implements ControllerInterface
 {
 
-      public function data(DataRequest $request): DataResponse
-      {
-          return new DataResponse(
+    public function data(DataRequest $request): DataResponse
+    {
+        return new DataResponse(
+        //.. will added more in future
+        );
+    }
+
+
+    public function config(ConfigRequest $request): ConfigResponse
+    {
+        return new ConfigResponse(
+            available: true,
+            webhook: false,
             //.. will added more in future
-          );
-      }
 
-
-      public function config(ConfigRequest $request): ConfigResponse
-      {
-          return new ConfigResponse(
-              available: true,
-              webhook: false,
-                          //.. will added more in future
-
-              form_fields: [
+            form_fields: [
                 FormField::select(
-                                  name: 'test',
-                                  label: 'Test',
-                                  options: [
-                                      ['label' => 'Test', 'value' => 'test'],
-                                      ['label' => 'Test 2', 'value' => 'test2'],
-                                  ],
-                                  default_value: 'test',
-                                  index: 1,
-                                  required: true,
-                                  multiple: true,
-                              ),
-              ],
-          );
-      }
+                    name: 'test',
+                    label: 'Test',
+                    options: [
+                        ['label' => 'Test', 'value' => 'test'],
+                        ['label' => 'Test 2', 'value' => 'test2'],
+                    ],
+                    default_value: 'test',
+                    index: 1,
+                    required: true,
+                    multiple: true,
+                ),
+            ],
+        );
+    }
 
-      public function import(ImportRequest $request): ImportResponse
-      {
-          //If webhook = false
-           throw new NotFoundHttpException('Feature not found');
-      }
+    public function import(ImportRequest $request): ImportResponse
+    {
+        //If webhook = false
+        throw new NotFoundHttpException('Feature not found');
+    }
 
-      /**
-       * @throws \Exception
-       */
-      public function export(ExportRequest $request): ExportResponse
-      {
-          $categoryService = new {{Module}}Service();
+    /**
+     * @throws \Exception
+     */
+    public function export(ExportRequest $request): ExportResponse
+    {
+        ${{module}}Service = new {{Module}}Service();
 
           return match ($request->event()) {
               //if event is created or updated
@@ -83,16 +86,16 @@ class {{Modules}}Controller implements ControllerInterface
       }
 
 
-      /**
-       * @throws \Exception
-       */
-      public function trigger(TriggerRequest $request): TriggerResponse // return this function
-      {
-          $categoryService = new CategoryService();
+    /**
+     * @throws \Exception
+     */
+    public function trigger(TriggerRequest $request): TriggerResponse // return this function
+    {
+        ${{module}}Service = new {{Module}}Service();
 
           return match ($request->action()) {
               //if action is import_all
-              ModuleAction::import_all => $categoryService->importAllForTrigger($request),
+              ModuleAction::import_all => ${{module}}Service->importAllForTrigger($request),
 
               default => throw new NotFoundHttpException('Action not found')
           };
