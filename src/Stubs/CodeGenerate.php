@@ -163,7 +163,7 @@ PHP;
             ],
             [
                 'file' => 'ModuleMapper.php.stub',
-                'path' => 'app/Services/Simple/Category/CategoryMapper.php.stub',
+                'path' => 'app/Services/Modules/Simple/Category/CategoryMapper.php.stub',
             ]
         ];
 
