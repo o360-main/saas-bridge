@@ -9,14 +9,12 @@ class CodeGenerate
     /**
      * @throws \Exception
      */
-    public function run(): void
+    public function run()
     {
         //get all modules
         foreach (Module::cases() as $module) {
             $this->generateController($module);
         }
-
-        $this->generateSampleService();
 
         $this->generateRoutes();
     }
@@ -27,8 +25,23 @@ class CodeGenerate
      */
     protected function modStub(Module $module): array|bool|string
     {
+
         $stub = $this->getStub();
-        return $this->compileTemplate($stub, $module);
+
+        $detail = $module->detail();
+
+        $module = [
+            'capName' => $detail['label'],
+            'smName' => $detail['name'],
+            'capPlural' => $detail['label_plural'],
+            'smPlural' => $detail['plural'],
+        ];
+
+        $stub = str_replace('{{Module}}', $module['capName'], $stub);
+        $stub = str_replace('{{module}}', $module['smName'], $stub);
+        $stub = str_replace('{{Modules}}', $module['capPlural'], $stub);
+        return str_replace('{{modules}}', $module['smPlural'], $stub);
+
     }
 
 
@@ -52,8 +65,6 @@ class CodeGenerate
             $plural = $module->detail('plural');
             $controller = $module->detail('label_plural') . 'Controller';
 
-            $controller = $module->isSimple() ? 'Simple\\' . $controller : 'Complex\\' . $controller;
-
             $routes .= <<<PHP
 Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
@@ -75,90 +86,16 @@ PHP;
         $controllerName = $module->detail('label_plural');
 
         $content = $this->modStub($module);
-        $file = "{$controllerName}Controller.php.stub";
+        $file = "{$controllerName}Controller.php";
 
         $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
 
-
-        if (!file_exists(app_path('Http/Controllers/Stubs') . $folder)) {
-            mkdir(app_path('Http/Controllers/Stubs') . $folder, 0777, true);
-        }
-
-        $path = app_path('Http/Controllers/Stubs') . $folder . $file;
-
+        $path = app_path('Http/Controllers') . $folder . $file;
 
         if (file_exists($path)) {
-            //remove
-            unlink($path);
-//            return;
+            return;
         }
 
         file_put_contents($path, $content);
-    }
-
-
-    /**
-     * @throws \Exception
-     */
-    public function generateSampleService(): void
-    {
-
-        $files = [
-            [
-                'file' => 'ModuleService.php.stub',
-                'path' => 'app/Services/Stubs/Category/CategoryService.php.stub',
-            ],
-            [
-                'file' => 'ModuleMapper.php.stub',
-                'path' => 'app/Services/Stubs/Category/CategoryMapper.php.stub',
-            ]
-        ];
-
-        foreach ($files as $f) {
-
-            $file = __DIR__ . '/' . $f['file'];
-            $path = $f['path'];
-
-            $content = file_get_contents($file);
-            $content = $this->compileTemplate($content, Module::category);
-
-            if (!file_exists(dirname($path))) {
-                mkdir(dirname($path), 0777, true);
-            }
-
-            if (file_exists($path)) {
-                unlink($path);
-            }
-
-            file_put_contents($path, $content);
-        }
-
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function compileTemplate(string $stub, Module $module)
-    {
-        $detail = $module->detail();
-
-        $module = [
-            'capName' => $detail['label'],
-            'smName' => $detail['name'],
-            'capPlural' => $detail['label_plural'],
-            'smPlural' => $detail['plural'],
-        ];
-
-        return str_replace([
-            '{{Module}}',
-            '{{module}}',
-            '{{Modules}}',
-            '{{modules}}',
-        ], [
-            $module['capName'],
-            $module['smName'],
-            $module['capPlural'],
-            $module['smPlural'],
-        ], $stub);
     }
 }
