@@ -108,10 +108,13 @@ PHP;
             default => "{$controllerName}Controller.php",
         };
 
-
         $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
 
-        $path = app_path('Http/Controllers') . $folder . $file;
+        $folder = app_path('Http/Controllers') . $folder;
+
+        mkdir($folder, recursive: true);
+
+        $path =  $folder . $file;
 
         if (file_exists($path)) {
             return;
