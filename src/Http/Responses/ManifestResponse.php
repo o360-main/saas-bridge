@@ -16,7 +16,7 @@ class ManifestResponse implements Responsable, Arrayable
 {
 
     //for new format -> default v1
-    public string $manifest_version = "v2";
+    public string $manifest_version = "1.0.0";
 
     /**
      * @throws \Exception
