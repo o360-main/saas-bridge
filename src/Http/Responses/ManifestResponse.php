@@ -118,10 +118,9 @@ class ManifestResponse implements Responsable, Arrayable
 
     /**
      * @param $filePath
-     * @return \Illuminate\Http\JsonResponse|void
      * @deprecated Use ManifestResponse as a replacement
      */
-    public static function json($filePath)
+    public static function fromJsonFile($filePath)
     {
         if (!file_exists($filePath)) {
             abort(404, 'File not found');
@@ -129,7 +128,58 @@ class ManifestResponse implements Responsable, Arrayable
         try {
             $json = json_decode(file_get_contents($filePath), true, 512, JSON_THROW_ON_ERROR);
 
-            return response()->json($json);
+//            public readonly string             $name,
+//        public readonly string             $display_name,
+//        public readonly string             $base_url,
+//        public readonly string             $manifest_url,
+//        public readonly ManifestLogo       $logo,
+//        public readonly PluginType         $type,
+//        public readonly string             $description,
+//        public readonly string             $version,
+//        public readonly array              $tags,
+//        public readonly ?ManifestDeveloper $developer,
+//        public readonly ?ManifestConfig    $config,
+//        public readonly array              $options,
+
+            return new self(
+
+                name: $json['name'],
+                display_name: $json['display_name'],
+                base_url: $json['base_url'],
+                manifest_url: $json['manifest_url'],
+                logo: new ManifestLogo(
+                    small: new Image(
+                        url: $json['logo']['small']['url'],
+                        type: $json['logo']['small']['type'],
+                    ),
+                    medium: new Image(
+                        url: $json['logo']['medium']['url'],
+                        type: $json['logo']['medium']['type'],
+                    ),
+                    large: new Image(
+                        url: $json['logo']['large']['url'],
+                        type: $json['logo']['large']['type'],
+                    ),
+                ),
+
+                type: PluginType::from($json['type']),
+                description: $json['description'],
+                version: $json['version'],
+                tags: $json['tags'],
+                developer: ManifestDeveloper::fromArray($json['developer']),
+                config: ManifestConfig::fromArray($json['config']),
+                options: value(function () use ($json) {
+
+                    $items = $json['options']['add'] ?? $json['options'] ?? [];
+
+                    $options = [];
+                    foreach ($items as $option) {
+                        $options[] = ManifestCredentialForm::fromJson($option);
+                    }
+                    return $options;
+                }),
+            );
+
 
         } catch (Exception $e) {
             abort(500, 'Invalid JSON');

@@ -25,4 +25,14 @@ class ManifestConfig implements Arrayable
     }
 
 
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            rate_limit_requests: $data['rate_limit_requests'],
+            rate_limit_seconds: $data['rate_limit_seconds'],
+            rate_limit_per_day: $data['rate_limit_per_day'],
+        );
+    }
+
+
 }

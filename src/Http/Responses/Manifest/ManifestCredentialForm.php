@@ -53,4 +53,19 @@ class ManifestCredentialForm implements Arrayable
             'options' => collect($this->options)->map(fn($item) => $item->toArray())->toArray(),
         ];
     }
+
+
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            key: $data['key'],
+            label: $data['label'],
+            description: $data['description'],
+            rules: $data['rules'],
+            default: $data['default'],
+            type: $data['type'],
+            index: $data['index'],
+            options: collect($data['options'])->map(fn($item) => ManifestCredentialOption::fromArray($item))->toArray(),
+        );
+    }
 }

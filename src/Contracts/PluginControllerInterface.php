@@ -10,7 +10,7 @@ use O360Main\SaasBridge\Http\Responses\TestCredentialsResponse;
 interface PluginControllerInterface
 {
 
-    public function manifest(): ManifestResponse|JsonResponse;
+    public function manifest(): ManifestResponse;
 
     public function ping(): PingResponse;
 

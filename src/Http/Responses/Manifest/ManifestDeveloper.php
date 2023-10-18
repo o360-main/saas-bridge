@@ -26,8 +26,7 @@ class ManifestDeveloper implements Arrayable
         }
     }
 
-    public
-    function toArray(): array
+    public function toArray(): array
     {
         return [
             'name' => $this->name,
@@ -36,5 +35,19 @@ class ManifestDeveloper implements Arrayable
             'notification_email' => $this->notification_email,
             'notes' => $this->notes,
         ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            name: $data['name'],
+            author_email: $data['author_email'],
+            author_url: $data['author_url'],
+            notification_email: $data['notification_email'],
+            notes: $data['notes'],
+        );
     }
 }

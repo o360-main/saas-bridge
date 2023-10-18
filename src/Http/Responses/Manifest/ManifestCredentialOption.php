@@ -21,4 +21,13 @@ class ManifestCredentialOption implements Arrayable
             'value' => $this->value,
         ];
     }
+
+
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            label: $data['label'],
+            value: $data['value'],
+        );
+    }
 }
