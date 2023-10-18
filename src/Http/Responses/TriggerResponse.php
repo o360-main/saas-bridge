@@ -2,12 +2,10 @@
 
 namespace O360Main\SaasBridge\Http\Responses;
 
-
 use Illuminate\Contracts\Support\Responsable;
 
 class TriggerResponse implements Responsable
 {
-
     public function __construct(
         protected readonly bool        $is_completed = false,
         protected readonly bool        $is_error = false,
@@ -15,8 +13,7 @@ class TriggerResponse implements Responsable
         protected readonly int|null    $interval_in_seconds = null,
         protected readonly string|null $error_message = null,
         protected readonly array       $data = []
-    )
-    {
+    ) {
     }
 
     public function toResponse($request): \Illuminate\Http\JsonResponse

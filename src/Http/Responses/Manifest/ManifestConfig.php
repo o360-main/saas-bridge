@@ -6,13 +6,11 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class ManifestConfig implements Arrayable
 {
-
     public function __construct(
         public readonly int $rate_limit_requests,
         public readonly int $rate_limit_seconds,
         public readonly int $rate_limit_per_day,
-    )
-    {
+    ) {
     }
 
     public function toArray(): array

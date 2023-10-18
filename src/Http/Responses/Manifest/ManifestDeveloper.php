@@ -6,7 +6,6 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class ManifestDeveloper implements Arrayable
 {
-
     /**
      * @throws \Exception
      */
@@ -16,8 +15,7 @@ class ManifestDeveloper implements Arrayable
         public readonly ?string $author_url,
         public readonly ?string $notification_email,
         public readonly ?array $notes,
-    )
-    {
+    ) {
         //check notes contain only key=>string => value=>string
         foreach ($this->notes as $key => $note) {
             if (!is_string($key) || (!is_string($note) || !is_numeric($note))) {

@@ -18,8 +18,7 @@ class ManifestCredentialForm implements Arrayable
         public readonly ManifestCredentialType $type,
         public readonly int                    $index = 0,
         public readonly array                  $options = [],
-    )
-    {
+    ) {
 
         if ($this->type == ManifestCredentialType::SELECT) {
             if (count($this->options) == 0) {
@@ -50,7 +49,7 @@ class ManifestCredentialForm implements Arrayable
             'default' => $this->default,
             'type' => $this->type,
             'index' => $this->index,
-            'options' => collect($this->options)->map(fn($item) => $item->toArray())->toArray(),
+            'options' => collect($this->options)->map(fn ($item) => $item->toArray())->toArray(),
         ];
     }
 
@@ -65,7 +64,7 @@ class ManifestCredentialForm implements Arrayable
             default: $data['default'],
             type: $data['type'],
             index: $data['index'],
-            options: collect($data['options'])->map(fn($item) => ManifestCredentialOption::fromArray($item))->toArray(),
+            options: collect($data['options'])->map(fn ($item) => ManifestCredentialOption::fromArray($item))->toArray(),
         );
     }
 }

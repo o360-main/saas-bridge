@@ -63,7 +63,7 @@ class SaasBridgeServiceProvider extends ServiceProvider
         //make route macro
         Route::macro('module', function ($url, $controller) {
 
-//            throw if $controller is not an instance of ControllerInterface
+            //            throw if $controller is not an instance of ControllerInterface
 
             if (config('saas-bridge.strict_mode')) {
                 $controllerValidationService = new Services\ControllerValidationService();

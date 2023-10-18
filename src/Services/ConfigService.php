@@ -4,7 +4,6 @@ namespace O360Main\SaasBridge\Services;
 
 use Illuminate\Support\Arr;
 
-
 /**
  * @method array|mixed currencies($key = null)
  * @method array|mixed taxes($key = null)

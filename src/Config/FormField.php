@@ -417,11 +417,11 @@ class FormField
     }
 
 
-//    public static function range($name, $label, $min, $max, $default_value = null, $index = 0, $required = true, $placeholder = null, $description = null): array
-//    {
-//        $options = compact('min', 'max');
-//        return self::make($name, $label, 'range', 'integer', $default_value, $index, $required, $placeholder, $description, $options);
-//    }
+    //    public static function range($name, $label, $min, $max, $default_value = null, $index = 0, $required = true, $placeholder = null, $description = null): array
+    //    {
+    //        $options = compact('min', 'max');
+    //        return self::make($name, $label, 'range', 'integer', $default_value, $index, $required, $placeholder, $description, $options);
+    //    }
 
 
 }

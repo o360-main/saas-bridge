@@ -7,13 +7,10 @@ use O360Main\SaasBridge\Module;
 
 class CodeGenerate
 {
-
-
     public function __construct(
         protected bool $stub = false,
         protected bool $routes = false,
-    )
-    {
+    ) {
     }
 
 
@@ -49,7 +46,7 @@ class CodeGenerate
 
         $detail = $module->detail();
 
-        $stub = str_replace('{{type}}',$module->isSimple() ? 'Simple' : 'Complex',$stub);
+        $stub = str_replace('{{type}}', $module->isSimple() ? 'Simple' : 'Complex', $stub);
 
         $module = [
             'capName' => $detail['label'],
@@ -97,8 +94,7 @@ class CodeGenerate
 Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
 
-            if (!Str::contains($content, $_ro))
-            {
+            if (!Str::contains($content, $_ro)) {
                 $routes .= "//".$_ro;// ->make commented routes
             }
 
@@ -120,20 +116,20 @@ PHP;
 
         $content = $this->modStub($module);
 
-//        $file = match ($this->stub)
-//        {
-//            true => "{$controllerName}Controller.php.stub",
-//            default => "{$controllerName}Controller.php",
-//        };
+        //        $file = match ($this->stub)
+        //        {
+        //            true => "{$controllerName}Controller.php.stub",
+        //            default => "{$controllerName}Controller.php",
+        //        };
 
-        $file ="{$controllerName}Controller.php.stub";
+        $file = "{$controllerName}Controller.php.stub";
 
         $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
 
         $folder = app_path('Http/Controllers') . $folder;
 
 
-//        mkdir($folder, recursive: true);
+        //        mkdir($folder, recursive: true);
         if (!file_exists($folder)) {
             mkdir($folder, recursive: true);
         }

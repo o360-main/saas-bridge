@@ -6,16 +6,14 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Image implements Arrayable
 {
-
     /**
      * @throws \Exception
      */
     public function __construct(
         public readonly string    $url,
         public readonly ImageType $type,
-    )
-    {
-//        check url is valid
+    ) {
+        //        check url is valid
         if (!filter_var($this->url, FILTER_VALIDATE_URL)) {
             throw new \Exception('Invalid URL');
         }

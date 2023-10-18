@@ -6,7 +6,6 @@ use ReflectionClass;
 
 class PluginControllerValidation
 {
-
     /**
      * @throws \ReflectionException
      */

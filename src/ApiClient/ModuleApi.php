@@ -8,7 +8,6 @@ use Illuminate\Http\Client\Response;
 
 class ModuleApi
 {
-
     private readonly PendingRequest $http;
     private readonly EndPoint $endpoint;
 
@@ -22,10 +21,10 @@ class ModuleApi
     {
         $args = [$this->endpoint->value, ...$args];
 
-        return join('/', array_map(fn($arg) => trim($arg, '/'), $args));
+        return join('/', array_map(fn ($arg) => trim($arg, '/'), $args));
     }
 
-//Route::post('/batch-delete-by-sync-ids', [$controller, 'batchDeleteBySyncIds']);//
+    //Route::post('/batch-delete-by-sync-ids', [$controller, 'batchDeleteBySyncIds']);//
     public function findMany($pageNumber, $perPage, $queryParams = []): PromiseInterface|Response
     {
         $url = $this->makeUrl('/');

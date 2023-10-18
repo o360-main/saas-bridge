@@ -60,7 +60,7 @@ class SaasAgent
             $arr = [$baseUrl, $version];
 
             //using core php
-            $baseUrl = implode('/', array_map(fn($i) => rtrim($i, '/'), $arr));
+            $baseUrl = implode('/', array_map(fn ($i) => rtrim($i, '/'), $arr));
 
             $this->_saasApi->baseUrl($baseUrl);
         }
@@ -107,10 +107,10 @@ class SaasAgent
 
 
     //call with magic method also return above function
-//    public function __call($name, $arguments)
-//    {
-//        return $this->saasApi()->$name(...$arguments);
-//    }
+    //    public function __call($name, $arguments)
+    //    {
+    //        return $this->saasApi()->$name(...$arguments);
+    //    }
     public function connection(): array
     {
         return $this->_connection;

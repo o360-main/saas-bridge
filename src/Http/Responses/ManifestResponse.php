@@ -14,7 +14,6 @@ use O360Main\SaasBridge\Http\Responses\Manifest\PluginType;
 
 class ManifestResponse implements Responsable, Arrayable
 {
-
     //for new format -> default v1
     public string $manifest_version = "1.0.0";
 
@@ -34,8 +33,7 @@ class ManifestResponse implements Responsable, Arrayable
         public readonly ?ManifestDeveloper $developer,
         public readonly ?ManifestConfig    $config,
         public readonly array              $options,
-    )
-    {
+    ) {
 
         //check $this->version must follow samvar -> https://semver.org/
 
@@ -91,7 +89,7 @@ class ManifestResponse implements Responsable, Arrayable
                 'developer' => $this->developer?->toArray(),
                 'config' => $this->config?->toArray(),
                 'options' => [
-                    'add' => collect($this->options)->mapWithKeys(fn($i) => [$i->key => $i->toArray()])->toArray(),
+                    'add' => collect($this->options)->mapWithKeys(fn ($i) => [$i->key => $i->toArray()])->toArray(),
                     'remove' => [],
                 ],
             ];
@@ -111,7 +109,7 @@ class ManifestResponse implements Responsable, Arrayable
             'tags' => $this->tags,
             'developer' => $this->developer?->toArray(),
             'config' => $this->config?->toArray(),
-            'options' => collect($this->options)->map(fn($item) => $item->toArray())->toArray(),
+            'options' => collect($this->options)->map(fn ($item) => $item->toArray())->toArray(),
         ];
     }
 
@@ -128,21 +126,20 @@ class ManifestResponse implements Responsable, Arrayable
         try {
             $json = json_decode(file_get_contents($filePath), true, 512, JSON_THROW_ON_ERROR);
 
-//            public readonly string             $name,
-//        public readonly string             $display_name,
-//        public readonly string             $base_url,
-//        public readonly string             $manifest_url,
-//        public readonly ManifestLogo       $logo,
-//        public readonly PluginType         $type,
-//        public readonly string             $description,
-//        public readonly string             $version,
-//        public readonly array              $tags,
-//        public readonly ?ManifestDeveloper $developer,
-//        public readonly ?ManifestConfig    $config,
-//        public readonly array              $options,
+            //            public readonly string             $name,
+            //        public readonly string             $display_name,
+            //        public readonly string             $base_url,
+            //        public readonly string             $manifest_url,
+            //        public readonly ManifestLogo       $logo,
+            //        public readonly PluginType         $type,
+            //        public readonly string             $description,
+            //        public readonly string             $version,
+            //        public readonly array              $tags,
+            //        public readonly ?ManifestDeveloper $developer,
+            //        public readonly ?ManifestConfig    $config,
+            //        public readonly array              $options,
 
             return new self(
-
                 name: $json['name'],
                 display_name: $json['display_name'],
                 base_url: $json['base_url'],
@@ -161,7 +158,6 @@ class ManifestResponse implements Responsable, Arrayable
                         type: $json['logo']['large']['type'],
                     ),
                 ),
-
                 type: PluginType::from($json['type']),
                 description: $json['description'],
                 version: $json['version'],

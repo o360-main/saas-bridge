@@ -12,8 +12,9 @@ class SaasApiClient
      * @throws \Exception
      */
     public function __construct(
-        private readonly SaasAgent $saasAgent, private readonly ?string $version = null)
-    {
+        private readonly SaasAgent $saasAgent,
+        private readonly ?string $version = null
+    ) {
         $this->api = $this->saasAgent->saasApi($this->version);
     }
 

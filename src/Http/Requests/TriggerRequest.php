@@ -8,14 +8,12 @@ use O360Main\SaasBridge\ModuleAction;
 
 class TriggerRequest extends BaseRequest
 {
-
     public function rules(): array
     {
 
         $version = config('saas-bridge.main_version');
 
-        if ($version == 'v1')
-        {
+        if ($version == 'v1') {
             return [
                 'payload' => 'required|array',
                 'action' => 'required|string',
@@ -25,7 +23,7 @@ class TriggerRequest extends BaseRequest
         return [
             'payload' => 'required|array',
             'action' => 'required|string',
-            'module'=>'required|string' //nullable in older version
+            'module' => 'required|string' //nullable in older version
         ];
     }
 
@@ -39,8 +37,7 @@ class TriggerRequest extends BaseRequest
 
         $version = config('saas-bridge.main_version');
 
-        if ($version == 'v1')
-        {
+        if ($version == 'v1') {
             return $this->payload();
         }
 

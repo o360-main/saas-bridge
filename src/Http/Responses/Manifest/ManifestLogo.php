@@ -2,7 +2,6 @@
 
 namespace O360Main\SaasBridge\Http\Responses\Manifest;
 
-
 //"logo": {
 //"small": {
 //"url": "https://vendhq.saasintegrator.online/logo/logo-sm.svg",
@@ -25,8 +24,7 @@ class ManifestLogo implements Arrayable
         public readonly Image $small,
         public readonly Image $medium,
         public readonly Image $large,
-    )
-    {
+    ) {
     }
 
     public function toArray(): array

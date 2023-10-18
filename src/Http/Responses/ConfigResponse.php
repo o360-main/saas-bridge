@@ -9,10 +9,8 @@ class ConfigResponse implements Responsable
     public function __construct(
         public readonly bool  $available = false,
         public readonly bool  $webhook = false,
-
         public readonly array $form_fields = [],
-    )
-    {
+    ) {
     }
 
     public function toResponse($request): array

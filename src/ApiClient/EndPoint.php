@@ -1,6 +1,5 @@
 <?php
 
-
 namespace O360Main\SaasBridge\ApiClient;
 
 enum EndPoint: string

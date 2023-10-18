@@ -23,7 +23,7 @@ class ImportRequest extends BaseRequest
 
     public function event(): ModuleEvent
     {
-        [,$event]= explode('.', $this->input('event'));
+        [,$event] = explode('.', $this->input('event'));
 
         return ModuleEvent::from($event);
     }

@@ -24,7 +24,7 @@ function path_join(...$path): string
 
 function url_make(...$path): string
 {
-    return implode('/', array_map(fn($arg) => trim($arg, '/'), $path));
+    return implode('/', array_map(fn ($arg) => trim($arg, '/'), $path));
 }
 
 
@@ -37,7 +37,3 @@ function array_pull(array &$arr, $key, $default = null)
 {
     return Arr::pull($arr, $key, $default);
 }
-
-
-
-
