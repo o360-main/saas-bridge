@@ -21,8 +21,8 @@ class TriggerResponse implements Responsable
         $version = config('saas-bridge.main_version');
 
         return match ($version) {
-            'v2' => $this->toResponseV2(),
-            default => $this->toResponseV1(),
+            'v1' => $this->toResponseV1(), // this is for backward compatibility [Will remove soon]
+            default => $this->toResponse1_0_0(),//now on this is the version 1.0.0
         };
     }
 
@@ -37,14 +37,14 @@ class TriggerResponse implements Responsable
         ]);
     }
 
-    private function toResponseV2(): \Illuminate\Http\JsonResponse
+    private function toResponse1_0_0(): \Illuminate\Http\JsonResponse
     {
         return response()->json([
             'is_completed' => $this->is_completed,
             'progress_in_percentage' => $this->progress_in_percentage,
             'interval_in_seconds' => $this->interval_in_seconds,
             'is_error' => $this->is_error,
-            'errorMsg' => $this->error_message,
+            'error_message' => $this->error_message,
             'data' => $this->data,
         ]);
     }
