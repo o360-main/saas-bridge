@@ -1,5 +1,7 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
+
 function array_deep_default(array $arr, array $defaultArr = []): array
 {
     foreach ($defaultArr as $key => $value) {
@@ -36,4 +38,12 @@ function array_get(array $arr, $key, $default = null)
 function array_pull(array &$arr, $key, $default = null)
 {
     return Arr::pull($arr, $key, $default);
+}
+
+
+
+#[NoReturn]
+function dd_json($data): void
+{
+    die(json_encode($data, JSON_PRETTY_PRINT).PHP_EOL);
 }

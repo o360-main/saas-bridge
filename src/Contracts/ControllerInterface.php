@@ -9,6 +9,7 @@ use O360Main\SaasBridge\Http\Requests\ImportRequest;
 use O360Main\SaasBridge\Http\Requests\TriggerRequest;
 use O360Main\SaasBridge\Http\Responses\ConfigResponse;
 use O360Main\SaasBridge\Http\Responses\DataResponse;
+use O360Main\SaasBridge\Http\Responses\ErrorResponse;
 use O360Main\SaasBridge\Http\Responses\ExportResponse;
 use O360Main\SaasBridge\Http\Responses\ImportResponse;
 use O360Main\SaasBridge\Http\Responses\TriggerResponse;

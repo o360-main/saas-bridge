@@ -6,13 +6,16 @@ use Illuminate\Http\Request;
 use Closure;
 use Illuminate\Validation\ValidationException;
 
+
 class ForceJsonMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
         $request->headers->set('Accept', 'application/json');
 
+
         $response = $next($request);
+
         // if response is redirected
         if ($response instanceof \Illuminate\Http\RedirectResponse) {
             return $response;
@@ -37,17 +40,18 @@ class ForceJsonMiddleware
             ];
         }
 
-        $request->hasHeader('X-Plugin-Debug') && $json['debug'] = [
-            'url' => $request->url(),
-            'method' => $request->method(),
-            'headers' => $request->headers->all(),
-            'request' => $request->all(),
-            'trace' => [
-                'file' => $response->exception?->getFile(),
-                'line' => $response->exception?->getLine(),
-                'trace' => $response->exception?->getTrace(),
-            ],
-        ];
+
+        if ($response->hasHeader('X-Plugin-Debug')) {
+
+            $json['debug'] = [
+                'url' => $request->url(),
+                'method' => $request->method(),
+                'headers' => $request->headers->all(),
+                'request' => $request->all(),
+                'trace' => $response?->getTrace() ?? [],
+            ];
+        }
+
 
         return response()->json($json, $statusCode);
 
