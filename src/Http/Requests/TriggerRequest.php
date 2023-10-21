@@ -22,6 +22,7 @@ class TriggerRequest extends BaseRequest
 
         return [
             'payload' => 'required|array',
+            'data' => 'required|array', //nullable in older version
             'action' => 'required|string',
             'module' => 'required|string' //nullable in older version
         ];
@@ -41,7 +42,7 @@ class TriggerRequest extends BaseRequest
             return $this->payload();
         }
 
-        return \Arr::get($this->payload(), 'data', []);
+        return $this->input('data', []);
     }
 
 
