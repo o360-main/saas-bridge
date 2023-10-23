@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
+use O360Main\SaasBridge\Http\Responses\Manifest\Image;
 use O360Main\SaasBridge\Http\Responses\Manifest\ManifestConfig;
 use O360Main\SaasBridge\Http\Responses\Manifest\ManifestCredentialForm;
 use O360Main\SaasBridge\Http\Responses\Manifest\ManifestDeveloper;
@@ -170,7 +171,7 @@ class ManifestResponse implements Responsable, Arrayable
 
                     $options = [];
                     foreach ($items as $option) {
-                        $options[] = ManifestCredentialForm::fromJson($option);
+                        $options[] = ManifestCredentialForm::fromArray($option);
                     }
                     return $options;
                 }),
