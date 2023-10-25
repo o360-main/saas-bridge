@@ -41,7 +41,7 @@ class ForceJsonMiddleware
         }
 
 
-        if ($response->hasHeader('X-Plugin-Debug')) {
+        if ($request->headers->has('X-Plugin-Debug')) {
 
             $json['debug'] = [
                 'url' => $request->url(),
