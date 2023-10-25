@@ -11,7 +11,7 @@ class ImportRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'payload' => 'required|array',
+            'payload' => 'array',
             'event' => 'required|string',
         ];
     }

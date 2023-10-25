@@ -15,14 +15,14 @@ class TriggerRequest extends BaseRequest
 
         if ($version == 'v1') {
             return [
-                'payload' => 'required|array',
+                'payload' => 'array',
                 'action' => 'required|string',
             ];
         }
 
         return [
-            'payload' => 'required|array',
-            'data' => 'nullable|array', //nullable in older version
+            'payload' => 'array',
+            'data' => 'array', //nullable in older version
             'action' => 'required|string',
             'module' => 'required|string' //nullable in older version
         ];

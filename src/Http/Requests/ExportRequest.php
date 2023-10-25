@@ -15,14 +15,14 @@ class ExportRequest extends BaseRequest
 
         if ($version === 'v1') {
             return [
-                'payload' => 'required|array',
+                'payload' => 'array',
                 'payload.id' => 'required|string',
                 'event' => 'required|string',
             ];
         }
 
         return [
-            'payload' => 'required|array',
+            'payload' => 'array',
             'payload.id' => 'required|string',
             'event' => 'required|string',
             'module' => 'required|string',
