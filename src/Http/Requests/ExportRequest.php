@@ -43,9 +43,15 @@ class ExportRequest extends BaseRequest
 
     public function event(): ModuleEvent
     {
-        [, $event] = explode('.', $this->input('event'));
 
-        return ModuleEvent::from($event);
+        $version = config('saas-bridge.main_version');
+
+        if ($version === 'v1') {
+            [, $event] = explode('.', $this->input('event'));
+            return ModuleEvent::from($event);
+        }
+
+        return ModuleEvent::from($this->input('event'));
     }
 
 
