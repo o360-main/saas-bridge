@@ -48,7 +48,7 @@ class ForceJsonMiddleware
                 'method' => $request->method(),
                 'headers' => $request->headers->all(),
                 'request' => $request->all(),
-                'trace' => $response?->getTrace() ?? [],
+                'trace' => $response?->exception?->getTrace() ?? [],
             ];
         }
 
