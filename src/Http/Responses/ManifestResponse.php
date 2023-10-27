@@ -123,6 +123,7 @@ class ManifestResponse implements Responsable, Arrayable
 
     /**
      * @param $filePath
+     * @return \O360Main\SaasBridge\Http\Responses\ManifestResponse|void
      * @deprecated Use ManifestResponse as a replacement
      */
     public static function fromJsonFile($filePath)

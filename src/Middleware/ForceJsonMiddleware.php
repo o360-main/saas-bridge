@@ -41,14 +41,14 @@ class ForceJsonMiddleware
         }
 
 
-        if ($response->hasHeader('X-Plugin-Debug')) {
+        if ($request->headers->has('X-Plugin-Debug')) {
 
             $json['debug'] = [
                 'url' => $request->url(),
                 'method' => $request->method(),
                 'headers' => $request->headers->all(),
                 'request' => $request->all(),
-                'trace' => $response?->getTrace() ?? [],
+                'trace' => $response?->exception?->getTrace() ?? [],
             ];
         }
 

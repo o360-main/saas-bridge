@@ -11,7 +11,7 @@ class ImportRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'payload' => 'required|array',
+            'payload' => 'array',
             'event' => 'required|string',
         ];
     }
@@ -23,9 +23,14 @@ class ImportRequest extends BaseRequest
 
     public function event(): ModuleEvent
     {
-        [,$event] = explode('.', $this->input('event'));
+        $version = config('saas-bridge.main_version');
 
-        return ModuleEvent::from($event);
+        if ($version == 'v1') {
+            [, $event] = explode('.', $this->input('action'));
+            return ModuleEvent::from($event);
+        }
+
+        return ModuleEvent::from($this->input('event'));
     }
 
     public function module(): Module
