@@ -34,7 +34,13 @@ class ManifestResponse implements Responsable, Arrayable
         public readonly ?ManifestDeveloper $developer,
         public readonly ?ManifestConfig    $config,
         public readonly array              $options,
-    ) {
+    )
+    {
+
+        //name allow only slug in lower
+        if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $this->name)) {
+            throw new Exception('name -> Invalid name, name must be slug in lower case');
+        }
 
         //check $this->version must follow samvar -> https://semver.org/
 
@@ -90,7 +96,7 @@ class ManifestResponse implements Responsable, Arrayable
                 'developer' => $this->developer?->toArray(),
                 'config' => $this->config?->toArray(),
                 'options' => [
-                    'add' => collect($this->options)->mapWithKeys(fn ($i) => [$i->key => $i->toArray()])->toArray(),
+                    'add' => collect($this->options)->mapWithKeys(fn($i) => [$i->key => $i->toArray()])->toArray(),
                     'remove' => [],
                 ],
             ];
@@ -110,7 +116,7 @@ class ManifestResponse implements Responsable, Arrayable
             'tags' => $this->tags,
             'developer' => $this->developer?->toArray(),
             'config' => $this->config?->toArray(),
-            'options' => collect($this->options)->map(fn ($item) => $item->toArray())->toArray(),
+            'options' => collect($this->options)->map(fn($item) => $item->toArray())->toArray(),
         ];
     }
 

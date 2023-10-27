@@ -49,9 +49,16 @@ class TriggerRequest extends BaseRequest
     public function action(): ModuleAction
     {
 
-        [, $action] = explode('.', $this->input('action'));
+        $version = config('saas-bridge.main_version');
 
-        return ModuleAction::from($action);
+        if ($version == 'v1') {
+            [, $action] = explode('.', $this->input('action'));
+
+            return ModuleAction::from($action);
+        }
+
+
+        return ModuleAction::from($this->input('action'));
     }
 
 
@@ -60,7 +67,7 @@ class TriggerRequest extends BaseRequest
         $module = $this->input('module', null);
 
         if (is_null($module)) {
-            [$module, ] = explode('.', $this->input('action'));
+            [$module,] = explode('.', $this->input('action'));
 
             return Module::from($module);
         }
