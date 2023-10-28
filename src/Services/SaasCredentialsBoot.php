@@ -47,6 +47,7 @@ class SaasCredentialsBoot
      */
     public function run(): void
     {
+
         // initiate token and http client
         $this->initSaasApi();
 
@@ -86,18 +87,9 @@ class SaasCredentialsBoot
         $headers['X-Plugin-Id'] = $pluginId;
         Config::set('saas-bridge.plugin_id', $pluginId);
 
-
         //check is in dev mode
-        $isInDev = $this->request->header('X-Plugin-Dev', false);
-        if ($isInDev) {
-            $headers['X-Plugin-Dev'] = $isInDev;
-            Config::set('saas-bridge.plugin_dev', $isInDev);
-        }
-
-        //check the main version
-        $mainVersion = $this->request->header('X-Main-Version', 'v1');
-        Config::set('saas-bridge.main_version', $mainVersion);
-        $headers['X-Main-Version'] = $mainVersion;
+        $headers['X-Plugin-Dev'] = config('saas-bridge.plugin_dev', false);
+        $headers['X-Main-Version'] = config('saas-bridge.main_version', 'v1');
 
         //Set headers
         $headers = [
