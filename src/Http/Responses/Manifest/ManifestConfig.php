@@ -8,8 +8,7 @@ class ManifestConfig implements Arrayable
 {
     public function __construct(
         public RateLimiterConfig $rate_limiter_config,
-    )
-    {
+    ) {
     }
 
     public function toArray(): array

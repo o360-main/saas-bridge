@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Closure;
 use Illuminate\Validation\ValidationException;
 
-
 class ForceJsonMiddleware
 {
     public function handle(Request $request, Closure $next)

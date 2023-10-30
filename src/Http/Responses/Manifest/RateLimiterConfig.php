@@ -4,12 +4,10 @@ namespace O360Main\SaasBridge\Http\Responses\Manifest;
 
 class RateLimiterConfig
 {
-
     public function __construct(
         public readonly ?int $allow_request_per_minute = null,
         public readonly ?int $allow_request_per_day = null,
-    )
-    {
+    ) {
     }
 
 

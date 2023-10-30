@@ -13,8 +13,7 @@ class ErrorResponse implements Responsable
         protected  int $code,
         protected readonly string $message,
         protected readonly array $data = []
-    )
-    {
+    ) {
         //validate code
         if ($this->code < 400 || $this->code > 599) {
             throw new \Exception('Invalid error code');

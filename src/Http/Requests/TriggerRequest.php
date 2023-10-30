@@ -56,7 +56,7 @@ class TriggerRequest extends BaseRequest
             return ModuleAction::from($action);
         }
 
-       return  ModuleAction::from($this->input('action'));
+        return  ModuleAction::from($this->input('action'));
 
     }
 
