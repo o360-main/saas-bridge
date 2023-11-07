@@ -4,6 +4,25 @@ namespace O360Main\SaasBridge\Config;
 
 class FormField
 {
+
+    public function __construct(
+        protected $name,
+        protected $label,
+        protected $input_type,
+        protected $type,
+        protected $default_value = null,
+        protected $index = 0,
+        protected $required = true,
+        protected $multiple = false,
+        protected $placeholder = null,
+        protected $description = null,
+        protected $options = [],
+        protected $pattern = null
+    )
+    {
+    }
+
+
     public static function make(
         $name,
         $label,
@@ -17,21 +36,56 @@ class FormField
         $description = null,
         $options = [],
         $pattern = null
-    ): array {
-        return compact(
-            'index',
-            'name',
-            'input_type',
-            'type',
-            'label',
-            'default_value',
-            'required',
-            'multiple',
-            'placeholder',
-            'description',
-            'options',
-            'pattern'
+    ): self
+    {
+
+        return new self(
+            name: $name,
+            label: $label,
+            input_type: $input_type,
+            type: $type,
+            default_value: $default_value,
+            index: $index,
+            required: $required,
+            multiple: $multiple,
+            placeholder: $placeholder,
+            description: $description,
+            options: $options,
+            pattern: $pattern
         );
+//        return compact(
+//            'index',
+//            'name',
+//            'input_type',
+//            'type',
+//            'label',
+//            'default_value',
+//            'required',
+//            'multiple',
+//            'placeholder',
+//            'description',
+//            'options',
+//            'pattern'
+//        );
+    }
+
+
+    public function toArray()
+    {
+        return [
+            'index' => $this->index,
+            'name' => $this->name,
+            'input_type' => $this->input_type,
+            'type' => $this->type,
+            'label' => $this->label,
+            'default_value' => $this->default_value,
+            'required' => $this->required,
+            'multiple' => $this->multiple,
+            'placeholder' => $this->placeholder,
+            'description' => $this->description,
+            'options' => $this->options,
+            'pattern' => $this->pattern
+        ];
     }
 
 
@@ -44,7 +98,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $pattern = null,
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -72,7 +127,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $multiple = false
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -98,7 +154,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $multiple = false
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -122,7 +179,8 @@ class FormField
         $required = true,
         $placeholder = null,
         $description = null,
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -146,7 +204,8 @@ class FormField
         $required = true,
         $placeholder = null,
         $description = null
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -170,7 +229,8 @@ class FormField
         $required = true,
         $placeholder = null,
         $description = null,
-    ): array {
+    ): self
+    {
 
         return self::make(
             $name,
@@ -195,7 +255,8 @@ class FormField
         $required = true,
         $placeholder = null,
         $description = null
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -219,7 +280,8 @@ class FormField
         $required = true,
         $placeholder = null,
         $description = null
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -243,7 +305,8 @@ class FormField
         $required = true,
         $placeholder = null,
         $description = null,
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -268,7 +331,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $pattern = null,
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -295,7 +359,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $multiple = false
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -320,7 +385,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $multiple = false
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -345,7 +411,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $pattern = null,
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -372,7 +439,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $pattern = null,
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
@@ -399,7 +467,8 @@ class FormField
         $placeholder = null,
         $description = null,
         $pattern = null,
-    ): array {
+    ): self
+    {
         return self::make(
             $name,
             $label,
