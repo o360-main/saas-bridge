@@ -5,37 +5,49 @@ namespace O360Main\SaasBridge\Config;
 class FormField
 {
 
+    /**
+     * @throws \Exception
+     */
     public function __construct(
-        protected $name,
-        protected $label,
-        protected $input_type,
-        protected $type,
-        protected $default_value = null,
-        protected $index = 0,
-        protected $required = true,
-        protected $multiple = false,
-        protected $placeholder = null,
-        protected $description = null,
-        protected $options = [],
-        protected $pattern = null
+        protected string             $name,
+        protected string             $label,
+        protected FormFieldInputType $input_type,
+        protected FormFieldDataType  $type,
+        protected string             $placeholder,
+        protected string             $description,
+        protected array              $options = [],
+        protected ?string            $pattern = null,
+        protected ?string            $default_value = null,
+        protected int                $index = 0,
+        protected bool               $required = true,
+        protected bool               $multiple = false,
     )
     {
+        foreach ($this->options as $option) {
+
+            if (!$option instanceof FormFieldOption) {
+                throw new \Exception('Options must be instance of FormFieldOption');
+            }
+        }
     }
 
 
+    /**
+     * @throws \Exception
+     */
     public static function make(
-        $name,
-        $label,
-        $input_type,
-        $type,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $multiple = false,
-        $placeholder = null,
-        $description = null,
-        $options = [],
-        $pattern = null
+        string             $name,
+        string             $label,
+        FormFieldInputType $input_type,
+        FormFieldDataType  $type,
+        string             $placeholder,
+        string             $description,
+        array              $options = [],
+        ?string            $pattern = null,
+        ?string            $default_value = null,
+        int                $index = 0,
+        bool               $required = true,
+        bool               $multiple = false,
     ): self
     {
 
@@ -44,33 +56,20 @@ class FormField
             label: $label,
             input_type: $input_type,
             type: $type,
-            default_value: $default_value,
-            index: $index,
-            required: $required,
-            multiple: $multiple,
             placeholder: $placeholder,
             description: $description,
             options: $options,
-            pattern: $pattern
+            pattern: $pattern,
+            default_value: $default_value,
+            index: $index,
+            required: $required,
+            multiple: $multiple
         );
-//        return compact(
-//            'index',
-//            'name',
-//            'input_type',
-//            'type',
-//            'label',
-//            'default_value',
-//            'required',
-//            'multiple',
-//            'placeholder',
-//            'description',
-//            'options',
-//            'pattern'
-//        );
+
     }
 
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'index' => $this->index,
@@ -87,410 +86,5 @@ class FormField
             'pattern' => $this->pattern
         ];
     }
-
-
-    public static function text(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $pattern = null,
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'text',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description,
-            [],
-            $pattern
-        );
-    }
-
-
-    public static function select(
-        $name,
-        $label,
-        $options,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $multiple = false
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'select',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            $multiple,
-            $placeholder,
-            $description,
-            $options
-        );
-    }
-
-
-    public static function checkbox(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $multiple = false
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'checkbox',
-            'boolean',
-            $default_value,
-            $index,
-            $required,
-            $multiple,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function number(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'number',
-            'integer',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function date(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'date',
-            'date',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function datetime(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-    ): self
-    {
-
-        return self::make(
-            $name,
-            $label,
-            'datetime',
-            'datetime',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function time(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'time',
-            'time',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function textarea(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'textarea',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function email(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'email',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function password(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $pattern = null,
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'password',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description,
-            [],
-            $pattern
-        );
-    }
-
-
-    public static function file(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $multiple = false
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'file',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            $multiple,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function image(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $multiple = false
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'image',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            $multiple,
-            $placeholder,
-            $description
-        );
-    }
-
-
-    public static function color(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $pattern = null,
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'color',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description,
-            [],
-            $pattern
-        );
-    }
-
-
-    public static function url(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $pattern = null,
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'url',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description,
-            [],
-            $pattern
-        );
-    }
-
-
-    public static function tel(
-        $name,
-        $label,
-        $default_value = null,
-        $index = 0,
-        $required = true,
-        $placeholder = null,
-        $description = null,
-        $pattern = null,
-    ): self
-    {
-        return self::make(
-            $name,
-            $label,
-            'tel',
-            'string',
-            $default_value,
-            $index,
-            $required,
-            false,
-            $placeholder,
-            $description,
-            [],
-            $pattern
-        );
-    }
-
-
-    //    public static function range($name, $label, $min, $max, $default_value = null, $index = 0, $required = true, $placeholder = null, $description = null): array
-    //    {
-    //        $options = compact('min', 'max');
-    //        return self::make($name, $label, 'range', 'integer', $default_value, $index, $required, $placeholder, $description, $options);
-    //    }
-
 
 }
