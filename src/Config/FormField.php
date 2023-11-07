@@ -9,20 +9,21 @@ class FormField
      * @throws \Exception
      */
     public function __construct(
-        protected string             $name,
-        protected string             $label,
         protected FormFieldInputType $input_type,
         protected FormFieldDataType  $type,
+        protected string             $name,
+        protected string             $label,
         protected string             $placeholder,
         protected string             $description,
-        protected array              $options = [],
-        protected ?string            $pattern = null,
+        protected ?array             $options = [],
         protected ?string            $default_value = null,
         protected int                $index = 0,
         protected bool               $required = true,
         protected bool               $multiple = false,
+        protected ?string            $pattern = null,
     )
     {
+
         foreach ($this->options as $option) {
 
             if (!$option instanceof FormFieldOption) {
@@ -31,42 +32,6 @@ class FormField
         }
     }
 
-
-    /**
-     * @throws \Exception
-     */
-    public static function make(
-        string             $name,
-        string             $label,
-        FormFieldInputType $input_type,
-        FormFieldDataType  $type,
-        string             $placeholder,
-        string             $description,
-        array              $options = [],
-        ?string            $pattern = null,
-        ?string            $default_value = null,
-        int                $index = 0,
-        bool               $required = true,
-        bool               $multiple = false,
-    ): self
-    {
-
-        return new self(
-            name: $name,
-            label: $label,
-            input_type: $input_type,
-            type: $type,
-            placeholder: $placeholder,
-            description: $description,
-            options: $options,
-            pattern: $pattern,
-            default_value: $default_value,
-            index: $index,
-            required: $required,
-            multiple: $multiple
-        );
-
-    }
 
 
     public function toArray(): array
@@ -82,7 +47,7 @@ class FormField
             'multiple' => $this->multiple,
             'placeholder' => $this->placeholder,
             'description' => $this->description,
-            'options' => $this->options,
+            'options' => collect($this->options ?? [])->map(fn($option) => $option->toArray())->toArray(),
             'pattern' => $this->pattern
         ];
     }
