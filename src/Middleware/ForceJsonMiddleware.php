@@ -40,17 +40,21 @@ class ForceJsonMiddleware
         }
 
 
-        if ($request->headers->has('X-Plugin-Debug')) {
+        try {
+            if ($request->headers->has('X-Plugin-Debug')) {
 
-            $json['debug'] = [
-                'url' => $request->url(),
-                'method' => $request->method(),
-                'headers' => $request->headers->all(),
-                'request' => $request->all(),
-                'trace' => $response?->exception?->getTrace() ?? [],
-            ];
+                $json['debug'] = [
+                    'url' => $request->url(),
+                    'method' => $request->method(),
+                    'headers' => $request->headers->all(),
+                    'request' => $request->all(),
+                    'trace' => $response?->exception?->getTrace() ?? [],
+                ];
+            }
+
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage(), $e->getTrace());
         }
-
 
         return response()->json($json, $statusCode);
 
