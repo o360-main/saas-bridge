@@ -13,6 +13,7 @@ class SaasAgent
     private array $_moduleConfig;
     private array $_connection;
     private array $_plugin;
+    private array $_source;
 
     private function __construct()
     {
@@ -79,6 +80,12 @@ class SaasAgent
         $this->_connection = $connection;
     }
 
+
+    public function setSource(array $source): void
+    {
+        $this->_source = $source;
+    }
+
     public function setPlugin(array $plugin): void
     {
         $this->_plugin = $plugin;
@@ -87,6 +94,11 @@ class SaasAgent
     public function credentials(): array
     {
         return $this->_credentials;
+    }
+
+    public function source(): array
+    {
+        return $this->_source ?? [];
     }
 
 
