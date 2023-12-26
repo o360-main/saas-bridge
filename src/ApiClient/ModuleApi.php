@@ -37,13 +37,13 @@ class ModuleApi
 //    }
 
 
-    public function findMany(int $perPage, string $cursor = null, array $queryParams = []): PromiseInterface|Response
+    public function findMany(array $queryParams = [],string $nextCursor = null, int $perPage = 20): PromiseInterface|Response
     {
         $url = $this->makeUrl('/');
 
         return $this->http->get($url, [
             'perPage' => $perPage,
-            'cursor' => $cursor,
+            'cursor' => $nextCursor,
             ...$queryParams,
         ]);
     }
