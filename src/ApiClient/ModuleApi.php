@@ -21,17 +21,29 @@ class ModuleApi
     {
         $args = [$this->endpoint->value, ...$args];
 
-        return join('/', array_map(fn ($arg) => trim($arg, '/'), $args));
+        return join('/', array_map(fn($arg) => trim($arg, '/'), $args));
     }
 
-    //Route::post('/batch-delete-by-sync-ids', [$controller, 'batchDeleteBySyncIds']);//
-    public function findMany($pageNumber, $perPage, $queryParams = []): PromiseInterface|Response
+//    //Route::post('/batch-delete-by-sync-ids', [$controller, 'batchDeleteBySyncIds']);//
+//    public function findMany($pageNumber, $perPage, $queryParams = []): PromiseInterface|Response
+//    {
+//        $url = $this->makeUrl('/');
+//
+//        return $this->http->get($url, [
+//            'page' => $pageNumber,
+//            'perPage' => $perPage,
+//            ...$queryParams,
+//        ]);
+//    }
+
+
+    public function findMany(int $perPage, string $cursor = null, array $queryParams = []): PromiseInterface|Response
     {
         $url = $this->makeUrl('/');
 
         return $this->http->get($url, [
-            'page' => $pageNumber,
             'perPage' => $perPage,
+            'cursor' => $cursor,
             ...$queryParams,
         ]);
     }
