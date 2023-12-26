@@ -13,6 +13,7 @@ class SaasAgent
     private array $_moduleConfig;
     private array $_connection;
     private array $_plugin;
+    private array $_dataConfig;
 
     private function __construct()
     {
@@ -95,6 +96,9 @@ class SaasAgent
         $this->_moduleConfig = $config;
     }
 
+
+
+
     public function moduleConfig($key = null): array
     {
         if ($key !== null) {
@@ -104,6 +108,20 @@ class SaasAgent
         return $this->_moduleConfig;
     }
 
+
+    public function setDataConfig(array $config): void
+    {
+        $this->_dataConfig = $config;
+    }
+
+    public function dataConfig($key = null): array
+    {
+        if ($key !== null) {
+            return $this->_dataConfig[$key] ?? [];
+        }
+
+        return $this->_dataConfig;
+    }
 
 
     //call with magic method also return above function

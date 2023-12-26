@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \O360Main\SaasBridge\Services\ConfigService configService()
  * @method static array configurations()
  * @method static array moduleConfig()
+ * @method static array dataConfig()
  * @method static \O360Main\SaasBridge\SaasBridgeService getInstance()
  * @see \O360Main\SaasBridge\SaasBridgeService
  */
