@@ -7,12 +7,15 @@ use Illuminate\Contracts\Support\Responsable;
 class DataResponse implements Responsable
 {
     public function __construct(
-    ) {
+        public array $unique_ids = [],
+    )
+    {
     }
 
     public function toResponse($request): array
     {
         return [
+            'unique_ids' => $this->unique_ids,
         ];
     }
 }
