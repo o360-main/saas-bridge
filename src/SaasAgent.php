@@ -14,6 +14,7 @@ class SaasAgent
     private array $_connection;
     private array $_plugin;
     private array $_dataConfig;
+    private array $_source;
 
     private function __construct()
     {
@@ -97,8 +98,6 @@ class SaasAgent
     }
 
 
-
-
     public function moduleConfig($key = null): array
     {
         if ($key !== null) {
@@ -121,6 +120,21 @@ class SaasAgent
         }
 
         return $this->_dataConfig;
+    }
+
+
+    public function setSource(array $source): void
+    {
+        $this->_source = $source;
+    }
+
+    public function source($module = null)
+    {
+        if ($module !== null) {
+            return $this->_source[$module] ?? null;
+        }
+
+        return $this->_source;
     }
 
 
