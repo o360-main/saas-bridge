@@ -15,6 +15,7 @@ class SaasAgent
     private array $_plugin;
     private array $_dataConfig;
     private array $_source;
+    private array $_enabled;
 
     private function __construct()
     {
@@ -137,6 +138,17 @@ class SaasAgent
         return $this->_source;
     }
 
+      public function mainModules($module = null)
+    {
+        if ($module !== null) {
+            return $this->_source[$module] ?? null;
+        }
+
+        return $this->_source;
+    }
+
+
+
 
     //call with magic method also return above function
     //    public function __call($name, $arguments)
@@ -151,6 +163,20 @@ class SaasAgent
     public function plugin(): array
     {
         return $this->_plugin;
+    }
+
+    public function setEnabled(array $param): void
+    {
+        $this->_enabled = $param;
+    }
+
+    public function enabledModules($module = null)
+    {
+        if ($module !== null) {
+            return $this->_enabled[$module] ?? null;
+        }
+
+        return $this->_enabled;
     }
 
 }

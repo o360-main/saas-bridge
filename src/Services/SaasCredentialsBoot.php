@@ -127,11 +127,22 @@ class SaasCredentialsBoot
 
         $data = $response->json();
 
+//
+//        'connection' => $this->connection,
+//            'config' => $this->config,
+//            'module_config' => $this->moduleConfig,
+//            'plugin' => $this->plugin,
+//            'source' => $this->source,
+//            'main_modules' => $this->source,
+//            'enabled_modules' => $this->enabled_modules,
+//            'data_config' => $this->dataConfig,
+
         $this->saasAgent->setConnection($data['connection'] ?? []);
         $this->saasAgent->setCredentials($data['config'] ?? []);
         $this->saasAgent->setModuleConfig($data['module_config'] ?? []);
         $this->saasAgent->setPlugin($data['plugin'] ?? []);
         $this->saasAgent->setDataConfig($data['data_config'] ?? []);
-        $this->saasAgent->setSource($data['source'] ?? []);
+        $this->saasAgent->setSource($data['source'] ?? $data["main_modules"] ?? []);
+        $this->saasAgent->setEnabled($data['enabled_modules'] ?? []);
     }
 }
