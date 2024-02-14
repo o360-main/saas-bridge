@@ -59,6 +59,11 @@ class SaasBridgeService
     }
 
 
+    /**
+     * @param $module
+     * @deprecated  use mainModules
+     * @return array|mixed|null
+     */
     public function source($module = null)
     {
         return $this->saasAgent->source($module);

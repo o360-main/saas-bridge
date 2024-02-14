@@ -142,7 +142,7 @@ class SaasCredentialsBoot
         $this->saasAgent->setModuleConfig($data['module_config'] ?? []);
         $this->saasAgent->setPlugin($data['plugin'] ?? []);
         $this->saasAgent->setDataConfig($data['data_config'] ?? []);
-        $this->saasAgent->setSource($data['source_of_truth'] ?? $data["main_modules"] ?? []);
+        $this->saasAgent->setSource($data['source'] ?? $data['source_of_truth'] ?? $data["main_modules"] ?? []);
         $this->saasAgent->setEnabled($data['enabled_modules'] ?? []);
     }
 }

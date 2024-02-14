@@ -138,7 +138,7 @@ class SaasAgent
         return $this->_source;
     }
 
-      public function mainModules($module = null)
+    public function mainModules($module = null)
     {
         if ($module !== null) {
             return $this->_source[$module] ?? null;

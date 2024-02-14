@@ -4,7 +4,6 @@ namespace O360Main\SaasBridge\ApiClient;
 
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\Response;
-use O360Main\SaasBridge\Module;
 use O360Main\SaasBridge\SaasAgent;
 
 class SaasApiClient
@@ -126,6 +125,11 @@ class SaasApiClient
     public function gift_cards(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::gift_card);
+    }
+
+    public function shipping_methods(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::shipping_method);
     }
 
     //tier-price
