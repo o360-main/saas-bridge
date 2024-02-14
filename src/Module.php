@@ -21,6 +21,11 @@ enum Module: string
     case seller = "seller";
     case account = "account";
 
+    case discount = 'discount';
+    case gift_card = 'gift_card';
+
+    // Tier Price
+    case tier_price = 'tier_price';
 
     /**
      * @throws \Exception
@@ -131,6 +136,30 @@ enum Module: string
                 'plural' => 'accounts',
                 'label' => 'Account',
                 'label_plural' => 'Accounts',
+                'simple' => false,
+            ],
+
+            self::discount => [
+                'name' => 'discount',
+                'plural' => 'discounts',
+                'label' => 'Discount',
+                'label_plural' => 'Discounts',
+                'simple' => false,
+            ],
+
+            self::gift_card => [
+                'name' => 'gift_card',
+                'plural' => 'gift_cards',
+                'label' => 'GiftCard',
+                'label_plural' => 'GiftCards',
+                'simple' => false,
+            ],
+
+            self::tier_price => [
+                'name' => 'tier_price',
+                'plural' => 'tier_prices',
+                'label' => 'TierPrice',
+                'label_plural' => 'TierPrices',
                 'simple' => false,
             ],
 

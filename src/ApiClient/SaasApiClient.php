@@ -109,4 +109,22 @@ class SaasApiClient
     {
         return new ModuleApi($this->api, EndPoint::order);
     }
+
+    //discount
+    public function discounts(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::discount);
+    }
+
+    //gift-card
+    public function gift_cards(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::gift_card);
+    }
+
+
+    public function tier_prices(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::tier_price);
+    }
 }

@@ -18,4 +18,8 @@ enum EndPoint: string
     case seller = 'sellers';
     case order = 'orders';
 
+    case discount = 'discounts';
+    case gift_card = 'gift-cards';
+    case tier_price = 'tier-prices';
+//    case invoice = 'invoices';
 }
