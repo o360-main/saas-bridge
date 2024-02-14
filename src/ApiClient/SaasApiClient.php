@@ -2,6 +2,9 @@
 
 namespace O360Main\SaasBridge\ApiClient;
 
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Http\Client\Response;
+use O360Main\SaasBridge\Module;
 use O360Main\SaasBridge\SaasAgent;
 
 class SaasApiClient
@@ -24,6 +27,11 @@ class SaasApiClient
         return $this->api;
     }
 
+
+    public function forModule(EndPoint $endPoint): ModuleApi
+    {
+        return new ModuleApi($this->api, $endPoint);
+    }
 
     /**
      * Currency SaaS Api
@@ -99,9 +107,7 @@ class SaasApiClient
     //seller
     public function sellers(): ModuleApi
     {
-
         return new ModuleApi($this->api, EndPoint::seller);
-
     }
 
     //order
@@ -122,9 +128,22 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::gift_card);
     }
 
-
+    //tier-price
     public function tier_prices(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::tier_price);
     }
+
+    //data-countries
+    public function data_countries(): PromiseInterface|Response
+    {
+        return $this->api->get('/data/countries');
+    }
+
+    //data-currencies
+    public function data_currencies(): PromiseInterface|Response
+    {
+        return $this->api->get('/data/currencies');
+    }
+
 }

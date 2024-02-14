@@ -17,9 +17,11 @@ enum EndPoint: string
     case customer = 'customers';
     case seller = 'sellers';
     case order = 'orders';
+    case order_refund = 'order-refunds';
 
     case discount = 'discounts';
     case gift_card = 'gift-cards';
     case tier_price = 'tier-prices';
-//    case invoice = 'invoices';
+    case invoice = 'invoices';
+    case shipping_method = 'shipping-methods';
 }
