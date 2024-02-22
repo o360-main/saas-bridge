@@ -24,4 +24,7 @@ enum EndPoint: string
     case tier_price = 'tier-prices';
     case invoice = 'invoices';
     case shipping_method = 'shipping-methods';
+    case product_price_class = 'product-price-classes';
+    case order_item = 'order-items';
+    case product_image = 'product-images';
 }

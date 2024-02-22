@@ -138,6 +138,21 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::tier_price);
     }
 
+    public function product_price_classes(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::product_price_class);
+    }
+
+    public function order_items(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_item);
+    }
+
+    public function product_images(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::product_image);
+    }
+
     //data-countries
     public function data_countries(): PromiseInterface|Response
     {
