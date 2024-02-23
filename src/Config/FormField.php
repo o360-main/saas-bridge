@@ -21,6 +21,10 @@ class FormField
         protected bool               $required = true,
         protected bool               $multiple = false,
         protected ?string            $pattern = null,
+        protected bool $is_default_hide = false,
+        protected ?string $show_in = null,
+        protected ?string $show_in_value = null,
+        protected ?string $not_show_in_value = null,
     )
     {
 
@@ -48,7 +52,11 @@ class FormField
             'placeholder' => $this->placeholder,
             'description' => $this->description,
             'options' => collect($this->options ?? [])->map(fn($option) => $option->toArray())->toArray(),
-            'pattern' => $this->pattern
+            'pattern' => $this->pattern,
+            'is_default_hide' => $this->is_default_hide,
+            'show_in' => $this->show_in,
+            'show_in_value' => $this->show_in_value,
+            'not_show_in_value' => $this->not_show_in_value,
         ];
     }
 
