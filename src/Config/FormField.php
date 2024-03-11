@@ -21,10 +21,11 @@ class FormField
         protected bool               $required = true,
         protected bool               $multiple = false,
         protected ?string            $pattern = null,
-        protected bool $is_default_hide = false,
-        protected ?string $show_in = null,
-        protected ?string $show_in_value = null,
-        protected ?string $not_show_in_value = null,
+        protected bool               $is_default_hide = false,
+        protected ?string            $show_in = null,
+        protected ?string            $show_in_value = null,
+        protected bool               $is_cloneable = false,
+        protected ?string            $not_show_in_value = null,
     )
     {
 
@@ -35,7 +36,6 @@ class FormField
             }
         }
     }
-
 
 
     public function toArray(): array
@@ -56,6 +56,7 @@ class FormField
             'is_default_hide' => $this->is_default_hide,
             'show_in' => $this->show_in,
             'show_in_value' => $this->show_in_value,
+            'is_cloneable' => $this->is_cloneable,
             'not_show_in_value' => $this->not_show_in_value,
         ];
     }
