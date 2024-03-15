@@ -163,6 +163,15 @@ enum Module: string
                 'simple' => false,
             ],
 
+            self::tier_price => [
+                'name' => 'error_log',
+                'plural' => 'error_logs',
+                'label' => 'ErrorLog',
+                'label_plural' => 'ErrorLogs',
+                'simple' => true,
+            ],
+
+
             default => throw new \Exception("Invalid Module")
 
         };

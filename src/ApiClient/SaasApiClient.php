@@ -165,4 +165,10 @@ class SaasApiClient
         return $this->api->get('/data/currencies');
     }
 
+    public function error_logs(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::error_log);
+    }
+
+
 }

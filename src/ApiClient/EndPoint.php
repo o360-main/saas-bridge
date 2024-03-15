@@ -27,4 +27,6 @@ enum EndPoint: string
     case product_price_class = 'product-price-classes';
     case order_item = 'order-items';
     case product_image = 'product-images';
+
+    case error_log = 'error-logs';
 }
