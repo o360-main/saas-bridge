@@ -17,7 +17,6 @@ enum EndPoint: string
     case customer = 'customers';
     case seller = 'sellers';
     case order = 'orders';
-    case order_refund = 'order-refunds';
 
     case discount = 'discounts';
     case gift_card = 'gift-cards';
@@ -29,4 +28,11 @@ enum EndPoint: string
     case product_image = 'product-images';
 
     case error_log = 'error-logs';
+
+    case order_return = 'order-returns';
+    case order_refund = 'order-refunds';
+    case order_return_item = 'order-return-items';
+    case order_refund_item = 'order-refund-items';
+    case order_shipping = 'order-shippings';
+    case order_payment_method = 'order-payment-methods';
 }

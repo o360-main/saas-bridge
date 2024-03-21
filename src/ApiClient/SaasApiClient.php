@@ -170,5 +170,34 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::error_log);
     }
 
+    public function order_returns(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_return);
+    }
+
+    public function order_refunds(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_refund);
+    }
+
+    public function order_return_items(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_return_item);
+    }
+
+    public function order_refund_items(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_refund_item);
+    }
+
+    public function order_shippings(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_shipping);
+    }
+
+    public function order_payment_methods(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_payment_method);
+    }
 
 }
