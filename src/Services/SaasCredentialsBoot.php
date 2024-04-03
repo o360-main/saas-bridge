@@ -82,12 +82,10 @@ class SaasCredentialsBoot
         }
 
 
-        Log::error("ENVIRONMENT",[
+        Log::error("ENVIRONMENT", [
             'env' => $this->environment,
             'all' => $this->request->all(),
         ]);
-        dd($this->environment);
-
 
         $baseUrl = $this->environment['core_url'] ?? config('saas-bridge.saas_api_url');
         $devMode = $this->environment['dev_mode'] ?? config('saas-bridge.plugin_dev', false);
@@ -149,15 +147,15 @@ class SaasCredentialsBoot
 
         $data = $response->json();
 
-//
-//        'connection' => $this->connection,
-//            'config' => $this->config,
-//            'module_config' => $this->moduleConfig,
-//            'plugin' => $this->plugin,
-//            'source' => $this->source,
-//            'main_modules' => $this->source,
-//            'enabled_modules' => $this->enabled_modules,
-//            'data_config' => $this->dataConfig,
+        //
+        //        'connection' => $this->connection,
+        //            'config' => $this->config,
+        //            'module_config' => $this->moduleConfig,
+        //            'plugin' => $this->plugin,
+        //            'source' => $this->source,
+        //            'main_modules' => $this->source,
+        //            'enabled_modules' => $this->enabled_modules,
+        //            'data_config' => $this->dataConfig,
 
         $this->saasAgent->setConnection($data['connection'] ?? []);
         $this->saasAgent->setCredentials($data['config'] ?? []);
