@@ -23,6 +23,8 @@ class SaasCredentialsBoot
     private SaasAgent $saasAgent;
     private PendingRequest $saasApi;
 
+    private array $environment = [];
+
 
     private bool $validated = false;
 
@@ -32,6 +34,8 @@ class SaasCredentialsBoot
         $this->saasAgent = SaasAgent::getInstance();
 
         $this->request = $request;
+
+        $this->environment = $request->input('_env', []);
 
         $this->auth['token'] = $this->request->bearerToken();
     }
@@ -70,8 +74,12 @@ class SaasCredentialsBoot
             throw new UnauthorizedException('Invalid Access Key');
         }
 
-        //check base url is existing on config
-        $baseUrl = config('saas-bridge.saas_api_url');
+
+        $baseUrl = $this->environment['core_url'] ?? config('saas-bridge.saas_api_url');
+        $devMode = $this->environment['dev_mode'] ?? config('saas-bridge.plugin_dev', false);
+        $debug = $this->environment['debug'] ?? false;
+        $mainVersion = $this->environment['version'] ?? config('saas-bridge.main_version', 'v1');
+
         if (empty($baseUrl)) {
             throw new Exception('CoreApi url not set');
         }
@@ -88,8 +96,8 @@ class SaasCredentialsBoot
         Config::set('saas-bridge.plugin_id', $pluginId);
 
         //check is in dev mode
-        $headers['X-Plugin-Dev'] = config('saas-bridge.plugin_dev', false);
-        $headers['X-Main-Version'] = config('saas-bridge.main_version', 'v1');
+        $headers['X-Plugin-Dev'] = $devMode;
+        $headers['X-Main-Version'] = $mainVersion;
 
         //Set headers
         $headers = [
