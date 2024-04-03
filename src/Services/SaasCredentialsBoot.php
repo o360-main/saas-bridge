@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\UnauthorizedException;
 use O360Main\SaasBridge\SaasAgent;
 use O360Main\SaasBridge\SaasBridgeService;
@@ -125,12 +124,6 @@ class SaasCredentialsBoot
         if ($this->validated) {
             return;
         }
-
-        Log::error("saaas api", [
-            'url' => config('saas-bridge.token_validate_endpoint'),
-            'headers' => $this->saasApi->getHeaders(),
-            'sulfur' => $this->saasApi,
-        ]);
 
         $response = $this->saasApi->get(
             config('saas-bridge.token_validate_endpoint', "/connection/validate")
