@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\UnauthorizedException;
 use O360Main\SaasBridge\SaasAgent;
 use O360Main\SaasBridge\SaasBridgeService;
@@ -79,6 +80,10 @@ class SaasCredentialsBoot
         if (!isset($this->auth['token'])) {
             throw new UnauthorizedException('Invalid Access Key');
         }
+
+
+        Log::error("ENVIRONMENT", $this->environment);
+        dd($this->environment);
 
 
         $baseUrl = $this->environment['core_url'] ?? config('saas-bridge.saas_api_url');
