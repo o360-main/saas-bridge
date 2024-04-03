@@ -82,7 +82,10 @@ class SaasCredentialsBoot
         }
 
 
-        Log::error("ENVIRONMENT", $this->environment);
+        Log::error("ENVIRONMENT",[
+            'env' => $this->environment,
+            'all' => $this->request->all(),
+        ]);
         dd($this->environment);
 
 
