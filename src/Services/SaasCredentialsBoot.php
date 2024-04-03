@@ -113,7 +113,7 @@ class SaasCredentialsBoot
 
         $this->saasApi = Http::baseUrl($baseUrl)->withHeaders($headers);
 
-        $this->saasAgent->setSaasApi($this->saasApi);
+        $this->saasAgent->setSaasApi($this->saasApi, $this->environment);
     }
 
     /**
