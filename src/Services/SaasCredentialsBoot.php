@@ -36,11 +36,7 @@ class SaasCredentialsBoot
 
         $this->request = $request;
 
-        $env = $request->input('_env', []);
-
-        if (!empty($env)) {
-            $env = $request->input('env', []);
-        }
+        $env = $request->all()['_env'] ?? [];
 
         $this->environment = $env;
 
