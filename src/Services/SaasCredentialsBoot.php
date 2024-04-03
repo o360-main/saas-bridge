@@ -36,9 +36,7 @@ class SaasCredentialsBoot
 
         $this->request = $request;
 
-        $env = $request->all()['_env'] ?? [];
-
-        $this->environment = $env;
+        $this->environment = $request->all()['_env'] ?? [];
 
         $this->auth['token'] = $this->request->bearerToken();
     }
@@ -131,9 +129,16 @@ class SaasCredentialsBoot
             return;
         }
 
+        Log::error("saaas api", [
+            'url' => config('saas-bridge.token_validate_endpoint'),
+            'headers' => $this->saasApi->getHeaders(),
+            'urlfull' => $this->saasApi,
+        ]);
+
         $response = $this->saasApi->get(
             config('saas-bridge.token_validate_endpoint')
         );
+
 
         if (!$response->ok()) {
             throw new AccessDeniedHttpException('Invalid Access Key');
