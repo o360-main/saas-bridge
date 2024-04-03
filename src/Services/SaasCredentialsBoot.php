@@ -35,7 +35,13 @@ class SaasCredentialsBoot
 
         $this->request = $request;
 
-        $this->environment = $request->input('_env', []);
+        $env = $request->input('_env', []);
+
+        if (!empty($env)) {
+            $env = $request->input('env', []);
+        }
+
+        $this->environment = $env;
 
         $this->auth['token'] = $this->request->bearerToken();
     }
