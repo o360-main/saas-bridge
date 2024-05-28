@@ -37,4 +37,5 @@ enum EndPoint: string
     case order_payment_method = 'order-payment-methods';
 
     case order_reason_code = 'order-reason-codes';
+    case addresses = 'addresses';
 }
