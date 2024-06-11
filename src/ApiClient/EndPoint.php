@@ -36,4 +36,7 @@ enum EndPoint: string
     case order_shipping = 'order-shippings';
     case order_payment_method = 'order-payment-methods';
     case plugin_log = 'plugin-logs';
+    case order_reason_code = 'order-reason-codes';
+    case addresses = 'addresses';
+
 }

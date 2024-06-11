@@ -153,6 +153,16 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::product_image);
     }
 
+    public function order_reason_codes(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_reason_code);
+    }
+
+    public function addresses(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::addresses);
+    }
+
     //data-countries
     public function data_countries(): PromiseInterface|Response
     {

@@ -34,9 +34,12 @@ class SaasAgent
      */
     private PendingRequest $_saasApi;
 
-    public function setSaasApi(PendingRequest $saasApi): void
+    private array $_env;
+
+    public function setSaasApi(PendingRequest $saasApi, array $env): void
     {
         $this->_saasApi = $saasApi;
+        $this->_env = $env;
     }
 
     //getter setter
@@ -46,12 +49,10 @@ class SaasAgent
      */
     public function saasApi($version = 'v1'): PendingRequest
     {
-        $baseUrl = config('saas-bridge.saas_api_url');
-
+        $baseUrl = $this->_env['core_url'] ?? config('saas-bridge.saas_api_url');
         if (empty($baseUrl)) {
             throw new \Exception('CoreApi url not set');
         }
-
         if ($version !== null) {
             $allowedVersions = [
                 'v1'
@@ -63,7 +64,7 @@ class SaasAgent
             $arr = [$baseUrl, $version];
 
             //using core php
-            $baseUrl = implode('/', array_map(fn ($i) => rtrim($i, '/'), $arr));
+            $baseUrl = implode('/', array_map(fn($i) => rtrim($i, '/'), $arr));
 
             $this->_saasApi->baseUrl($baseUrl);
         }
@@ -77,29 +78,34 @@ class SaasAgent
         $this->_credentials = $credentials;
     }
 
-    public function setConnection(array $connection): void
+    public
+    function setConnection(array $connection): void
     {
         $this->_connection = $connection;
     }
 
-    public function setPlugin(array $plugin): void
+    public
+    function setPlugin(array $plugin): void
     {
         $this->_plugin = $plugin;
     }
 
-    public function credentials(): array
+    public
+    function credentials(): array
     {
         return $this->_credentials;
     }
 
 
-    public function setModuleConfig(array $config): void
+    public
+    function setModuleConfig(array $config): void
     {
         $this->_moduleConfig = $config;
     }
 
 
-    public function moduleConfig($key = null): array
+    public
+    function moduleConfig($key = null): array
     {
         if ($key !== null) {
             return $this->_moduleConfig[$key] ?? [];
@@ -109,12 +115,14 @@ class SaasAgent
     }
 
 
-    public function setDataConfig(array $config): void
+    public
+    function setDataConfig(array $config): void
     {
         $this->_dataConfig = $config;
     }
 
-    public function dataConfig($key = null): array
+    public
+    function dataConfig($key = null): array
     {
         if ($key !== null) {
             return $this->_dataConfig[$key] ?? [];
@@ -124,12 +132,14 @@ class SaasAgent
     }
 
 
-    public function setSource(array $source): void
+    public
+    function setSource(array $source): void
     {
         $this->_source = $source;
     }
 
-    public function source($module = null)
+    public
+    function source($module = null)
     {
         if ($module !== null) {
             return $this->_source[$module] ?? null;
@@ -138,7 +148,8 @@ class SaasAgent
         return $this->_source;
     }
 
-    public function mainModules($module = null)
+    public
+    function mainModules($module = null)
     {
         if ($module !== null) {
             return $this->_source[$module] ?? null;
@@ -146,8 +157,6 @@ class SaasAgent
 
         return $this->_source;
     }
-
-
 
 
     //call with magic method also return above function
@@ -155,22 +164,26 @@ class SaasAgent
     //    {
     //        return $this->saasApi()->$name(...$arguments);
     //    }
-    public function connection(): array
+    public
+    function connection(): array
     {
         return $this->_connection;
     }
 
-    public function plugin(): array
+    public
+    function plugin(): array
     {
         return $this->_plugin;
     }
 
-    public function setEnabled(array $param): void
+    public
+    function setEnabled(array $param): void
     {
         $this->_enabled = $param;
     }
 
-    public function enabledModules($module = null)
+    public
+    function enabledModules($module = null)
     {
         if ($module !== null) {
             return $this->_enabled[$module] ?? null;
