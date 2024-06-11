@@ -199,5 +199,10 @@ class SaasApiClient
     {
         return new ModuleApi($this->api, EndPoint::order_payment_method);
     }
+    //plugin-logs
+    public function plugin_logs(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::plugin_log);
+    }
 
 }

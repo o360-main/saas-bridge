@@ -27,6 +27,9 @@ enum Module: string
     // Tier Price
     case tier_price = 'tier_price';
 
+    case errorLog = "error_log";
+    case pluginLog = "plugin_log";
+
     /**
      * @throws \Exception
      */
@@ -163,12 +166,19 @@ enum Module: string
                 'simple' => false,
             ],
 
-            self::tier_price => [
+            self::errorLog => [
                 'name' => 'error_log',
                 'plural' => 'error_logs',
                 'label' => 'ErrorLog',
                 'label_plural' => 'ErrorLogs',
                 'simple' => true,
+            ],
+            self::pluginLog => [
+                'name' => 'plugin_log',
+                'plural' => 'plugin_logs',
+                'label' => 'PluginLog',
+                'label_plural' => 'PluginLogs',
+                'simple' => false,
             ],
 
 
