@@ -3,6 +3,7 @@
 namespace O360Main\SaasBridge\Http\Requests;
 
 use O360Main\SaasBridge\Contracts\BaseRequest;
+use O360Main\SaasBridge\Module;
 use O360Main\SaasBridge\ModuleEvent;
 
 class ImportRequest extends BaseRequest
@@ -10,7 +11,7 @@ class ImportRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'payload' => 'required|array',
+            'payload' => 'array',
             'event' => 'required|string',
         ];
     }
@@ -22,8 +23,27 @@ class ImportRequest extends BaseRequest
 
     public function event(): ModuleEvent
     {
-        $str = event_action_extract($this->input('event'));
+        $version = config('saas-bridge.main_version');
 
-        return ModuleEvent::from($str);
+        if ($version == 'v1') {
+            [, $event] = explode('.', $this->input('action'));
+            return ModuleEvent::from($event);
+        }
+
+        return ModuleEvent::from($this->input('event'));
     }
+
+    public function module(): Module
+    {
+        $module = $this->input('module', null);
+
+        if (is_null($module)) {
+            [$module, ] = explode('.', $this->input('event'));
+
+            return Module::from($module);
+        }
+
+        return Module::from($module);
+    }
+
 }

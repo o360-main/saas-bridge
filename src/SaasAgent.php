@@ -13,7 +13,9 @@ class SaasAgent
     private array $_moduleConfig;
     private array $_connection;
     private array $_plugin;
+    private array $_dataConfig;
     private array $_source;
+    private array $_enabled;
 
     private function __construct()
     {
@@ -32,9 +34,12 @@ class SaasAgent
      */
     private PendingRequest $_saasApi;
 
-    public function setSaasApi(PendingRequest $saasApi): void
+    private array $_env;
+
+    public function setSaasApi(PendingRequest $saasApi, array $env): void
     {
         $this->_saasApi = $saasApi;
+        $this->_env = $env;
     }
 
     //getter setter
@@ -44,12 +49,10 @@ class SaasAgent
      */
     public function saasApi($version = 'v1'): PendingRequest
     {
-        $baseUrl = config('saas-bridge.saas_api_url');
-
+        $baseUrl = $this->_env['core_url'] ?? config('saas-bridge.saas_api_url');
         if (empty($baseUrl)) {
             throw new \Exception('CoreApi url not set');
         }
-
         if ($version !== null) {
             $allowedVersions = [
                 'v1'
@@ -61,7 +64,7 @@ class SaasAgent
             $arr = [$baseUrl, $version];
 
             //using core php
-            $baseUrl = implode('/', array_map(fn($i) => rtrim($i, '/'), $arr));
+            $baseUrl = implode('/', array_map(fn ($i) => rtrim($i, '/'), $arr));
 
             $this->_saasApi->baseUrl($baseUrl);
         }
@@ -80,12 +83,6 @@ class SaasAgent
         $this->_connection = $connection;
     }
 
-
-    public function setSource(array $source): void
-    {
-        $this->_source = $source;
-    }
-
     public function setPlugin(array $plugin): void
     {
         $this->_plugin = $plugin;
@@ -96,16 +93,13 @@ class SaasAgent
         return $this->_credentials;
     }
 
-    public function source(): array
-    {
-        return $this->_source ?? [];
-    }
 
 
     public function setModuleConfig(array $config): void
     {
         $this->_moduleConfig = $config;
     }
+
 
     public function moduleConfig($key = null): array
     {
@@ -117,12 +111,50 @@ class SaasAgent
     }
 
 
+    public function setDataConfig(array $config): void
+    {
+        $this->_dataConfig = $config;
+    }
+
+    public function dataConfig($key = null): array
+    {
+        if ($key !== null) {
+            return $this->_dataConfig[$key] ?? [];
+        }
+
+        return $this->_dataConfig;
+    }
+
+
+    public function setSource(array $source): void
+    {
+        $this->_source = $source;
+    }
+
+    public function source($module = null)
+    {
+        if ($module !== null) {
+            return $this->_source[$module] ?? null;
+        }
+
+        return $this->_source;
+    }
+
+    public function mainModules($module = null)
+    {
+        if ($module !== null) {
+            return $this->_source[$module] ?? null;
+        }
+
+        return $this->_source;
+    }
+
 
     //call with magic method also return above function
-//    public function __call($name, $arguments)
-//    {
-//        return $this->saasApi()->$name(...$arguments);
-//    }
+    //    public function __call($name, $arguments)
+    //    {
+    //        return $this->saasApi()->$name(...$arguments);
+    //    }
     public function connection(): array
     {
         return $this->_connection;
@@ -131,6 +163,20 @@ class SaasAgent
     public function plugin(): array
     {
         return $this->_plugin;
+    }
+
+    public function setEnabled(array $param): void
+    {
+        $this->_enabled = $param;
+    }
+
+    public function enabledModules($module = null)
+    {
+        if ($module !== null) {
+            return $this->_enabled[$module] ?? null;
+        }
+
+        return $this->_enabled;
     }
 
 }

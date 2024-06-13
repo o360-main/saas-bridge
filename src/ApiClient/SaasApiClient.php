@@ -2,6 +2,8 @@
 
 namespace O360Main\SaasBridge\ApiClient;
 
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Http\Client\Response;
 use O360Main\SaasBridge\SaasAgent;
 
 class SaasApiClient
@@ -12,8 +14,9 @@ class SaasApiClient
      * @throws \Exception
      */
     public function __construct(
-        private readonly SaasAgent $saasAgent, private readonly ?string $version = null)
-    {
+        private readonly SaasAgent $saasAgent,
+        private readonly ?string $version = null
+    ) {
         $this->api = $this->saasAgent->saasApi($this->version);
     }
 
@@ -23,6 +26,11 @@ class SaasApiClient
         return $this->api;
     }
 
+
+    public function forModule(EndPoint $endPoint): ModuleApi
+    {
+        return new ModuleApi($this->api, $endPoint);
+    }
 
     /**
      * Currency SaaS Api
@@ -98,9 +106,7 @@ class SaasApiClient
     //seller
     public function sellers(): ModuleApi
     {
-
         return new ModuleApi($this->api, EndPoint::seller);
-
     }
 
     //order
@@ -108,4 +114,105 @@ class SaasApiClient
     {
         return new ModuleApi($this->api, EndPoint::order);
     }
+
+    //discount
+    public function discounts(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::discount);
+    }
+
+    //gift-card
+    public function gift_cards(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::gift_card);
+    }
+
+    public function shipping_methods(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::shipping_method);
+    }
+
+    //tier-price
+    public function tier_prices(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::tier_price);
+    }
+
+    public function product_price_classes(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::product_price_class);
+    }
+
+    public function order_items(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_item);
+    }
+
+    public function product_images(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::product_image);
+    }
+
+    public function order_reason_codes(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_reason_code);
+    }
+
+    public function addresses(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::addresses);
+    }
+
+    //data-countries
+    public function data_countries(): PromiseInterface|Response
+    {
+        return $this->api->get('/data/countries');
+    }
+
+    //data-currencies
+    public function data_currencies(): PromiseInterface|Response
+    {
+        return $this->api->get('/data/currencies');
+    }
+
+    public function error_logs(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::error_log);
+    }
+
+    public function order_returns(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_return);
+    }
+
+    public function order_refunds(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_refund);
+    }
+
+    public function order_return_items(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_return_item);
+    }
+
+    public function order_refund_items(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_refund_item);
+    }
+
+    public function order_shippings(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_shipping);
+    }
+
+    public function order_payment_methods(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_payment_method);
+    }
+    //plugin-logs
+    public function plugin_logs(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::plugin_log);
+    }
+
 }

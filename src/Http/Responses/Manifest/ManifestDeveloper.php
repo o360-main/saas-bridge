@@ -6,7 +6,6 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class ManifestDeveloper implements Arrayable
 {
-
     /**
      * @throws \Exception
      */
@@ -16,8 +15,7 @@ class ManifestDeveloper implements Arrayable
         public readonly ?string $author_url,
         public readonly ?string $notification_email,
         public readonly ?array $notes,
-    )
-    {
+    ) {
         //check notes contain only key=>string => value=>string
         foreach ($this->notes as $key => $note) {
             if (!is_string($key) || (!is_string($note) || !is_numeric($note))) {
@@ -26,8 +24,7 @@ class ManifestDeveloper implements Arrayable
         }
     }
 
-    public
-    function toArray(): array
+    public function toArray(): array
     {
         return [
             'name' => $this->name,
@@ -36,5 +33,19 @@ class ManifestDeveloper implements Arrayable
             'notification_email' => $this->notification_email,
             'notes' => $this->notes,
         ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            name: $data['name'],
+            author_email: $data['author_email'],
+            author_url: $data['author_url'],
+            notification_email: $data['notification_email'],
+            notes: $data['notes'],
+        );
     }
 }

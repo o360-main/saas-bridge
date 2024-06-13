@@ -3,7 +3,6 @@
 namespace O360Main\SaasBridge\Commands;
 
 use Illuminate\Console\Command as BaseCommand;
-use mysql_xdevapi\Collection;
 use O360Main\SaasBridge\Module;
 use O360Main\SaasBridge\Services\ControllerValidationService;
 use O360Main\SaasBridge\Services\PluginControllerValidation;
@@ -55,13 +54,14 @@ class CodeChecker extends BaseCommand
 
 
         $controllers = collect(\File::allFiles(app_path('Http/Controllers')))
-            ->map(fn($controller) => $controller->getRelativePathname())
-            ->map(fn($controller) => str_replace('.php', '', $controller))
-            ->map(fn($controller) => str_replace('/', '\\', $controller))
-            ->map(fn($controller) => 'App\\Http\\Controllers\\' . $controller);
+            ->filter(fn ($controller) => str_ends_with($controller->getRelativePathname(), '.php'))
+            ->map(fn ($controller) => $controller->getRelativePathname())
+            ->map(fn ($controller) => str_replace('.php', '', $controller))
+            ->map(fn ($controller) => str_replace('/', '\\', $controller))
+            ->map(fn ($controller) => 'App\\Http\\Controllers\\' . $controller);
 
 
-        $pluginController = $controllers->filter(fn($controller) => str_contains($controller, 'Plugin'))->first();
+        $pluginController = $controllers->filter(fn ($controller) => str_contains($controller, 'Plugin'))->first();
 
         if (!$pluginController) {
             $this->error('PluginController not found');
@@ -83,8 +83,9 @@ class CodeChecker extends BaseCommand
 
         //first check missing controller
         $missing = $modules
-            ->map(fn($module) => $module->detail('label_plural'))
-            ->diff($controllers->map(fn($controller) => str_replace('Controller', '', class_basename($controller))));
+            ->map(fn ($module) => $module->detail('label_plural'))
+            ->diff($controllers->map(fn ($controller) => str_replace('Controller', '', class_basename($controller))));
+
 
         $table = [];
         foreach ($missing as $item) {
@@ -126,6 +127,10 @@ class CodeChecker extends BaseCommand
         $this->info('Checking for Valid Controller...');
 
         $table = [];
+
+
+        $controllers = $controllers->filter(fn ($c) => !str_contains($c, 'Plugin'));
+
 
         foreach ($controllers as $controller) {
 

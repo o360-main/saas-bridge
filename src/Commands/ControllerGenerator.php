@@ -10,7 +10,6 @@ class ControllerGenerator extends BaseCommand
 {
     /**
      * The name and signature of the console command.
-     *çn
      * @var string
      */
     protected $signature = 'saas:generate:controller';
@@ -30,10 +29,31 @@ class ControllerGenerator extends BaseCommand
      */
     public function handle(): int
     {
-        $x = new CodeGenerate();
+        //prompt for ask only stub file
+        $this->info('Generating Controller...');
+
+        //        $ask = $this->ask('Do you want to generate only stub file? (y/n)');
+        //
+        //        $stub = false;
+        //        if ($ask === 'y') {
+        //            $stub = true;
+        //        }
+
+        $routes = false;
+        $ask = $this->ask('Do you want to generate routes? (y/n)');
+        if ($ask === 'y') {
+            $this->info('Generating routes...');
+            $routes = true;
+        } else {
+            $this->info('Skipping routes generation...');
+        }
+
+        $x = new CodeGenerate(
+            stub: true,
+            routes: $routes
+        );
 
         $x->run();
-
 
         return Command::SUCCESS;
 

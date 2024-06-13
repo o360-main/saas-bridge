@@ -6,22 +6,24 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class ManifestConfig implements Arrayable
 {
-
     public function __construct(
-        public readonly int $rate_limit_requests,
-        public readonly int $rate_limit_seconds,
-        public readonly int $rate_limit_per_day,
-    )
-    {
+        public RateLimiterConfig $rate_limiter_config,
+    ) {
     }
 
     public function toArray(): array
     {
         return [
-            'rate_limit_requests' => $this->rate_limit_requests,
-            'rate_limit_seconds' => $this->rate_limit_seconds,
-            'rate_limit_per_day' => $this->rate_limit_per_day,
+            'rate_limiter_config' => $this->rate_limiter_config->toArray(),
         ];
+    }
+
+
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            rate_limiter_config: RateLimiterConfig::fromArray($data['rate_limiter_config']),
+        );
     }
 
 

@@ -10,7 +10,7 @@ class CategoryMapper
     /**
      * @throws \Exception
      */
-    public function vendHqToSaas($vendHqCategory): array
+    public function cmsToSaas($vendHqCategory): array
     {
         $data = ArrayBroker::use($vendHqCategory);
         $categoryID = $data->string('id');
@@ -32,7 +32,7 @@ class CategoryMapper
     }
 
 
-    public function saasToVendHq($saasCategory): array
+    public function saasToCms($saasCategory): array
     {
         $data = ArrayBroker::use($saasCategory);
 

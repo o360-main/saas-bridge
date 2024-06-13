@@ -21,6 +21,14 @@ enum Module: string
     case seller = "seller";
     case account = "account";
 
+    case discount = 'discount';
+    case gift_card = 'gift_card';
+
+    // Tier Price
+    case tier_price = 'tier_price';
+
+    case errorLog = "error_log";
+    case pluginLog = "plugin_log";
 
     /**
      * @throws \Exception
@@ -133,6 +141,46 @@ enum Module: string
                 'label_plural' => 'Accounts',
                 'simple' => false,
             ],
+
+            self::discount => [
+                'name' => 'discount',
+                'plural' => 'discounts',
+                'label' => 'Discount',
+                'label_plural' => 'Discounts',
+                'simple' => false,
+            ],
+
+            self::gift_card => [
+                'name' => 'gift_card',
+                'plural' => 'gift_cards',
+                'label' => 'GiftCard',
+                'label_plural' => 'GiftCards',
+                'simple' => false,
+            ],
+
+            self::tier_price => [
+                'name' => 'tier_price',
+                'plural' => 'tier_prices',
+                'label' => 'TierPrice',
+                'label_plural' => 'TierPrices',
+                'simple' => false,
+            ],
+
+            self::errorLog => [
+                'name' => 'error_log',
+                'plural' => 'error_logs',
+                'label' => 'ErrorLog',
+                'label_plural' => 'ErrorLogs',
+                'simple' => true,
+            ],
+            self::pluginLog => [
+                'name' => 'plugin_log',
+                'plural' => 'plugin_logs',
+                'label' => 'PluginLog',
+                'label_plural' => 'PluginLogs',
+                'simple' => false,
+            ],
+
 
             default => throw new \Exception("Invalid Module")
 

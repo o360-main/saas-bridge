@@ -1,5 +1,7 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
+
 function array_deep_default(array $arr, array $defaultArr = []): array
 {
     foreach ($defaultArr as $key => $value) {
@@ -24,29 +26,24 @@ function path_join(...$path): string
 
 function url_make(...$path): string
 {
-    return implode('/', array_map(fn($arg) => trim($arg, '/'), $path));
+    return implode('/', array_map(fn ($arg) => trim($arg, '/'), $path));
 }
 
 
 function array_get(array $arr, $key, $default = null)
 {
-    return $arr[$key] ?? $default;
+    return Arr::get($arr, $key, $default);
 }
 
 function array_pull(array &$arr, $key, $default = null)
 {
-    $value = $arr[$key] ?? $default;
-    unset($arr[$key]);
-    return $value;
+    return Arr::pull($arr, $key, $default);
 }
 
 
-function event_action_extract(string $str): string
+
+#[NoReturn]
+function dd_json($data): void
 {
-    $arr = explode('.', $str);
-    return end($arr);
-
+    die(json_encode($data, JSON_PRETTY_PRINT).PHP_EOL);
 }
-
-
-

@@ -7,13 +7,14 @@ use O360Main\SaasBridge\Commands\CodeChecker;
 use O360Main\SaasBridge\Commands\ConfigChecker;
 use Illuminate\Support\Facades\Route;
 use O360Main\SaasBridge\Commands\ControllerGenerator;
+use O360Main\SaasBridge\Commands\KeyGenerator;
 
 class SaasBridgeServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -25,6 +26,7 @@ class SaasBridgeServiceProvider extends ServiceProvider
             $this->app->bind('saas:manifest-test', ConfigChecker::class);
             $this->app->bind('saas:code-test', CodeChecker::class);
             $this->app->bind('saas:generate:controller', ControllerGenerator::class);
+            $this->app->bind('saas:generate:key', KeyGenerator::class);
 
             //load commands folder
             $this->commands([
@@ -63,7 +65,7 @@ class SaasBridgeServiceProvider extends ServiceProvider
         //make route macro
         Route::macro('module', function ($url, $controller) {
 
-//            throw if $controller is not an instance of ControllerInterface
+            //            throw if $controller is not an instance of ControllerInterface
 
             if (config('saas-bridge.strict_mode')) {
                 $controllerValidationService = new Services\ControllerValidationService();

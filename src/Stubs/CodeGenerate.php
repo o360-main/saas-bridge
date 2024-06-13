@@ -2,21 +2,37 @@
 
 namespace O360Main\SaasBridge\Stubs;
 
+use Illuminate\Support\Str;
 use O360Main\SaasBridge\Module;
 
 class CodeGenerate
 {
+    public function __construct(
+        protected bool $stub = false,
+        protected bool $routes = false,
+    ) {
+    }
+
+
     /**
      * @throws \Exception
      */
     public function run()
     {
+
         //get all modules
         foreach (Module::cases() as $module) {
             $this->generateController($module);
         }
 
-        $this->generateRoutes();
+
+        $this->generateSampleService();
+
+
+        if ($this->routes) {
+            $this->generateRoutes();
+
+        }
     }
 
 
@@ -30,12 +46,15 @@ class CodeGenerate
 
         $detail = $module->detail();
 
+        $stub = str_replace('{{type}}', $module->isSimple() ? 'Simple' : 'Complex', $stub);
+
         $module = [
             'capName' => $detail['label'],
             'smName' => $detail['name'],
             'capPlural' => $detail['label_plural'],
             'smPlural' => $detail['plural'],
         ];
+
 
         $stub = str_replace('{{Module}}', $module['capName'], $stub);
         $stub = str_replace('{{module}}', $module['smName'], $stub);
@@ -58,6 +77,8 @@ class CodeGenerate
     {
         $routeFile = base_path('routes/api.php');
 
+        $content = file_get_contents($routeFile);
+
         $routes = '//--SaasBridge--//' . PHP_EOL;
 
         foreach (Module::cases() as $module) {
@@ -65,12 +86,20 @@ class CodeGenerate
             $plural = $module->detail('plural');
             $controller = $module->detail('label_plural') . 'Controller';
 
-            $routes .= <<<PHP
+            $folder = $module->isSimple() ? 'Simple\\' : 'Complex\\';
+
+            $controller = $folder . $controller;
+
+            $_ro = <<<PHP
 Route::module('{$plural}',\App\Http\Controllers\\{$controller}Controller::class);\n
 PHP;
+
+            if (!Str::contains($content, $_ro)) {
+                $routes .= "//".$_ro;// ->make commented routes
+            }
+
         }
 
-        $content = file_get_contents($routeFile);
 
         $content = str_replace('//--SaasBridge--//', $routes, $content);
         //append
@@ -86,16 +115,100 @@ PHP;
         $controllerName = $module->detail('label_plural');
 
         $content = $this->modStub($module);
-        $file = "{$controllerName}Controller.php";
+
+        //        $file = match ($this->stub)
+        //        {
+        //            true => "{$controllerName}Controller.php.stub",
+        //            default => "{$controllerName}Controller.php",
+        //        };
+
+        $file = "{$controllerName}Controller.php.stub";
 
         $folder = $module->isSimple() ? '/Simple/' : '/Complex/';
 
-        $path = app_path('Http/Controllers') . $folder . $file;
+        $folder = app_path('Http/Controllers') . $folder;
+
+
+        //        mkdir($folder, recursive: true);
+        if (!file_exists($folder)) {
+            mkdir($folder, recursive: true);
+        }
+
+        $path =  $folder . $file;
+
+        //if file exists then overwrite
 
         if (file_exists($path)) {
-            return;
+            unlink($path);
         }
 
         file_put_contents($path, $content);
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function generateSampleService(): void
+    {
+
+        $files = [
+            [
+                'file' => 'ModuleService.php.stub',
+                'path' => 'app/Services/Simple/Category/CategoryService.php.stub',
+            ],
+            [
+                'file' => 'ModuleMapper.php.stub',
+                'path' => 'app/Services/Modules/Simple/Category/CategoryMapper.php.stub',
+            ]
+        ];
+
+        foreach ($files as $f) {
+
+            $file = __DIR__ . '/' . $f['file'];
+            $path = $f['path'];
+
+            $content = file_get_contents($file);
+            $content = $this->compileTemplate($content, Module::category);
+
+            if (!file_exists(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
+
+            file_put_contents($path, $content);
+        }
+
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    private function compileTemplate(string $stub, Module $module)
+    {
+        $detail = $module->detail();
+
+        $module = [
+            'capName' => $detail['label'],
+            'smName' => $detail['name'],
+            'capPlural' => $detail['label_plural'],
+            'smPlural' => $detail['plural'],
+        ];
+
+        return str_replace([
+            '{{Module}}',
+            '{{module}}',
+            '{{Modules}}',
+            '{{modules}}',
+        ], [
+            $module['capName'],
+            $module['smName'],
+            $module['capPlural'],
+            $module['smPlural'],
+        ], $stub);
     }
 }

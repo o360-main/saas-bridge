@@ -36,8 +36,7 @@ final class ResponseHelper
         bool|null   $isError = null,
         string|null $errorMsg = null,
         array       $data = []
-    ): JsonResponse
-    {
+    ): JsonResponse {
 
         $isError ??= false;
         $interval ??= 300;

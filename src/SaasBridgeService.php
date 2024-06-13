@@ -58,6 +58,35 @@ class SaasBridgeService
         return $this->saasAgent->moduleConfig($module);
     }
 
+
+    /**
+     * @param $module
+     * @deprecated  use mainModules
+     * @return array|mixed|null
+     */
+    public function source($module = null)
+    {
+        return $this->saasAgent->source($module);
+    }
+
+    public function mainModules($module = null)
+    {
+        return $this->saasAgent->mainModules($module);
+    }
+
+
+    public function enabledModules($module = null)
+    {
+        return $this->saasAgent->enabledModules($module);
+    }
+
+
+    public function dataConfig($module = null): array
+    {
+        return $this->saasAgent->dataConfig($module);
+    }
+
+
     public function configService(): ConfigService
     {
         return $this->configService;

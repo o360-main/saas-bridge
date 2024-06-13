@@ -6,13 +6,11 @@ use Illuminate\Contracts\Support\Responsable;
 
 class PingResponse implements Responsable
 {
-
     public function __construct(
         protected bool   $success,
         protected string $message,
         protected array  $data = []
-    )
-    {
+    ) {
     }
 
 

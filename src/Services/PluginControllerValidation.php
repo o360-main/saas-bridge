@@ -6,7 +6,6 @@ use ReflectionClass;
 
 class PluginControllerValidation
 {
-
     /**
      * @throws \ReflectionException
      */
@@ -27,7 +26,7 @@ class PluginControllerValidation
         $reflection = new ReflectionClass($controller);
 
         if (!$reflection->implementsInterface(\O360Main\SaasBridge\Contracts\PluginControllerInterface::class)) {
-            throw new \Exception("Controller must implement ControllerInterface");
+            throw new \Exception("Controller must implement \O360Main\SaasBridge\Contracts\PluginControllerInterface::class");
         }
     }
 
