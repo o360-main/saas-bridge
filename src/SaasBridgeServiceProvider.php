@@ -8,6 +8,7 @@ use O360Main\SaasBridge\Commands\ConfigChecker;
 use Illuminate\Support\Facades\Route;
 use O360Main\SaasBridge\Commands\ControllerGenerator;
 use O360Main\SaasBridge\Commands\KeyGenerator;
+use O360Main\SaasBridge\Commands\SignatureGenerator;
 
 class SaasBridgeServiceProvider extends ServiceProvider
 {
@@ -22,17 +23,19 @@ class SaasBridgeServiceProvider extends ServiceProvider
             ], 'config');
 
             // $this->commands([]);
-
             $this->app->bind('saas:manifest-test', ConfigChecker::class);
             $this->app->bind('saas:code-test', CodeChecker::class);
             $this->app->bind('saas:generate:controller', ControllerGenerator::class);
             $this->app->bind('saas:generate:key', KeyGenerator::class);
+            $this->app->bind('saas:generate:sign', SignatureGenerator::class);
 
             //load commands folder
             $this->commands([
                 'saas:manifest-test',
                 'saas:code-test',
                 'saas:generate:controller',
+                'saas:generate:key',
+                'saas:generate:sign',
             ]);
         }
 

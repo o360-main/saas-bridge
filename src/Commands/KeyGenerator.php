@@ -3,6 +3,7 @@
 namespace O360Main\SaasBridge\Commands;
 
 use Illuminate\Console\Command as BaseCommand;
+use O360Main\SaasBridge\Services\EncService;
 use O360Main\SaasBridge\Services\RSA;
 use O360Main\SaasBridge\Stubs\CodeGenerate;
 use Symfony\Component\Console\Command\Command;
@@ -33,13 +34,8 @@ class KeyGenerator extends BaseCommand
         //prompt for ask only stub file
         $this->info('Generating Keys...');
 
-        $rsa = new RSA();
 
-        $rsa->generateKeys();
-
-        $this->info('Private Key: ' . $rsa->getPrivateKey());
-
-        $this->info('Public Key: ' . $rsa->getPublicKey());
+        EncService::generate();
 
         return Command::SUCCESS;
 
