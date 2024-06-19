@@ -8,6 +8,7 @@ class DataResponse implements Responsable
 {
     public function __construct(
         public array $unique_ids = [],
+        public array $meta = [],
     )
     {
     }
@@ -16,6 +17,7 @@ class DataResponse implements Responsable
     {
         return [
             'unique_ids' => $this->unique_ids,
+            'meta' => $this->meta,
         ];
     }
 }
