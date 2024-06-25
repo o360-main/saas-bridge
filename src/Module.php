@@ -13,7 +13,11 @@ enum Module: string
     case paymentMethod = "payment_method";
     case tierGroup = "tier_group";
 
+    case catalog = "catalog";
+
+
     //Complex
+    case company = "company";
     case customer = "customer";
     case product = "product";
     case inventory = "inventory";
@@ -85,6 +89,14 @@ enum Module: string
                 'simple' => true,
             ],
 
+            self::catalog => [
+                'name' => 'catalog',
+                'plural' => 'catalogs',
+                'label' => 'Catalog',
+                'label_plural' => 'Catalogs',
+                'simple' => true,
+            ],
+
             self::tierGroup => [
                 'name' => 'tier_group',
                 'plural' => 'tier_groups',
@@ -92,6 +104,14 @@ enum Module: string
                 'label' => 'TierGroup',
                 'label_plural' => 'TierGroups',
                 'simple' => true,
+            ],
+
+            self::company => [
+                'name' => 'company',
+                'plural' => 'companies',
+                'label' => 'Company',
+                'label_plural' => 'Companies',
+                'simple' => false,
             ],
 
             self::customer => [
