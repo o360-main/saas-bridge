@@ -24,7 +24,6 @@ class ManifestResponse implements Responsable, Arrayable
      * @throws \Exception
      */
     public function __construct(
-        public readonly string             $manifest_version,
         public readonly string             $name,
         public readonly string             $display_name,
         public readonly string             $base_url,
@@ -37,6 +36,7 @@ class ManifestResponse implements Responsable, Arrayable
         public readonly ?ManifestDeveloper $developer,
         public readonly ?ManifestConfig    $config,
         public readonly array              $options,
+        public readonly string             $manifest_version = "v1",
     ) {
 
 
