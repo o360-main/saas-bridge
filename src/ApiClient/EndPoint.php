@@ -10,10 +10,12 @@ enum EndPoint: string
     case attribute = 'attributes';
     case category = 'categories';
     case payment_method = 'payment-methods';
+    case catalog = 'catalogs';
     case tier_group = 'tier-groups';
     # Advance
     case product = 'products';
     case inventory = 'inventories';
+    case company = 'companies';
     case customer = 'customers';
     case seller = 'sellers';
     case order = 'orders';
