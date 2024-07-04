@@ -4,6 +4,7 @@ namespace O360Main\SaasBridge\Middleware;
 
 use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class ForceJsonMiddleware
@@ -12,7 +13,6 @@ class ForceJsonMiddleware
     {
         $request->headers->set('Accept', 'application/json');
 
-
         $response = $next($request);
 
         // if response is redirected
@@ -20,9 +20,12 @@ class ForceJsonMiddleware
             return $response;
         }
 
+        /**
+         * @var \Illuminate\Http\Response $response
+         */
         $statusCode = $response->getStatusCode();
 
-        if ($response->isOk()) {
+        if ($response->isSuccessful()) {
             return $response;
         }
 
@@ -35,7 +38,8 @@ class ForceJsonMiddleware
             $json = [
                 'status_code' => $statusCode,
                 'message' => 'Validation error',
-                'errors' => $response->exception->errors(),
+                'error_msg' => $response->exception?->getMessage() ?? "Validation error",
+                'errors' => $response->exception?->errors() ?? [],
             ];
         }
 
@@ -53,7 +57,11 @@ class ForceJsonMiddleware
             }
 
         } catch (\Exception $e) {
-            \Log::error($e->getMessage(), $e->getTrace());
+            //            Log::error($e->getMessage(), $e->getTrace());
+            $json['debug'] = [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTrace(),
+            ];
         }
 
         return response()->json($json, $statusCode);

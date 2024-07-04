@@ -13,6 +13,7 @@ class SaasTokenValidationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+
         try {
 
             SaasCredentialsBoot::make($request)->run();

@@ -5,6 +5,7 @@ namespace O360Main\SaasBridge\Middleware;
 use Illuminate\Http\Request;
 use Closure;
 use Illuminate\Support\Facades\Config;
+use O360Main\SaasBridge\Services\SaasCredentialsBoot;
 
 class PluginSecretValidationMiddleware
 {
@@ -14,6 +15,13 @@ class PluginSecretValidationMiddleware
     public function handle(Request $request, Closure $next)
     {
         $token = config('saas-bridge.plugin_secret');
+
+        $version = $request->input('_env', [])['version'] ?? "1.0.0";
+
+        if ($version == "2.0.0") {
+            SaasCredentialsBoot::validateJwt($request);
+            return $next($request);
+        }
 
         abort_if(
             empty($token),
