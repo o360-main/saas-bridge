@@ -19,13 +19,18 @@ class TriggerResponse implements Responsable
 
     public function toResponse($request): \Illuminate\Http\JsonResponse
     {
-//        $version = config('saas-bridge.main_version');
-        $version = $request->header('x-main-version', '1.0.0');
-        $version = $request->input("_env.version", $version);
-        return match ($version) {
-            'v1' => $this->toResponseV1(), // this is for backward compatibility [Will remove soon]
-            default => $this->toResponse1_0_0(),//now on this is the version 1.0.0
-        };
+
+        return $this->toResponse1_0_0();
+
+////        $version = config('saas-bridge.main_version');
+//        $version = $request->header('x-main-version', '1.0.0');
+//        $version = $request->input("_env.version", $version);
+//        return match ($version) {
+//            'v1' => $this->toResponseV1(), // this is for backward compatibility [Will remove soon]
+//            default => $this->toResponse1_0_0(),//now on this is the version 1.0.0
+//        };
+//
+
     }
 
     private function toResponseV1(): \Illuminate\Http\JsonResponse
