@@ -154,7 +154,7 @@ class SaasCredentialsBoot
         //Set headers
         $headers = [
             'Authorization' => 'Bearer ' . $XToken,
-            'X-Pass-Token' => $JwtToken,
+            'X-Plugin-Token' => $JwtToken,
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
 //            'X-Plugin-Secret' => $pluginSecret,
