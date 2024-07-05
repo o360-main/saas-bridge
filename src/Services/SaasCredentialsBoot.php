@@ -149,9 +149,7 @@ class SaasCredentialsBoot
 //        "2.0.0"
         $headers['X-Main-Version'] = $this->environment['version'] ?? "1.0.0";
 
-        if ($this->environment['version'] != "1.0.0") {
-            $headers['X-Plugin-Id'] = $pluginId;
-        }
+        $headers['X-Plugin-Id'] = $pluginId;
 
         //Set headers
         $headers = [
