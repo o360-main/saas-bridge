@@ -145,6 +145,8 @@ class SaasCredentialsBoot
 
         //check is in dev mode
         $headers['X-Plugin-Dev'] = $devMode;
+
+//        "2.0.0"
         $headers['X-Main-Version'] = $this->environment['version'] ?? "1.0.0";
 
         //Set headers
