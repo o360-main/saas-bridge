@@ -119,6 +119,10 @@ class SaasCredentialsBoot
             return;
         }
 
+        if ($config->secret() === null) {
+            throw new AccessDeniedHttpException('Invalid Plugin Secret');
+        }
+
         $data = EncryptionCall::decrypt($this->cred, $config->secret());
 
         if (!$data) {
