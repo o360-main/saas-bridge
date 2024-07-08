@@ -35,6 +35,25 @@ class SaasCredentialsBoot
     }
 
 
+    public static function setEnvironment(Request $request): void
+    {
+        $environment = $request->input('_env', []);
+
+        if (empty($environment)) {
+            abort(401, 'Environment not set');
+        }
+
+        \config()->set('saas-bridge.main_version', $environment['version'] ?? "1.0.0");
+        \config()->set('saas-bridge.plugin_dev', $environment['dev_mode'] ?? false);
+        \config()->set('saas-bridge.debug', $environment['debug'] ?? false);
+        \config()->set('saas-bridge.core_url', $environment['core_url'] ?? null);
+        \config()->set('saas-bridge.pass_headers', $environment['pass_headers'] ?? []);
+
+        //throw  errors if all values are not set
+        $request->request->remove('_env');
+    }
+
+
     public static function validateJwt(Request $request): void
     {
         $JwtToken = $request->bearerToken();

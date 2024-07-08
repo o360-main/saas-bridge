@@ -18,36 +18,17 @@ class PluginSecretValidationMiddleware
 
         $token = config('saas-bridge.plugin_secret', null);
 
-
-        $environment = $request->input('_env', []);
-
-        if (empty($environment)) {
-            abort(401, 'Environment not set');
-        }
-
-        \config()->set('saas-bridge.main_version', $environment['version'] ?? "1.0.0");
-        \config()->set('saas-bridge.plugin_dev', $environment['dev_mode'] ?? false);
-        \config()->set('saas-bridge.debug', $environment['debug'] ?? false);
-        \config()->set('saas-bridge.core_url', $environment['core_url'] ?? null);
-        \config()->set('saas-bridge.pass_headers', $environment['pass'] ?? []);
-
-
-        //throw  errors if all values are not set
-
-
-        $request->request->remove('_env');
-
-        if (SaasConfig::getInstance()->versionGreaterThenEqual("2.0.0")) {
-            SaasCredentialsBoot::validateJwt($request);
-            return $next($request);
-        }
-
         abort_if(
             empty($token),
             401,
             'Plugin secret not set'
         );
 
+        SaasCredentialsBoot::setEnvironment($request);
+
+        if (SaasConfig::getInstance()->versionGreaterThenEqual("2.0.0")) {
+            SaasCredentialsBoot::validateJwt($request);
+        }
 
         //not required credentials
         $ignore = [
@@ -59,13 +40,9 @@ class PluginSecretValidationMiddleware
             return $next($request);
         }
 
-        try {
-            SaasCredentialsBoot::make($request)->run();
-            return $next($request);
 
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 401);
-        }
+        SaasCredentialsBoot::make($request)->run();
+        return $next($request);
 
     }
 }
