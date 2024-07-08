@@ -34,12 +34,9 @@ class SaasAgent
      */
     private PendingRequest $_saasApi;
 
-    private array $_env;
-
-    public function setSaasApi(PendingRequest $saasApi, array $env): void
+    public function setSaasApi(PendingRequest $saasApi): void
     {
         $this->_saasApi = $saasApi;
-        $this->_env = $env;
     }
 
     //getter setter
@@ -49,10 +46,8 @@ class SaasAgent
      */
     public function saasApi($version = 'v1'): PendingRequest
     {
-        $baseUrl = $this->_env['core_url'] ?? config('saas-bridge.saas_api_url');
-        if (empty($baseUrl)) {
-            throw new \Exception('CoreApi url not set');
-        }
+        $baseUrl = SaasConfig::getInstance()->coreUrl();
+
         if ($version !== null) {
             $allowedVersions = [
                 'v1'
@@ -63,7 +58,6 @@ class SaasAgent
 
             $arr = [$baseUrl, $version];
 
-            //using core php
             $baseUrl = implode('/', array_map(fn ($i) => rtrim($i, '/'), $arr));
 
             $this->_saasApi->baseUrl($baseUrl);
@@ -92,7 +86,6 @@ class SaasAgent
     {
         return $this->_credentials;
     }
-
 
 
     public function setModuleConfig(array $config): void
