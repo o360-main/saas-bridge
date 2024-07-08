@@ -31,7 +31,7 @@ class SaasCredentialsBoot
 
         $this->cred = $request->input('_cred', null);
         //remove cred
-        $request->request->remove('_cred');
+//        $request->request->remove('_cred');
     }
 
 
@@ -50,7 +50,7 @@ class SaasCredentialsBoot
         \config()->set('saas-bridge.pass_headers', $environment['pass_headers'] ?? []);
 
         //throw  errors if all values are not set
-        $request->request->remove('_env');
+//            $request->request->remove('_env');
     }
 
 
