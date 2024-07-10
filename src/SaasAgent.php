@@ -14,6 +14,7 @@ class SaasAgent
     private array $_connection;
     private array $_plugin;
     private array $_dataConfig;
+    private array $_metaDataConfig;
     private array $_source;
     private array $_enabled;
 
@@ -123,6 +124,20 @@ class SaasAgent
         }
 
         return $this->_dataConfig;
+    }
+
+    public function setMetaDataConfig(array $config): void
+    {
+        $this->_metaDataConfig = $config;
+    }
+
+    public function metaDataConfig($key = null): array
+    {
+        if ($key !== null) {
+            return $this->_metaDataConfig[$key] ?? [];
+        }
+
+        return $this->_metaDataConfig;
     }
 
 
