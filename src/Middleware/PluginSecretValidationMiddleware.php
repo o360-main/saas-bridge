@@ -36,10 +36,13 @@ class PluginSecretValidationMiddleware
             'ping',
         ];
 
-        if (in_array($request->route()->uri, $ignore)) {
-            return $next($request);
-        }
+        $uri = $request->route()->uri;
 
+        foreach ($ignore as $item) {
+            if (str_contains($uri, $item)) {
+                return $next($request);
+            }
+        }
 
         SaasCredentialsBoot::make($request)->run();
         return $next($request);
