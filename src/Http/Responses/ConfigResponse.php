@@ -14,8 +14,7 @@ class ConfigResponse implements Responsable
         public readonly bool  $available = false,
         public readonly bool  $webhook = false,
         public readonly array $form_fields = [],
-    )
-    {
+    ) {
 
         foreach ($this->form_fields as $form_field) {
 
@@ -30,7 +29,7 @@ class ConfigResponse implements Responsable
         return [
             'available' => $this->available,
             'webhook' => $this->webhook,
-            'form_fields' => collect($this->form_fields ?? [])->map(fn($form_field) => $form_field->toArray())->toArray(),
+            'form_fields' => collect($this->form_fields ?? [])->map(fn ($form_field) => $form_field->toArray())->toArray(),
         ];
     }
 }

@@ -2,10 +2,8 @@
 
 namespace O360Main\SaasBridge\Services;
 
-use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\UnauthorizedException;
 use O360Main\SaasBridge\SaasAgent;
@@ -16,8 +14,11 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class SaasCredentialsBoot
 {
     private SaasAgent $saasAgent;
+
     private PendingRequest $saasApi;
+
     private ?string $cred = null;
+
     private bool $validated = false;
 
     public static function make(Request $request): self
@@ -31,9 +32,8 @@ class SaasCredentialsBoot
 
         $this->cred = $request->input('_cred', null);
         //remove cred
-//        $request->request->remove('_cred');
+        //        $request->request->remove('_cred');
     }
-
 
     public static function setEnvironment(Request $request): void
     {
@@ -43,31 +43,29 @@ class SaasCredentialsBoot
             abort(401, 'Environment not set');
         }
 
-        \config()->set('saas-bridge.main_version', $environment['version'] ?? "1.0.0");
+        \config()->set('saas-bridge.main_version', $environment['version'] ?? '1.0.0');
         \config()->set('saas-bridge.plugin_dev', $environment['dev_mode'] ?? false);
         \config()->set('saas-bridge.debug', $environment['debug'] ?? false);
         \config()->set('saas-bridge.core_url', $environment['core_url'] ?? null);
         \config()->set('saas-bridge.pass_headers', $environment['pass_headers'] ?? []);
 
         //throw  errors if all values are not set
-//            $request->request->remove('_env');
+        //            $request->request->remove('_env');
     }
-
 
     public static function validateJwt(Request $request): void
     {
         $JwtToken = $request->bearerToken();
 
         $pluginSecret = SaasConfig::getInstance()->secret();
-        if (!$JwtToken) {
+        if (! $JwtToken) {
             throw new UnauthorizedException('Invalid Access Key | 0');
         }
 
-        if (!EncryptionCall::validateJwtToken($JwtToken, $pluginSecret)) {
+        if (! EncryptionCall::validateJwtToken($JwtToken, $pluginSecret)) {
             throw new UnauthorizedException('Invalid Access Key | 1');
         }
     }
-
 
     /**
      * @throws \Exception
@@ -98,7 +96,7 @@ class SaasCredentialsBoot
         $headers = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            ... $config->passHeaders(),
+            ...$config->passHeaders(),
         ];
 
         $this->saasApi = Http::baseUrl($baseUrl)->withHeaders($headers);
@@ -108,7 +106,6 @@ class SaasCredentialsBoot
 
     /**
      * @throws \Exception
-     *
      */
     private function validate(): void
     {
@@ -125,7 +122,7 @@ class SaasCredentialsBoot
 
         $data = EncryptionCall::decrypt($this->cred, $config->secret());
 
-        if (!$data) {
+        if (! $data) {
             throw new AccessDeniedHttpException('Invalid Access Key || Invalid Plugin Secret');
         }
 
@@ -137,7 +134,7 @@ class SaasCredentialsBoot
         $this->saasAgent->setModuleConfig($data['module_config'] ?? []);
         $this->saasAgent->setPlugin($data['plugin'] ?? []);
         $this->saasAgent->setDataConfig($data['data_config'] ?? []);
-        $this->saasAgent->setSource($data['source'] ?? $data['source_of_truth'] ?? $data["main_modules"] ?? []);
+        $this->saasAgent->setSource($data['source'] ?? $data['source_of_truth'] ?? $data['main_modules'] ?? []);
         $this->saasAgent->setEnabled($data['enabled_modules'] ?? []);
     }
 }

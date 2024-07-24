@@ -10,8 +10,7 @@ class ExportResponse implements Responsable
         public bool    $success = false,
         public ?string $message = null,
         public array   $data = [],
-    )
-    {
+    ) {
     }
 
     public function toResponse($request): \Illuminate\Http\JsonResponse

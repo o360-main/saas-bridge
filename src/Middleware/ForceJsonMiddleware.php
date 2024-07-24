@@ -12,8 +12,8 @@ class ForceJsonMiddleware
     public function handle(Request $request, Closure $next)
     {
 
-//        return $next($request);
-//
+        //        return $next($request);
+        //
         $response = $next($request);
 
         // if response is redirected

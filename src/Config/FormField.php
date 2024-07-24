@@ -4,7 +4,6 @@ namespace O360Main\SaasBridge\Config;
 
 class FormField
 {
-
     /**
      * @throws \Exception
      */
@@ -26,8 +25,7 @@ class FormField
         protected ?string            $show_in_value = null,
         protected bool               $is_cloneable = false,
         protected ?string            $not_show_in_value = null,
-    )
-    {
+    ) {
 
         foreach ($this->options as $option) {
 
@@ -51,7 +49,7 @@ class FormField
             'multiple' => $this->multiple,
             'placeholder' => $this->placeholder,
             'description' => $this->description,
-            'options' => collect($this->options ?? [])->map(fn($option) => $option->toArray())->toArray(),
+            'options' => collect($this->options ?? [])->map(fn ($option) => $option->toArray())->toArray(),
             'pattern' => $this->pattern,
             'is_default_hide' => $this->is_default_hide,
             'show_in' => $this->show_in,

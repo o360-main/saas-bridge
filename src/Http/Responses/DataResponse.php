@@ -9,8 +9,7 @@ class DataResponse implements Responsable
     public function __construct(
         public array $unique_ids = [],
         public array $meta = [],
-    )
-    {
+    ) {
 
     }
 

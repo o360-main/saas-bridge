@@ -87,5 +87,3 @@ class RSA
         echo "Decrypted: $decrypted\n";
     }
 }
-
-
