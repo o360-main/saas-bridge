@@ -33,6 +33,8 @@ enum Module: string
 
     case errorLog = "error_log";
     case pluginLog = "plugin_log";
+    case cacheData = "cache_data";
+
 
     /**
      * @throws \Exception
@@ -199,6 +201,13 @@ enum Module: string
                 'label' => 'PluginLog',
                 'label_plural' => 'PluginLogs',
                 'simple' => false,
+            ],
+            self::cacheData => [
+                'name' => 'cache_data',
+                'plural' => 'cache_datas',
+                'label' => 'CacheData',
+                'label_plural' => 'CacheDatas',
+                'simple' => true,
             ],
 
 

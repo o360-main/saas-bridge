@@ -40,5 +40,7 @@ enum EndPoint: string
     case plugin_log = 'plugin-logs';
     case order_reason_code = 'order-reason-codes';
     case addresses = 'addresses';
+    case cache_data = 'cache-datas';
+
 
 }

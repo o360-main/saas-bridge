@@ -215,6 +215,11 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::plugin_log);
     }
 
+    public function cache_datas(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::cache_data);
+    }
+
     //catalogs
     public function catalogs(): ModuleApi
     {
