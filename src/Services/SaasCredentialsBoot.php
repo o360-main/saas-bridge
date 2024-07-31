@@ -42,7 +42,7 @@ class SaasCredentialsBoot
         Log::error('encryptedData', [
             'd' => $encryptedData,
             'c' => base64_decode($this->saasConfig->secret()),
-            'confg' => $this->saasConfig,
+            'confg' => $this->saasConfig->all(),
         ]);
 
         if (!$encryptedData) {
@@ -145,13 +145,7 @@ class SaasCredentialsBoot
             throw new AccessDeniedHttpException('Invalid Plugin Secret');
         }
 
-        $data = EncryptionCall::decrypt($this->cred, $config->secret());
-
-        if (!$data) {
-            throw new AccessDeniedHttpException('Invalid Access Key || Invalid Plugin Secret');
-        }
-
-        $data = json_decode($data, true);
+        $data = $this->data['_cred'] ?? [];
         $data['main_modules'] = $data['source'] ?? [];
 
         $this->saasAgent->setConnection($data['connection'] ?? []);
