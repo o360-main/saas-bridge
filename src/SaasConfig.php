@@ -4,18 +4,18 @@ namespace O360Main\SaasBridge;
 
 class SaasConfig
 {
-    private static self|null $instance = null;
+    private static ?self $instance = null;
+
     public static function getInstance(): self
     {
         if (self::$instance === null) {
-            self::$instance = new self();
+            self::$instance = new self;
         }
+
         return self::$instance;
     }
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public function secret()
     {
@@ -27,11 +27,16 @@ class SaasConfig
         return config('saas-bridge.main_version', '1.0.0');
     }
 
-//
-//    public function passHeaders(): array
-//    {
-//        return config('saas-bridge.pass_headers', []);
-//    }
+    public function all()
+    {
+        return config('saas-bridge');
+
+    }
+    //
+    //    public function passHeaders(): array
+    //    {
+    //        return config('saas-bridge.pass_headers', []);
+    //    }
 
     public function versionGreaterThenEqual($version): bool|int
     {

@@ -37,10 +37,13 @@ class SaasCredentialsBoot
 
         $this->saasConfig = SaasConfig::getInstance();
 
-
         $encryptedData = $request->input('_env')['_data'] ?? null;
 
-        Log::error('encryptedData', ["d" => $encryptedData]);
+        Log::error('encryptedData', [
+            'd' => $encryptedData,
+            'c' => base64_decode($this->saasConfig->secret()),
+            'confg' => $this->saasConfig,
+        ]);
 
         if (!$encryptedData) {
             throw new UnauthorizedException('Invalid Payload');
