@@ -2,10 +2,10 @@
 
 namespace O360Main\SaasBridge;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use O360Main\SaasBridge\Commands\CodeChecker;
 use O360Main\SaasBridge\Commands\ConfigChecker;
-use Illuminate\Support\Facades\Route;
 use O360Main\SaasBridge\Commands\ControllerGenerator;
 use O360Main\SaasBridge\Commands\KeyGenerator;
 use O360Main\SaasBridge\Commands\SignatureGenerator;
@@ -19,7 +19,7 @@ class SaasBridgeServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/saas-bridge.php' => config_path('saas-bridge.php'),
+                __DIR__.'/../config/saas-bridge.php' => config_path('saas-bridge.php'),
             ], 'config');
 
             // $this->commands([]);
@@ -39,11 +39,9 @@ class SaasBridgeServiceProvider extends ServiceProvider
             ]);
         }
 
-
-        foreach (glob(__DIR__ . '/Helpers/functions/*.php') as $filename) {
+        foreach (glob(__DIR__.'/Helpers/functions/*.php') as $filename) {
             require_once $filename;
         }
-
 
     }
 
@@ -53,7 +51,7 @@ class SaasBridgeServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/saas-bridge.php', 'saas-bridge');
+        $this->mergeConfigFrom(__DIR__.'/../config/saas-bridge.php', 'saas-bridge');
 
         // Register the main class to use with the facade
 
@@ -71,10 +69,9 @@ class SaasBridgeServiceProvider extends ServiceProvider
             //            throw if $controller is not an instance of ControllerInterface
 
             if (config('saas-bridge.strict_mode')) {
-                $controllerValidationService = new Services\ControllerValidationService();
+                $controllerValidationService = new Services\ControllerValidationService;
                 $controllerValidationService->validate($controller);
             }
-
 
             Route::post("/{$url}/data", [$controller, 'data']);
             Route::post("/{$url}/config", [$controller, 'config']);
