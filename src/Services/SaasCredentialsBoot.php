@@ -19,7 +19,11 @@ class SaasCredentialsBoot
 
     private ?string $cred = null;
 
+    private array $data = [];
+
     private bool $validated = false;
+
+    private SaasConfig $saasConfig;
 
     public static function make(Request $request): self
     {
@@ -30,9 +34,20 @@ class SaasCredentialsBoot
     {
         $this->saasAgent = SaasAgent::getInstance();
 
-        $this->cred = $request->input('_cred', null);
-        //remove cred
-        //        $request->request->remove('_cred');
+        $this->saasConfig = SaasConfig::getInstance();
+
+        $encryptedData = $request->input('_env._data');
+
+        $isWorked = EncryptionCall::decrypt($encryptedData, $this->saasConfig->secret());
+
+        if (!$isWorked) {
+            throw new UnauthorizedException('Invalid Payload');
+        }
+
+        $this->data = json_decode($isWorked, true);
+
+        $request->request->remove('_env._data');
+
     }
 
     public static function setEnvironment(Request $request): void
@@ -49,8 +64,6 @@ class SaasCredentialsBoot
         \config()->set('saas-bridge.core_url', $environment['core_url'] ?? null);
         \config()->set('saas-bridge.pass_headers', $environment['pass_headers'] ?? []);
 
-        //throw  errors if all values are not set
-        //            $request->request->remove('_env');
     }
 
     public static function validateJwt(Request $request): void
@@ -58,11 +71,11 @@ class SaasCredentialsBoot
         $JwtToken = $request->bearerToken();
 
         $pluginSecret = SaasConfig::getInstance()->secret();
-        if (! $JwtToken) {
+        if (!$JwtToken) {
             throw new UnauthorizedException('Invalid Access Key | 0');
         }
 
-        if (! EncryptionCall::validateJwtToken($JwtToken, $pluginSecret)) {
+        if (!EncryptionCall::validateJwtToken($JwtToken, $pluginSecret)) {
             throw new UnauthorizedException('Invalid Access Key | 1');
         }
     }
@@ -90,13 +103,14 @@ class SaasCredentialsBoot
      */
     private function initSaasApi(): void
     {
-        $config = SaasConfig::getInstance();
+        $config = $this->saasConfig;
 
         $baseUrl = $config->coreUrl();
+        $passHeaders = $this->data['_pass_headers'] ?? [];
         $headers = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            ...$config->passHeaders(),
+            ...$passHeaders,
         ];
 
         $this->saasApi = Http::baseUrl($baseUrl)->withHeaders($headers);
@@ -122,7 +136,7 @@ class SaasCredentialsBoot
 
         $data = EncryptionCall::decrypt($this->cred, $config->secret());
 
-        if (! $data) {
+        if (!$data) {
             throw new AccessDeniedHttpException('Invalid Access Key || Invalid Plugin Secret');
         }
 
