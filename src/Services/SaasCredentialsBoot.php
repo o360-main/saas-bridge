@@ -36,11 +36,15 @@ class SaasCredentialsBoot
 
         $this->saasConfig = SaasConfig::getInstance();
 
-        $encryptedData = $request->input('_env._data');
+        $encryptedData = $request->input('_env')['_data'] ?? null;
 
-        $isWorked = EncryptionCall::decrypt($encryptedData, $this->saasConfig->secret());
+        if (! $encryptedData) {
+            throw new UnauthorizedException('Invalid Payload');
+        }
 
-        if (!$isWorked) {
+        $isWorked = EncryptionCall::decrypt($encryptedData, base64_decode($this->saasConfig->secret()));
+
+        if (! $isWorked) {
             throw new UnauthorizedException('Invalid Payload');
         }
 
@@ -62,7 +66,7 @@ class SaasCredentialsBoot
         \config()->set('saas-bridge.plugin_dev', $environment['dev_mode'] ?? false);
         \config()->set('saas-bridge.debug', $environment['debug'] ?? false);
         \config()->set('saas-bridge.core_url', $environment['core_url'] ?? null);
-        \config()->set('saas-bridge.pass_headers', $environment['pass_headers'] ?? []);
+        //        \config()->set('saas-bridge.pass_headers', $environment['pass_headers'] ?? []);
 
     }
 
@@ -71,11 +75,11 @@ class SaasCredentialsBoot
         $JwtToken = $request->bearerToken();
 
         $pluginSecret = SaasConfig::getInstance()->secret();
-        if (!$JwtToken) {
+        if (! $JwtToken) {
             throw new UnauthorizedException('Invalid Access Key | 0');
         }
 
-        if (!EncryptionCall::validateJwtToken($JwtToken, $pluginSecret)) {
+        if (! EncryptionCall::validateJwtToken($JwtToken, $pluginSecret)) {
             throw new UnauthorizedException('Invalid Access Key | 1');
         }
     }
@@ -136,7 +140,7 @@ class SaasCredentialsBoot
 
         $data = EncryptionCall::decrypt($this->cred, $config->secret());
 
-        if (!$data) {
+        if (! $data) {
             throw new AccessDeniedHttpException('Invalid Access Key || Invalid Plugin Secret');
         }
 
