@@ -5,6 +5,7 @@ namespace O360Main\SaasBridge\Services;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\UnauthorizedException;
 use O360Main\SaasBridge\SaasAgent;
 use O360Main\SaasBridge\SaasBridgeService;
@@ -35,6 +36,12 @@ class SaasCredentialsBoot
         $this->saasAgent = SaasAgent::getInstance();
 
         $this->saasConfig = SaasConfig::getInstance();
+
+        Log::info('payload', [
+            'payload' => $request->all(),
+            '_env' => $request->input('_env'),
+            '_data' => $request->input('_env._data'),
+        ]);
 
         $encryptedData = $request->input('_env')['_data'] ?? null;
 
