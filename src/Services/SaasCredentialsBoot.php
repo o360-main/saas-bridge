@@ -37,7 +37,7 @@ class SaasCredentialsBoot
 
         $this->saasConfig = SaasConfig::getInstance();
 
-        Log::info('payload', [
+        Log::error('payload', [
             'payload' => $request->all(),
             '_env' => $request->input('_env'),
             '_data' => $request->input('_env._data'),
