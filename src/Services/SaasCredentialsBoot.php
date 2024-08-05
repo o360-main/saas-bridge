@@ -75,6 +75,9 @@ class SaasCredentialsBoot
         $JwtToken = $request->bearerToken();
 
         $pluginSecret = SaasConfig::getInstance()->secret();
+
+        $pluginSecret = base64_decode($pluginSecret);
+
         if (! $JwtToken) {
             throw new UnauthorizedException('Invalid Access Key | 0');
         }
