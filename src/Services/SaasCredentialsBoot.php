@@ -38,13 +38,13 @@ class SaasCredentialsBoot
 
         $encryptedData = $request->input('_env._data') ?? null;
 
-        if (!$encryptedData) {
+        if (! $encryptedData) {
             throw new UnauthorizedException('Invalid Payload');
         }
 
-        $isWorked = EncryptionCall::decrypt($encryptedData, base64_decode($this->saasConfig->secret()));
+        $isWorked = EncryptionCall::decrypt($encryptedData, $this->saasConfig->secret());
 
-        if (!$isWorked) {
+        if (! $isWorked) {
             throw new UnauthorizedException('Invalid Payload');
         }
 
@@ -75,11 +75,11 @@ class SaasCredentialsBoot
         $JwtToken = $request->bearerToken();
 
         $pluginSecret = SaasConfig::getInstance()->secret();
-        if (!$JwtToken) {
+        if (! $JwtToken) {
             throw new UnauthorizedException('Invalid Access Key | 0');
         }
 
-        if (!EncryptionCall::validateJwtToken($JwtToken, $pluginSecret)) {
+        if (! EncryptionCall::validateJwtToken($JwtToken, $pluginSecret)) {
             throw new UnauthorizedException('Invalid Access Key | 1');
         }
     }
