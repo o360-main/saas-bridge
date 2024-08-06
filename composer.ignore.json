@@ -1,0 +1,10 @@
+[
+    {
+        "type": "path",
+        "url": "packages/*"
+    },
+    {
+        "type": "composer",
+        "url": "https://plugins.saasintegrator.ai/packages"
+    }
+]
