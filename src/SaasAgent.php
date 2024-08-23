@@ -7,31 +7,33 @@ use Illuminate\Http\Client\PendingRequest;
 class SaasAgent
 {
     //make singleton
-    private static self|null $instance = null;
+    private static ?self $instance = null;
+
     private array $_credentials;
 
     private array $_moduleConfig;
+
     private array $_connection;
+
     private array $_plugin;
+
     private array $_dataConfig;
+
     private array $_source;
+
     private array $_enabled;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function getInstance(): self
     {
         if (self::$instance === null) {
-            self::$instance = new self();
+            self::$instance = new self;
         }
+
         return self::$instance;
     }
 
-    /**
-     * @var PendingRequest
-     */
     private PendingRequest $_saasApi;
 
     public function setSaasApi(PendingRequest $saasApi): void
@@ -50,10 +52,10 @@ class SaasAgent
 
         if ($version !== null) {
             $allowedVersions = [
-                'v1'
+                'v1',
             ];
-            if (!in_array($version, $allowedVersions)) {
-                throw new \Exception('Invalid version, Allowed versions ' . implode(', ', $allowedVersions));
+            if (! in_array($version, $allowedVersions)) {
+                throw new \Exception('Invalid version, Allowed versions '.implode(', ', $allowedVersions));
             }
 
             $arr = [$baseUrl, $version];
@@ -65,7 +67,6 @@ class SaasAgent
 
         return $this->_saasApi;
     }
-
 
     public function setCredentials(array $credentials): void
     {
@@ -87,12 +88,10 @@ class SaasAgent
         return $this->_credentials;
     }
 
-
     public function setModuleConfig(array $config): void
     {
         $this->_moduleConfig = $config;
     }
-
 
     public function moduleConfig($key = null): array
     {
@@ -102,7 +101,6 @@ class SaasAgent
 
         return $this->_moduleConfig;
     }
-
 
     public function setDataConfig(array $config): void
     {
@@ -117,7 +115,6 @@ class SaasAgent
 
         return $this->_dataConfig;
     }
-
 
     public function setSource(array $source): void
     {
@@ -141,7 +138,6 @@ class SaasAgent
 
         return $this->_source;
     }
-
 
     //call with magic method also return above function
     //    public function __call($name, $arguments)
@@ -171,5 +167,4 @@ class SaasAgent
 
         return $this->_enabled;
     }
-
 }
