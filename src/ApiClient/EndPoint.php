@@ -42,5 +42,7 @@ enum EndPoint: string
     case addresses = 'addresses';
     case cache_data = 'cache-datas';
 
+    case loyalty_points = 'loyalty-points';
+
 
 }
