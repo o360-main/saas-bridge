@@ -22,7 +22,7 @@ class PluginSecretValidationMiddleware
         abort_if(
             empty($token),
             401,
-            'Plugin secret not set'
+            'Plugin secret not set [0]'
         );
 
         SaasCredentialsBoot::setEnvironment($request);
