@@ -22,6 +22,9 @@ class SaasBridgeServiceProvider extends ServiceProvider
                 __DIR__.'/../config/saas-bridge.php' => config_path('saas-bridge.php'),
             ], 'config');
 
+            //merge config
+            $this->mergeConfigFrom(__DIR__.'/../config/saas-bridge.php', 'saas-bridge');
+
             // $this->commands([]);
             $this->app->bind('saas:manifest-test', ConfigChecker::class);
             $this->app->bind('saas:code-test', CodeChecker::class);
