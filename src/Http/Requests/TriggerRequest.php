@@ -24,7 +24,7 @@ class TriggerRequest extends BaseRequest
             'payload' => 'array',
             'data' => 'array', //nullable in older version
             'action' => 'required|string',
-            'module' => 'required|string' //nullable in older version
+            'module' => 'required|string', //nullable in older version
         ];
     }
 
@@ -45,14 +45,14 @@ class TriggerRequest extends BaseRequest
         return $this->input('data', []);
     }
 
-
     public function action(): ModuleAction
     {
         //        $version = config('saas-bridge.main_version');
 
         $action = $this->input('action');
-        if (str_contains(".", $action)) {
+        if (str_contains('.', $action)) {
             [, $action] = explode('.', $action);
+
             return ModuleAction::from($action);
         }
         //        if ($version == 'v1') {
@@ -64,18 +64,16 @@ class TriggerRequest extends BaseRequest
 
     }
 
-
     public function module(): Module
     {
         $module = $this->input('module', null);
 
         if (is_null($module)) {
-            [$module,] = explode('.', $this->input('action'));
+            [$module] = explode('.', $this->input('action'));
 
             return Module::from($module);
         }
 
         return Module::from($module);
     }
-
 }

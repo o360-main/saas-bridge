@@ -21,7 +21,12 @@ class EncryptionCall
     public static function validateJwtToken($token, $key): bool
     {
         try {
-            $decoded = JWT::decode($token, new Key($key, 'HS256'));
+            //todo remove this after upgrade
+            if (base64_encode(base64_decode($key, true)) !== $key) {
+                $key = base64_decode($key);
+            }
+
+            JWT::decode($token, new Key($key, 'HS256'));
 
             return true;
         } catch (\Exception $e) {
