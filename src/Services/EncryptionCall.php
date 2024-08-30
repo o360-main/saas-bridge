@@ -22,12 +22,10 @@ class EncryptionCall
     {
         try {
             //todo remove this after upgrade
-            if (base64_encode(base64_decode($key, true)) !== $key) {
+            if (str_contains($key, '=')) {
                 $key = base64_decode($key);
             }
-
             JWT::decode($token, new Key($key, 'HS256'));
-
             return true;
         } catch (\Exception $e) {
             return false;
