@@ -10,6 +10,7 @@ return [
     'main_version' => '1.0.0',
     //    'core_url' => env('SAAS_API_URL', 'http://core.o360-core.test'),
     'plugin_secret' => env('PLUGIN_SECRET', 'secret'),
+    'plugin_version' => env('PLUGIN_VERSION', 'v1'),
     //    'token_validate_endpoint' => "/connection/validate",
     //    'manifest_path' => base_path('app/manifest.json'),
 

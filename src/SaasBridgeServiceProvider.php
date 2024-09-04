@@ -19,11 +19,11 @@ class SaasBridgeServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/saas-bridge.php' => config_path('saas-bridge.php'),
+                __DIR__ . '/../config/saas-bridge.php' => config_path('saas-bridge.php'),
             ], 'config');
 
             //merge config
-            $this->mergeConfigFrom(__DIR__.'/../config/saas-bridge.php', 'saas-bridge');
+            $this->mergeConfigFrom(__DIR__ . '/../config/saas-bridge.php', 'saas-bridge');
 
             // $this->commands([]);
             $this->app->bind('saas:manifest-test', ConfigChecker::class);
@@ -42,7 +42,7 @@ class SaasBridgeServiceProvider extends ServiceProvider
             ]);
         }
 
-        foreach (glob(__DIR__.'/Helpers/functions/*.php') as $filename) {
+        foreach (glob(__DIR__ . '/Helpers/functions/*.php') as $filename) {
             require_once $filename;
         }
 
@@ -54,7 +54,7 @@ class SaasBridgeServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/saas-bridge.php', 'saas-bridge');
+        $this->mergeConfigFrom(__DIR__ . '/../config/saas-bridge.php', 'saas-bridge');
 
         // Register the main class to use with the facade
 
@@ -78,8 +78,14 @@ class SaasBridgeServiceProvider extends ServiceProvider
 
             Route::post("/{$url}/data", [$controller, 'data']);
             Route::post("/{$url}/config", [$controller, 'config']);
-            Route::post("/{$url}/import", [$controller, 'import']);
-            Route::post("/{$url}/export", [$controller, 'export']);
+
+            $pluginVersion = config('saas-bridge.plugin_version', 'v1');
+
+            if ($pluginVersion == 'v1') {
+                Route::post("/{$url}/import", [$controller, 'import']);
+                Route::post("/{$url}/export", [$controller, 'export']);
+            }
+
             Route::post("/{$url}/trigger", [$controller, 'trigger']);
         });
     }
