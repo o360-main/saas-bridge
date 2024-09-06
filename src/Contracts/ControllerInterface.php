@@ -21,11 +21,6 @@ interface ControllerInterface
     //Routes : /api/{module}/config
     public function config(ConfigRequest $request): ConfigResponse;
 
-    //Routes : /api/{module}/import
-    public function import(ImportRequest $request): ImportResponse;
-
-    //Routes : /api/{module}/export
-    public function export(ExportRequest $request): ExportResponse;
-
+    //Routes : /api/{module}/trigger
     public function trigger(TriggerRequest $request): TriggerResponse;
 }
