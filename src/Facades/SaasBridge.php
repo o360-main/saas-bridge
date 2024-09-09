@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array enabledModules($module = null)
  * @method static array mainModules($module = null)
  * @method static array source($module = null)
+ * @method static array metaDataConfig($module = null)
  * @method static \O360Main\SaasBridge\SaasBridgeService getInstance()
  * @see \O360Main\SaasBridge\SaasBridgeService
  *

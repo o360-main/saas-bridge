@@ -148,5 +148,6 @@ class SaasCredentialsBoot
         $this->saasAgent->setDataConfig($data['data_config'] ?? []);
         $this->saasAgent->setSource($data['source'] ?? $data['source_of_truth'] ?? $data['main_modules'] ?? []);
         $this->saasAgent->setEnabled($data['enabled_modules'] ?? []);
+        $this->saasAgent->setMetaDataConfig($data['meta_data_config'] ?? []);
     }
 }
