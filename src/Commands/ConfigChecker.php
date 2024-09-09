@@ -11,6 +11,7 @@ class ConfigChecker extends BaseCommand
     /**
      * The name and signature of the console command.
      *çn
+     *
      * @var string
      */
     protected $signature = 'saas:manifest-test';
@@ -26,27 +27,28 @@ class ConfigChecker extends BaseCommand
      * Execute the console command.
      *
      * @return int
+     *
      * @throws \Exception
      */
     public function handle()
     {
-        $data = (new PluginController())->manifest();
+        $data = (new PluginController)->manifest();
 
         $arr = [
-            'erp', 'ecom', 'pos'
+            'erp', 'ecom', 'pos',
         ];
 
         $rules = [
-            "type" => "required|in:" . implode(',', $arr),
-            'name' => 'required|alpha_dash',//|unique:plugins,name', //Must be a number and length of value is 8
+            'type' => 'required|in:'.implode(',', $arr),
+            'name' => 'required|alpha_dash', //|unique:plugins,name', //Must be a number and length of value is 8
             'label' => 'required|string', //Must be a number and length of value is 8
             'version' => 'required|string',
             'author' => 'string',
             'options.*' => 'array',
-            "other" => "array",
-//            'options.add' => 'array|required',
-//            'options.remove' => 'array',
-//            'packages' => 'array',
+            'other' => 'array',
+            //            'options.add' => 'array|required',
+            //            'options.remove' => 'array',
+            //            'packages' => 'array',
         ];
 
         $validate = \Illuminate\Support\Facades\Validator::make($data, $rules);
@@ -57,7 +59,7 @@ class ConfigChecker extends BaseCommand
             //show errors
             //show errros by key value multiple line
             foreach ($validate->errors()->toArray() as $key => $value) {
-                $this->error($key . ': ' . implode(', ', $value));
+                $this->error($key.': '.implode(', ', $value));
             }
 
             //check sample plugin repository
