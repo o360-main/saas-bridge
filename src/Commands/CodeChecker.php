@@ -13,6 +13,7 @@ class CodeChecker extends BaseCommand
     /**
      * The name and signature of the console command.
      *çn
+     *
      * @var string
      */
     protected $signature = 'saas:code-test';
@@ -25,7 +26,6 @@ class CodeChecker extends BaseCommand
     protected $description = 'Command description';
 
     /**
-     *
      * @throws \ReflectionException
      */
     public function handle(): void
@@ -41,29 +41,26 @@ class CodeChecker extends BaseCommand
             ->filter(function ($module) {
 
                 $arr = [
-//                    Module::seller,
-//                    Module::account
+                    //                    Module::seller,
+                    //                    Module::account
                 ];
 
-                return !in_array($module, $arr);
+                return ! in_array($module, $arr);
             });
-
 
         //info checking for missing controller
         $this->info('Checking for missing controller...');
-
 
         $controllers = collect(\File::allFiles(app_path('Http/Controllers')))
             ->filter(fn ($controller) => str_ends_with($controller->getRelativePathname(), '.php'))
             ->map(fn ($controller) => $controller->getRelativePathname())
             ->map(fn ($controller) => str_replace('.php', '', $controller))
             ->map(fn ($controller) => str_replace('/', '\\', $controller))
-            ->map(fn ($controller) => 'App\\Http\\Controllers\\' . $controller);
-
+            ->map(fn ($controller) => 'App\\Http\\Controllers\\'.$controller);
 
         $pluginController = $controllers->filter(fn ($controller) => str_contains($controller, 'Plugin'))->first();
 
-        if (!$pluginController) {
+        if (! $pluginController) {
             $this->error('PluginController not found');
         } else {
 
@@ -72,7 +69,7 @@ class CodeChecker extends BaseCommand
             } catch (\Exception $e) {
                 $table[] = [
                     $pluginController,
-                    $e->getMessage()
+                    $e->getMessage(),
                 ];
                 $isError = true;
                 $this->showTable($table, $isError);
@@ -80,46 +77,40 @@ class CodeChecker extends BaseCommand
 
         }
 
-
         //first check missing controller
         $missing = $modules
             ->map(fn ($module) => $module->detail('label_plural'))
             ->diff($controllers->map(fn ($controller) => str_replace('Controller', '', class_basename($controller))));
-
 
         $table = [];
         foreach ($missing as $item) {
             $isError = true;
             $table[] = [
                 $item,
-                'Missing Controller'
+                'Missing Controller',
             ];
         }
 
         $this->showTable($table, $isError);
 
-
         //check missing controller methods
         $this->info('Checking for missing routes declaration...');
 
-
         //check missing routes
         $routes = \File::get(base_path('routes/api.php'));
-
 
         $table = [];
 
         foreach ($modules as $module) {
             $route = "Route::module('{$module->plural()}',";
-            if (!str_contains($routes, $route)) {
+            if (! str_contains($routes, $route)) {
                 $isError = true;
                 $table[] = [
                     $module->plural(),
-                    'Missing Route'
+                    'Missing Route',
                 ];
             }
         }
-
 
         $this->showTable($table, $isError);
 
@@ -128,9 +119,7 @@ class CodeChecker extends BaseCommand
 
         $table = [];
 
-
-        $controllers = $controllers->filter(fn ($c) => !str_contains($c, 'Plugin'));
-
+        $controllers = $controllers->filter(fn ($c) => ! str_contains($c, 'Plugin'));
 
         foreach ($controllers as $controller) {
 
@@ -144,7 +133,7 @@ class CodeChecker extends BaseCommand
 
                 $table[] = [
                     $controller,
-                    $error
+                    $error,
                 ];
 
             }

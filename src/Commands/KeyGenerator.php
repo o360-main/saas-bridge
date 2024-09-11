@@ -2,6 +2,7 @@
 
 namespace O360Main\SaasBridge\Commands;
 
+use Exception;
 use Illuminate\Console\Command as BaseCommand;
 use O360Main\SaasBridge\Services\EncService;
 use Symfony\Component\Console\Command\Command;
@@ -25,7 +26,7 @@ class KeyGenerator extends BaseCommand
      * Execute the console command.
      *
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(): int
     {
