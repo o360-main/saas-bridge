@@ -41,5 +41,6 @@ enum EndPoint: string
     case order_reason_code = 'order-reason-codes';
     case addresses = 'addresses';
     case cache_data = 'cache-datas';
+    case loyalty_points = 'loyalty-points';
 
 }
