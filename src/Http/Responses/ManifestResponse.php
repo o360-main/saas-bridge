@@ -36,6 +36,7 @@ class ManifestResponse implements Responsable, Arrayable
         public readonly ?ManifestDeveloper $developer,
         public readonly ?ManifestConfig    $config,
         public readonly array              $options,
+        public readonly bool               $oauth_enabled = false,
         public readonly string             $manifest_version = "v1",
     ) {
 
@@ -113,6 +114,7 @@ class ManifestResponse implements Responsable, Arrayable
                 'tags' => $this->tags,
                 'developer' => $this->developer?->toArray(),
                 'config' => $this->config?->toArray(),
+                'oauth_enabled' => $this->oauth_enabled,
                 'options' => [
                     'add' => collect($this->options)->mapWithKeys(fn ($i) => [$i->key => $i->toArray()])->toArray(),
                     'remove' => [],
@@ -134,6 +136,7 @@ class ManifestResponse implements Responsable, Arrayable
             'tags' => $this->tags,
             'developer' => $this->developer?->toArray(),
             'config' => $this->config?->toArray(),
+            'oauth_enabled' => $this->oauth_enabled,
             'options' => collect($this->options)->map(fn ($item) => $item->toArray())->toArray(),
         ];
     }
