@@ -38,9 +38,11 @@ class PluginSecretValidationMiddleware
         ];
 
         $uri = $request->route()->uri;
+        $endUri = explode('/', $uri);
+        $uri = end($endUri);
 
         foreach ($ignore as $item) {
-            if (str_contains($uri, $item)) {
+            if (strtolower($uri) == $item) {
                 return $next($request);
             }
         }
