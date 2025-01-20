@@ -232,4 +232,9 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::company);
     }
 
+    public function loyalty_points(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::loyalty_points);
+    }
+
 }

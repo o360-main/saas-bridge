@@ -11,6 +11,8 @@ enum Module: string
     case tax = "tax";
     case currency = "currency";
     case paymentMethod = "payment_method";
+
+    case shippingMethod = "shipping_method";
     case tierGroup = "tier_group";
 
     case catalog = "catalog";
@@ -87,6 +89,13 @@ enum Module: string
                 'plural' => 'payment_methods',
                 'label' => 'PaymentMethod',
                 'label_plural' => 'PaymentMethods',
+                'simple' => true,
+            ],
+            self::shippingMethod => [
+                'name' => 'shipping_method',
+                'plural' => 'shipping_methods',
+                'label' => 'ShippingMethod',
+                'label_plural' => 'ShippingMethods',
                 'simple' => true,
             ],
 
