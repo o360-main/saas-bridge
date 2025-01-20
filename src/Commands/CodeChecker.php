@@ -6,6 +6,7 @@ use Illuminate\Console\Command as BaseCommand;
 use O360Main\SaasBridge\Module;
 use O360Main\SaasBridge\Services\ControllerValidationService;
 use O360Main\SaasBridge\Services\PluginControllerValidation;
+use ReflectionException;
 use Symfony\Component\Console\Command\Command;
 
 class CodeChecker extends BaseCommand
@@ -26,7 +27,7 @@ class CodeChecker extends BaseCommand
     protected $description = 'Command description';
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function handle(): void
     {

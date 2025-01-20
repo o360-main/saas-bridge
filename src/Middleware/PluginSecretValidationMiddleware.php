@@ -5,6 +5,7 @@ namespace O360Main\SaasBridge\Middleware;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use O360Main\SaasBridge\SaasConfig;
 use O360Main\SaasBridge\Services\SaasCredentialsBoot;
 
@@ -46,6 +47,7 @@ class PluginSecretValidationMiddleware
         }
 
         SaasCredentialsBoot::make($request)->run();
+
 
         return $next($request);
 

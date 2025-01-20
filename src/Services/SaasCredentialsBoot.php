@@ -5,6 +5,7 @@ namespace O360Main\SaasBridge\Services;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\UnauthorizedException;
 use O360Main\SaasBridge\SaasAgent;
 use O360Main\SaasBridge\SaasBridgeService;
@@ -41,6 +42,11 @@ class SaasCredentialsBoot
         if (! $encryptedData) {
             throw new UnauthorizedException('Invalid Payload');
         }
+
+        Log::info('payload', [
+            'data' => $encryptedData,
+            'secret' => $this->saasConfig->secret(),
+        ]);
 
         $isWorked = EncryptionCall::decrypt($encryptedData, $this->saasConfig->secret());
 

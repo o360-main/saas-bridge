@@ -8,9 +8,6 @@ use O360Main\SaasBridge\Services\ConfigService;
 
 class SaasBridgeService
 {
-    /**
-     * @var \O360Main\SaasBridge\Services\ConfigService
-     */
     private readonly ConfigService $configService;
 
     public function __construct(private readonly SaasAgent $saasAgent)
@@ -33,7 +30,6 @@ class SaasBridgeService
         return $this->saasAgent->saasApi($version);
     }
 
-
     /**
      * @throws \Exception
      */
@@ -41,7 +37,6 @@ class SaasBridgeService
     {
         return new SaasApiClient($this->saasAgent, $version);
     }
-
 
     public function credentials(): array
     {
@@ -58,10 +53,9 @@ class SaasBridgeService
         return $this->saasAgent->moduleConfig($module);
     }
 
-
     /**
-     * @param $module
      * @deprecated  use mainModules
+     *
      * @return array|mixed|null
      */
     public function source($module = null)
@@ -74,18 +68,15 @@ class SaasBridgeService
         return $this->saasAgent->mainModules($module);
     }
 
-
     public function enabledModules($module = null)
     {
         return $this->saasAgent->enabledModules($module);
     }
 
-
     public function dataConfig($module = null): array
     {
         return $this->saasAgent->dataConfig($module);
     }
-
 
     public function configService(): ConfigService
     {
@@ -111,5 +102,4 @@ class SaasBridgeService
     {
         return $this->saasAgent->plugin()['id'];
     }
-
 }
