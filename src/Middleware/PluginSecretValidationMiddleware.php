@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Log;
 use O360Main\SaasBridge\SaasConfig;
 use O360Main\SaasBridge\Services\SaasCredentialsBoot;
 
+
+/**
+ * Done. v1 Compatibility for go-worker
+ *
+ * Class PluginSecretValidationMiddleware
+ * @package O360Main\SaasBridge\Middleware
+ */
 class PluginSecretValidationMiddleware
 {
     /**
@@ -29,10 +36,11 @@ class PluginSecretValidationMiddleware
         SaasCredentialsBoot::setEnvironment($request);
 
         if (SaasConfig::getInstance()->versionGreaterThenEqual('2.0.0')) {
+
             SaasCredentialsBoot::validateJwt($request);
         }
 
-        //not required credentials
+        // not required credentials
         $ignore = [
             'manifest.json',
             'ping',
@@ -42,14 +50,12 @@ class PluginSecretValidationMiddleware
         $endUri = explode('/', $uri);
         $uri = end($endUri);
 
-        foreach ($ignore as $item) {
-            if (strtolower($uri) == $item) {
-                return $next($request);
-            }
+
+        if (in_array(strtolower($uri), $ignore)) {
+            return $next($request);
         }
 
         SaasCredentialsBoot::make($request)->run();
-
 
         return $next($request);
 

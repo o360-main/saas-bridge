@@ -2,8 +2,10 @@
 
 namespace O360Main\SaasBridge\Middleware;
 
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use O360Main\SaasBridge\SaasConfig;
 use O360Main\SaasBridge\Services\SaasCredentialsBoot;
 
 class SaasTokenValidationMiddleware
@@ -13,6 +15,11 @@ class SaasTokenValidationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+
+        if (SaasConfig::getInstance()->versionGreaterThenEqual('2.0.0')) {
+            // ignore
+            return $next($request);
+        }
 
         try {
 

@@ -2,8 +2,8 @@
 
 namespace O360Main\SaasBridge\Middleware;
 
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -12,8 +12,6 @@ class ForceJsonMiddleware
     public function handle(Request $request, Closure $next)
     {
 
-        //        return $next($request);
-        //
         $response = $next($request);
 
         // if response is redirected
@@ -39,11 +37,10 @@ class ForceJsonMiddleware
             $json = [
                 'status_code' => $statusCode,
                 'message' => 'Validation error',
-                'error_msg' => $response->exception?->getMessage() ?? "Validation error",
+                'error_msg' => $response->exception?->getMessage() ?? 'Validation error',
                 'errors' => $response->exception?->errors() ?? [],
             ];
         }
-
 
         try {
             if ($request->headers->has('X-Plugin-Debug')) {
