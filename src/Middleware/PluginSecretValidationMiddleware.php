@@ -5,16 +5,14 @@ namespace O360Main\SaasBridge\Middleware;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use O360Main\SaasBridge\SaasConfig;
 use O360Main\SaasBridge\Services\SaasCredentialsBoot;
-
+use O360Main\SaasBridge\Services\SaasCredentialsBootV1;
 
 /**
  * Done. v1 Compatibility for go-worker
  *
  * Class PluginSecretValidationMiddleware
- * @package O360Main\SaasBridge\Middleware
  */
 class PluginSecretValidationMiddleware
 {
@@ -35,7 +33,9 @@ class PluginSecretValidationMiddleware
 
         SaasCredentialsBoot::setEnvironment($request);
 
-        if (SaasConfig::getInstance()->versionGreaterThenEqual('2.0.0')) {
+        $greaterThen = SaasConfig::getInstance()->versionGreaterThenEqual('2.0.0');
+
+        if ($greaterThen) {
 
             SaasCredentialsBoot::validateJwt($request);
         }
@@ -50,12 +50,15 @@ class PluginSecretValidationMiddleware
         $endUri = explode('/', $uri);
         $uri = end($endUri);
 
-
         if (in_array(strtolower($uri), $ignore)) {
             return $next($request);
         }
 
-        SaasCredentialsBoot::make($request)->run();
+        if ($greaterThen) {
+            SaasCredentialsBoot::make($request)->run();
+        } else {
+            SaasCredentialsBootV1::make($request)->run();
+        }
 
         return $next($request);
 

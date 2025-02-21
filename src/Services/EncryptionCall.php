@@ -13,6 +13,12 @@ class EncryptionCall
         // check if key is base64 encoded
         if (base64_encode(base64_decode($key, true)) === $key) {
             $key = base64_decode($key);
+        } else {
+
+            // if key length is less than 32, then pad it with 0
+            if (strlen($key) < 32) {
+                $key = str_pad($key, 32, '0');
+            }
         }
 
         //        Log::info('key', [

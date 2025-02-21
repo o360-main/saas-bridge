@@ -4,9 +4,8 @@ namespace O360Main\SaasBridge\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use O360Main\SaasBridge\SaasConfig;
-use O360Main\SaasBridge\Services\SaasCredentialsBoot;
+use O360Main\SaasBridge\Services\SaasCredentialsBootV1;
 
 class SaasTokenValidationMiddleware
 {
@@ -23,7 +22,8 @@ class SaasTokenValidationMiddleware
 
         try {
 
-            SaasCredentialsBoot::make($request)->run();
+            // v1
+            SaasCredentialsBootV1::make($request)->run();
 
             return $next($request);
 
