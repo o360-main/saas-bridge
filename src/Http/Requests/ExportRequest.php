@@ -51,7 +51,7 @@ class ExportRequest extends BaseRequest
             return ModuleEvent::from($event);
         }
 
-        return ModuleEvent::from($this->input('event'));
+        return ModuleEvent::from($this->input('payload.body.event'));
     }
 
 

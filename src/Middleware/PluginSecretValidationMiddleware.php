@@ -36,7 +36,6 @@ class PluginSecretValidationMiddleware
         $greaterThen = SaasConfig::getInstance()->versionGreaterThenEqual('2.0.0');
 
         if ($greaterThen) {
-
             SaasCredentialsBoot::validateJwt($request);
         }
 

@@ -30,7 +30,7 @@ class ImportRequest extends BaseRequest
             return ModuleEvent::from($event);
         }
 
-        return ModuleEvent::from($this->input('event'));
+        return ModuleEvent::from($this->input('payload.body.event'));
     }
 
     public function module(): Module
@@ -38,7 +38,7 @@ class ImportRequest extends BaseRequest
         $module = $this->input('module', null);
 
         if (is_null($module)) {
-            [$module, ] = explode('.', $this->input('event'));
+            [$module,] = explode('.', $this->input('event'));
 
             return Module::from($module);
         }

@@ -91,7 +91,9 @@ class SaasCredentialsBootV1
         }
 
         $headers['X-Plugin-Id'] = $pluginId;
-        Config::set('saas-bridge.plugin_id', $pluginId);
+//        \Config::set('saas-bridge.plugin_id', $pluginId);
+
+        config()->set('saas-bridge.plugin_id', $pluginId);
 
         // check is in dev mode
         $headers['X-Plugin-Dev'] = $devMode;

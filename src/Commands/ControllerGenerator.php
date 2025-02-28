@@ -10,6 +10,7 @@ class ControllerGenerator extends BaseCommand
 {
     /**
      * The name and signature of the console command.
+     *
      * @var string
      */
     protected $signature = 'saas:generate:controller';
@@ -24,12 +25,11 @@ class ControllerGenerator extends BaseCommand
     /**
      * Execute the console command.
      *
-     * @return int
      * @throws \Exception
      */
     public function handle(): int
     {
-        //prompt for ask only stub file
+        // prompt for ask only stub file
         $this->info('Generating Controller...');
 
         //        $ask = $this->ask('Do you want to generate only stub file? (y/n)');

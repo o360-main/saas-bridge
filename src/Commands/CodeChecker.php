@@ -35,8 +35,8 @@ class CodeChecker extends BaseCommand
 
         $this->info('Checking code...');
 
-        //get all controller nested
-        //get all routes wich are using ::module macro
+        // get all controller nested
+        // get all routes wich are using ::module macro
 
         $modules = collect(Module::cases())
             ->filter(function ($module) {
@@ -49,7 +49,7 @@ class CodeChecker extends BaseCommand
                 return ! in_array($module, $arr);
             });
 
-        //info checking for missing controller
+        // info checking for missing controller
         $this->info('Checking for missing controller...');
 
         $controllers = collect(\File::allFiles(app_path('Http/Controllers')))
@@ -78,7 +78,7 @@ class CodeChecker extends BaseCommand
 
         }
 
-        //first check missing controller
+        // first check missing controller
         $missing = $modules
             ->map(fn ($module) => $module->detail('label_plural'))
             ->diff($controllers->map(fn ($controller) => str_replace('Controller', '', class_basename($controller))));
@@ -94,10 +94,10 @@ class CodeChecker extends BaseCommand
 
         $this->showTable($table, $isError);
 
-        //check missing controller methods
+        // check missing controller methods
         $this->info('Checking for missing routes declaration...');
 
-        //check missing routes
+        // check missing routes
         $routes = \File::get(base_path('routes/api.php'));
 
         $table = [];
@@ -115,7 +115,7 @@ class CodeChecker extends BaseCommand
 
         $this->showTable($table, $isError);
 
-        //check controller methods
+        // check controller methods
         $this->info('Checking for Valid Controller...');
 
         $table = [];
