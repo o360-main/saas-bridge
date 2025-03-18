@@ -34,12 +34,10 @@ class ExportRequest extends BaseRequest
         return $this->input('payload.id');
     }
 
-
     public function payload()
     {
         return $this->input('payload', []);
     }
-
 
     public function event(): ModuleEvent
     {
@@ -48,24 +46,23 @@ class ExportRequest extends BaseRequest
 
         if ($version === 'v1') {
             [, $event] = explode('.', $this->input('event'));
+
             return ModuleEvent::from($event);
         }
 
-        return ModuleEvent::from($this->input('payload.body.event'));
+        return ModuleEvent::from($this->input('payload.event'));
     }
-
 
     public function module(): Module
     {
         $module = $this->input('module', null);
 
         if (is_null($module)) {
-            [$module, ] = explode('.', $this->input('event'));
+            [$module] = explode('.', $this->input('event'));
 
             return Module::from($module);
         }
 
         return Module::from($module);
     }
-
 }

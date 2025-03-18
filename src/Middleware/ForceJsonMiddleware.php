@@ -4,6 +4,7 @@ namespace O360Main\SaasBridge\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -20,7 +21,7 @@ class ForceJsonMiddleware
         }
 
         /**
-         * @var \Illuminate\Http\Response $response
+         * @var Response $response
          */
         $statusCode = $response->getStatusCode();
 

@@ -27,10 +27,11 @@ class ImportRequest extends BaseRequest
 
         if ($version == 'v1') {
             [, $event] = explode('.', $this->input('action'));
+
             return ModuleEvent::from($event);
         }
 
-        return ModuleEvent::from($this->input('payload.body.event'));
+        return ModuleEvent::from($this->input('payload.event'));
     }
 
     public function module(): Module
@@ -38,12 +39,11 @@ class ImportRequest extends BaseRequest
         $module = $this->input('module', null);
 
         if (is_null($module)) {
-            [$module,] = explode('.', $this->input('event'));
+            [$module] = explode('.', $this->input('event'));
 
             return Module::from($module);
         }
 
         return Module::from($module);
     }
-
 }
