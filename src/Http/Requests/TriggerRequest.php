@@ -2,6 +2,7 @@
 
 namespace O360Main\SaasBridge\Http\Requests;
 
+use Log;
 use O360Main\SaasBridge\Contracts\BaseRequest;
 use O360Main\SaasBridge\Module;
 use O360Main\SaasBridge\ModuleAction;
@@ -10,10 +11,13 @@ class TriggerRequest extends BaseRequest
 {
     public function rules(): array
     {
+        //for 2.1
 
-        $version = config('saas-bridge.main_version');
+        // $version = config('saas-bridge.main_version');
+        // Log::error('version:xx ' . $version);
+        // Log::error("request: ", $this->all());
 
-        if ($version == 'v1') {
+        if ($this->manifestVersion() == 'v1') {
             return [
                 'payload' => 'array',
                 'action' => 'required|string',
@@ -33,14 +37,18 @@ class TriggerRequest extends BaseRequest
         return $this->input('payload', []);
     }
 
+    protected function manifestVersion(): string
+    {
+        return strtolower($this->input("_env.manifest_version", 'v2'));
+    }
+
+
     public function data(): array
     {
-
-        $version = config('saas-bridge.main_version');
-
-        if ($version == 'v1') {
-            return $this->payload();
-        }
+        // $version = $this->manifestVersion();
+        // if ($version == 'v1') {
+        //     return $this->payload();
+        // }
 
         return $this->input('data', []);
     }
