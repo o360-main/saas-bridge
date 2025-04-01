@@ -50,7 +50,7 @@ class ForceJsonMiddleware
                     'url' => $request->url(),
                     'method' => $request->method(),
                     'headers' => $request->headers->all(),
-                    'request' => $request->all(),
+                    'request' => $request->except('_env._data'),
                     'trace' => $response?->exception?->getTrace() ?? [],
                 ];
             }
