@@ -17,15 +17,13 @@ class SaasApiClient
         private readonly SaasAgent $saasAgent,
         private readonly ?string $version = null
     ) {
-        $this->api = $this->saasAgent->saasApi($this->version);
+        $this->api = $this->saasAgent->saasApi($this->version)->timeout(10 * 60);
     }
-
 
     public function api(): \Illuminate\Http\Client\PendingRequest
     {
         return $this->api;
     }
-
 
     public function forModule(EndPoint $endPoint): ModuleApi
     {
@@ -34,94 +32,89 @@ class SaasApiClient
 
     /**
      * Currency SaaS Api
-     *
-     * @return \O360Main\SaasBridge\ApiClient\ModuleApi
      */
     public function currencies(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::currency);
     }
 
-    //now follow same as upper with all the EndPoints
+    // now follow same as upper with all the EndPoints
 
-
-    //stores
+    // stores
     public function stores(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::store);
 
     }
 
-    //tax
+    // tax
     public function taxes(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::tax);
     }
 
-    //attribute
+    // attribute
     public function attributes(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::attribute);
     }
 
-
-    //category
+    // category
     public function categories(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::category);
     }
 
-    //payment-method
+    // payment-method
     public function payment_methods(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::payment_method);
     }
 
-
-    //tier-group
+    // tier-group
     public function tier_groups(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::tier_group);
 
     }
 
-    //product
+    // product
     public function products(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::product);
     }
 
-    //inventory
+    // inventory
     public function inventories(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::inventory);
     }
 
-    //customer
+    // customer
     public function customers(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::customer);
     }
 
-    //seller
+    // seller
     public function sellers(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::seller);
     }
 
-    //order
+    // order
     public function orders(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::order);
     }
 
-    //discount
+    // discount
     public function discounts(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::discount);
     }
 
-    //gift-card
+    // gift-card
     public function gift_cards(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::gift_card);
@@ -132,7 +125,7 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::shipping_method);
     }
 
-    //tier-price
+    // tier-price
     public function tier_prices(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::tier_price);
@@ -163,13 +156,13 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::addresses);
     }
 
-    //data-countries
+    // data-countries
     public function data_countries(): PromiseInterface|Response
     {
         return $this->api->get('/data/countries');
     }
 
-    //data-currencies
+    // data-currencies
     public function data_currencies(): PromiseInterface|Response
     {
         return $this->api->get('/data/currencies');
@@ -209,7 +202,8 @@ class SaasApiClient
     {
         return new ModuleApi($this->api, EndPoint::order_payment_method);
     }
-    //plugin-logs
+
+    // plugin-logs
     public function plugin_logs(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::plugin_log);
@@ -220,13 +214,13 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::cache_data);
     }
 
-    //catalogs
+    // catalogs
     public function catalogs(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::catalog);
     }
 
-    //companies
+    // companies
     public function companies(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::company);
