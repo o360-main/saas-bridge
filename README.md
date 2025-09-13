@@ -20,8 +20,8 @@ composer require o360-main/saas-bridge
 
 This package provides the following features:
 
-#### 🔒 ConnectionSyncMutex - Distributed Locking
-Redis-based distributed locking mechanism similar to Go's `sync.Mutex`. Perfect for ensuring thread-safe operations across distributed systems.
+#### 🔒 Helpers\ConnectionSyncMutex - Redis-Based Locking
+Enterprise-grade distributed locking mechanism similar to Go's `sync.Mutex`. Ensures thread-safe operations across distributed systems with automatic cleanup and timeout handling.
 
 **Quick Example:**
 ```php
@@ -35,6 +35,82 @@ $result = ConnectionSyncMutex::make('resource_key')->synchronized(function() {
 ```
 
 📖 **[Complete Documentation](docs/connection-sync-mutex.md)** - Configuration, examples, troubleshooting
+
+#### 🔄 Helpers\JsonDataMapper - JSON & Array Processing
+Enterprise-grade JSON-to-JSON and array-to-array transformation engine with configurable mapping rules, 15+ built-in transformers, and nested data support. Optimized for high-performance API integrations.
+
+**Quick Examples:**
+```php
+use O360Main\SaasBridge\Helpers\JsonDataMapper;
+
+// JSON to JSON transformation
+$result = JsonDataMapper::quickTransform($sourceJson, [
+    'name' => 'user.full_name',
+    'email' => ['source' => 'user.email', 'transform' => 'lowercase']
+]);
+
+// PHP Array to Array transformation (no JSON parsing overhead)
+$mapper = JsonDataMapper::create($rules);
+$result = $mapper->transformArray($sourceArray);
+```
+
+📖 **[Complete Documentation](docs/json-data-mapper.md)** | **[Examples](docs/json-mapper-examples.md)** | **[Performance](docs/json-mapper-performance.md)** | **[Troubleshooting](docs/json-mapper-troubleshooting.md)**
+
+#### 🌐 Helpers\HttpDataMapper - Laravel HTTP Integration
+Advanced HTTP response transformation layer extending JsonMapper. Features fluent pipelines, batch processing, error handling, webhook support, and paginated API responses.
+
+**Quick Examples:**
+```php
+use O360Main\SaasBridge\Helpers\HttpDataMapper;
+use Illuminate\Support\Facades\Http;
+
+// Transform HTTP response directly
+$response = Http::get('https://api.example.com/users');
+$mapper = HttpDataMapper::create($rules);
+$users = $mapper->transformResponse($response);
+
+// Fluent pipeline for complex transformations
+$result = $mapper->pipe()
+    ->from($response)
+    ->transform()
+    ->extract('data')
+    ->filter(fn($item) => $item['active'])
+    ->take(10)
+    ->toArray();
+```
+
+📖 **[HTTP Documentation](docs/http-data-mapper.md)** - Response transformation, pipelines, webhooks, batch processing
+
+#### ⚡ Helpers\RateLimitedHttpClient - Rate Limited HTTP Wrapper
+Enterprise-grade HTTP client wrapper with Redis-based rate limiting, automatic blocking using ConnectionSyncMutex when limits are exhausted, and API-specific configurations. Perfect for external API integrations with rate limit requirements.
+
+**Quick Examples:**
+```php
+use O360Main\SaasBridge\Helpers\RateLimitedHttpClient;
+
+// Simple rate limited requests
+$client = RateLimitedHttpClient::make();
+$response = $client->get('https://api.example.com/users');
+
+// API-specific rate limits
+$shopifyClient = RateLimitedHttpClient::forApi('shopify');
+$products = $shopifyClient->get('/admin/api/2023-01/products.json');
+
+// Batch operations with shared rate limiting
+$responses = $client->batch([
+    'users' => ['method' => 'GET', 'url' => '/api/users'],
+    'orders' => ['method' => 'GET', 'url' => '/api/orders'],
+]);
+
+// Custom rate limiting configuration
+$client = RateLimitedHttpClient::make()->configure([
+    'max_requests' => 30,
+    'window_seconds' => 60,
+    'block_when_exhausted' => false
+]);
+```
+
+📖 **[Complete Documentation](docs/rate-limited-http-client.md)** - Configuration, API limits, monitoring, troubleshooting
 
 ---
 

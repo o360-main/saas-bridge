@@ -1,6 +1,6 @@
-# ConnectionSyncMutex - Distributed Locking
+# Synchronization\DistributedMutex - Redis-Based Locking
 
-The `ConnectionSyncMutex` class provides Redis-based distributed locking mechanism similar to Go's `sync.Mutex`. It uses connection ID from request headers to ensure thread-safe operations across distributed systems.
+The `DistributedMutex` class provides enterprise-grade Redis-based distributed locking mechanism similar to Go's `sync.Mutex`. It uses connection ID from request headers to ensure thread-safe operations across distributed systems.
 
 ## Basic Usage
 

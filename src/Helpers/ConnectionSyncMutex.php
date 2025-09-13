@@ -27,7 +27,7 @@ class ConnectionSyncMutex
         ?int $lockTimeout = null
     ) {
         $config = config('saas-bridge.mutex', []);
-        
+
         $keyPrefix = $config['key_prefix'] ?? 'saas_mutex';
         $this->lockKey = $keyPrefix . ":" . $lockKey;
         $this->connectionId = $connectionId ?? $this->getConnectionIdFromRequest();
@@ -36,7 +36,7 @@ class ConnectionSyncMutex
         $this->maxRetries = $maxRetries ?? $config['max_retries'] ?? 100;
         $this->lockTimeout = $lockTimeout ?? $config['lock_timeout'] ?? 30; // seconds
         $this->redisConnection = $config['redis_connection'] ?? null;
-        
+
         if (empty($this->connectionId)) {
             throw new InvalidArgumentException('Connection ID cannot be empty');
         }
@@ -50,7 +50,7 @@ class ConnectionSyncMutex
         $connectionId = null;
         $config = config('saas-bridge.mutex', []);
         $headers = $config['connection_headers'] ?? ['X-Connection-ID', 'Connection-ID', 'connection-id'];
-        
+
         // Try to get connection ID from provided request
         if ($request) {
             foreach ($headers as $header) {
@@ -60,7 +60,7 @@ class ConnectionSyncMutex
                 }
             }
         }
-        
+
         // Try global request if no connection ID found
         if (!$connectionId && function_exists('request')) {
             $req = request();
@@ -71,7 +71,7 @@ class ConnectionSyncMutex
                 }
             }
         }
-        
+
         return new self($lockKey, $connectionId);
     }
 
@@ -84,19 +84,19 @@ class ConnectionSyncMutex
         $timeout = $timeoutSeconds ?? $this->lockTimeout;
         $startTime = time();
         $maxTime = $startTime + $timeout;
-        
+
         $attempts = 0;
         while (time() < $maxTime && $attempts < $this->maxRetries) {
             if ($this->tryLock()) {
                 return true;
             }
-            
+
             $attempts++;
-            
+
             // Sleep for retry delay (convert milliseconds to microseconds)
             usleep($this->retryDelay * 1000);
         }
-        
+
         $elapsed = time() - $startTime;
         throw new \RuntimeException(
             "Failed to acquire lock '{$this->lockKey}' after {$elapsed}s (timeout: {$timeout}s, attempts: {$attempts})"
@@ -110,7 +110,7 @@ class ConnectionSyncMutex
     public function tryLock(): bool
     {
         $this->lockValue = $this->generateLockValue();
-        
+
         // Use Redis SET with NX (only if not exists) and EX (expiration)
         $result = $this->redis()->set(
             $this->lockKey,
@@ -119,20 +119,21 @@ class ConnectionSyncMutex
             $this->ttl,
             'NX'
         );
-        
+
         return $result === 'OK';
     }
 
     /**
      * Release the lock
      * Similar to Go's mutex.Unlock()
+     *
      */
     public function unlock(): bool
     {
         if (!$this->lockValue) {
             return false;
         }
-        
+
         // Use Lua script to ensure atomic check-and-delete
         $script = '
             if redis.call("GET", KEYS[1]) == ARGV[1] then
@@ -141,14 +142,14 @@ class ConnectionSyncMutex
                 return 0
             end
         ';
-        
+
         $result = $this->redis()->eval($script, 1, $this->lockKey, $this->lockValue);
-        
+
         if ($result) {
             $this->lockValue = null;
             return true;
         }
-        
+
         return false;
     }
 
@@ -159,7 +160,7 @@ class ConnectionSyncMutex
     public function synchronized(callable $callback, ?int $timeoutSeconds = null)
     {
         $this->lock($timeoutSeconds);
-        
+
         try {
             return $callback();
         } finally {
@@ -175,7 +176,7 @@ class ConnectionSyncMutex
         if (!$this->lockValue) {
             return false;
         }
-        
+
         return $this->redis()->get($this->lockKey) === $this->lockValue;
     }
 
@@ -187,9 +188,9 @@ class ConnectionSyncMutex
         if (!$this->lockValue || !$this->isLocked()) {
             return false;
         }
-        
+
         $newTtl = $additionalTtl ?? $this->ttl;
-        
+
         $script = '
             if redis.call("GET", KEYS[1]) == ARGV[1] then
                 return redis.call("EXPIRE", KEYS[1], ARGV[2])
@@ -197,7 +198,7 @@ class ConnectionSyncMutex
                 return 0
             end
         ';
-        
+
         return $this->redis()->eval($script, 1, $this->lockKey, $this->lockValue, $newTtl) === 1;
     }
 
@@ -231,11 +232,11 @@ class ConnectionSyncMutex
         if (!function_exists('request')) {
             return null;
         }
-        
+
         $request = request();
         $config = config('saas-bridge.mutex', []);
         $headers = $config['connection_headers'] ?? ['X-Connection-ID', 'Connection-ID', 'connection-id'];
-        
+
         // Try each header in priority order
         foreach ($headers as $header) {
             $connectionId = $request->header($header);
@@ -243,12 +244,12 @@ class ConnectionSyncMutex
                 return $connectionId;
             }
         }
-        
+
         // Fallback connection ID if enabled
         if ($config['fallback_connection_id'] ?? true) {
             return $request->ip() . ':' . getmypid();
         }
-        
+
         return null;
     }
 
@@ -257,7 +258,7 @@ class ConnectionSyncMutex
      */
     private function redis(): RedisConnection
     {
-        return $this->redisConnection 
+        return $this->redisConnection
             ? Redis::connection($this->redisConnection)
             : Redis::connection();
     }

@@ -49,4 +49,71 @@ return [
         // Fallback connection ID generation when no header present
         'fallback_connection_id' => true, // Generate IP:PID if no header
     ],
+
+    /*
+     * Rate Limiter Configuration
+     * HTTP request rate limiting with Redis-based storage
+     */
+    'rate_limiter' => [
+        // Maximum requests per time window
+        'max_requests' => env('SAAS_RATE_LIMIT_MAX_REQUESTS', 60),
+        
+        // Time window in seconds
+        'window_seconds' => env('SAAS_RATE_LIMIT_WINDOW_SECONDS', 60),
+        
+        // Block and wait when rate limit is exhausted (true) or throw exception (false)
+        'block_when_exhausted' => env('SAAS_RATE_LIMIT_BLOCK_WHEN_EXHAUSTED', true),
+        
+        // Seconds to wait before retrying when rate limited
+        'retry_after_seconds' => env('SAAS_RATE_LIMIT_RETRY_AFTER', 60),
+        
+        // Maximum timeout for waiting when blocked (seconds)
+        'wait_timeout' => env('SAAS_RATE_LIMIT_WAIT_TIMEOUT', 300),
+        
+        // Redis connection name to use (null for default)
+        'redis_connection' => env('SAAS_RATE_LIMIT_REDIS_CONNECTION', null),
+        
+        // Key prefix for rate limit counters
+        'key_prefix' => env('SAAS_RATE_LIMIT_KEY_PREFIX', 'rate_limit'),
+        
+        // HTTP client default configuration
+        'timeout' => env('SAAS_HTTP_TIMEOUT', 30),
+        'retries' => env('SAAS_HTTP_RETRIES', 3),
+        'retry_delay' => env('SAAS_HTTP_RETRY_DELAY', 100),
+        
+        // Connection ID headers priority (first found will be used)
+        'connection_headers' => [
+            'X-Connection-ID',
+            'Connection-ID', 
+            'connection-id'
+        ],
+        
+        // Fallback connection ID generation when no header present
+        'fallback_connection_id' => true, // Generate IP:PID if no header
+    ],
+
+    /*
+     * API-specific Rate Limits
+     * Configure different rate limits for specific APIs
+     */
+    'api_rate_limits' => [
+        'shopify' => [
+            'max_requests' => env('SHOPIFY_API_RATE_LIMIT', 40),
+            'window_seconds' => 60,
+            'block_when_exhausted' => true,
+        ],
+        
+        'stripe' => [
+            'max_requests' => env('STRIPE_API_RATE_LIMIT', 100),
+            'window_seconds' => 60,
+            'block_when_exhausted' => false,
+        ],
+        
+        'external_api' => [
+            'max_requests' => env('EXTERNAL_API_RATE_LIMIT', 30),
+            'window_seconds' => 60,
+            'block_when_exhausted' => true,
+            'retry_after_seconds' => 120,
+        ],
+    ],
 ];
