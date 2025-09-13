@@ -4,6 +4,7 @@ namespace O360Main\SaasBridge\Helpers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Redis\Connections\Connection as RedisConnection;
 use InvalidArgumentException;
 
 class ConnectionSyncMutex
@@ -15,21 +16,26 @@ class ConnectionSyncMutex
     private int $retryDelay;
     private int $maxRetries;
     private int $lockTimeout;
+    private ?string $redisConnection;
 
     public function __construct(
         string $lockKey,
         ?string $connectionId = null,
-        int $ttl = 30,
-        int $retryDelay = 100,
-        int $maxRetries = 100,
-        int $lockTimeout = 30
+        ?int $ttl = null,
+        ?int $retryDelay = null,
+        ?int $maxRetries = null,
+        ?int $lockTimeout = null
     ) {
-        $this->lockKey = "lock:" . $lockKey;
+        $config = config('saas-bridge.mutex', []);
+        
+        $keyPrefix = $config['key_prefix'] ?? 'saas_mutex';
+        $this->lockKey = $keyPrefix . ":" . $lockKey;
         $this->connectionId = $connectionId ?? $this->getConnectionIdFromRequest();
-        $this->ttl = $ttl;
-        $this->retryDelay = $retryDelay; // milliseconds
-        $this->maxRetries = $maxRetries;
-        $this->lockTimeout = $lockTimeout; // seconds
+        $this->ttl = $ttl ?? $config['ttl'] ?? 30;
+        $this->retryDelay = $retryDelay ?? $config['retry_delay'] ?? 100; // milliseconds
+        $this->maxRetries = $maxRetries ?? $config['max_retries'] ?? 100;
+        $this->lockTimeout = $lockTimeout ?? $config['lock_timeout'] ?? 30; // seconds
+        $this->redisConnection = $config['redis_connection'] ?? null;
         
         if (empty($this->connectionId)) {
             throw new InvalidArgumentException('Connection ID cannot be empty');
@@ -42,18 +48,28 @@ class ConnectionSyncMutex
     public static function make(string $lockKey, ?Request $request = null): self
     {
         $connectionId = null;
+        $config = config('saas-bridge.mutex', []);
+        $headers = $config['connection_headers'] ?? ['X-Connection-ID', 'Connection-ID', 'connection-id'];
         
+        // Try to get connection ID from provided request
         if ($request) {
-            $connectionId = $request->header('X-Connection-ID') 
-                ?? $request->header('Connection-ID')
-                ?? $request->header('connection-id');
+            foreach ($headers as $header) {
+                $connectionId = $request->header($header);
+                if ($connectionId) {
+                    break;
+                }
+            }
         }
         
+        // Try global request if no connection ID found
         if (!$connectionId && function_exists('request')) {
             $req = request();
-            $connectionId = $req->header('X-Connection-ID') 
-                ?? $req->header('Connection-ID')
-                ?? $req->header('connection-id');
+            foreach ($headers as $header) {
+                $connectionId = $req->header($header);
+                if ($connectionId) {
+                    break;
+                }
+            }
         }
         
         return new self($lockKey, $connectionId);
@@ -96,7 +112,7 @@ class ConnectionSyncMutex
         $this->lockValue = $this->generateLockValue();
         
         // Use Redis SET with NX (only if not exists) and EX (expiration)
-        $result = Redis::set(
+        $result = $this->redis()->set(
             $this->lockKey,
             $this->lockValue,
             'EX',
@@ -126,7 +142,7 @@ class ConnectionSyncMutex
             end
         ';
         
-        $result = Redis::eval($script, 1, $this->lockKey, $this->lockValue);
+        $result = $this->redis()->eval($script, 1, $this->lockKey, $this->lockValue);
         
         if ($result) {
             $this->lockValue = null;
@@ -160,7 +176,7 @@ class ConnectionSyncMutex
             return false;
         }
         
-        return Redis::get($this->lockKey) === $this->lockValue;
+        return $this->redis()->get($this->lockKey) === $this->lockValue;
     }
 
     /**
@@ -182,7 +198,7 @@ class ConnectionSyncMutex
             end
         ';
         
-        return Redis::eval($script, 1, $this->lockKey, $this->lockValue, $newTtl) === 1;
+        return $this->redis()->eval($script, 1, $this->lockKey, $this->lockValue, $newTtl) === 1;
     }
 
     /**
@@ -217,10 +233,33 @@ class ConnectionSyncMutex
         }
         
         $request = request();
-        return $request->header('X-Connection-ID') 
-            ?? $request->header('Connection-ID')
-            ?? $request->header('connection-id')
-            ?? $request->ip() . ':' . getmypid();
+        $config = config('saas-bridge.mutex', []);
+        $headers = $config['connection_headers'] ?? ['X-Connection-ID', 'Connection-ID', 'connection-id'];
+        
+        // Try each header in priority order
+        foreach ($headers as $header) {
+            $connectionId = $request->header($header);
+            if ($connectionId) {
+                return $connectionId;
+            }
+        }
+        
+        // Fallback connection ID if enabled
+        if ($config['fallback_connection_id'] ?? true) {
+            return $request->ip() . ':' . getmypid();
+        }
+        
+        return null;
+    }
+
+    /**
+     * Get Redis connection instance
+     */
+    private function redis(): RedisConnection
+    {
+        return $this->redisConnection 
+            ? Redis::connection($this->redisConnection)
+            : Redis::connection();
     }
 
     /**

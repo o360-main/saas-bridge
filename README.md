@@ -16,9 +16,27 @@ composer require o360-main/saas-bridge
 
 ## Usage
 
+### Features
+
+This package provides the following features:
+
+#### 🔒 ConnectionSyncMutex - Distributed Locking
+Redis-based distributed locking mechanism similar to Go's `sync.Mutex`. Perfect for ensuring thread-safe operations across distributed systems.
+
+**Quick Example:**
 ```php
-// Usage description here
+use O360Main\SaasBridge\Helpers\ConnectionSyncMutex;
+
+// Simple synchronized execution
+$result = ConnectionSyncMutex::make('resource_key')->synchronized(function() {
+    // Only one process can execute this at a time
+    return performCriticalOperation();
+});
 ```
+
+📖 **[Complete Documentation](docs/connection-sync-mutex.md)** - Configuration, examples, troubleshooting
+
+---
 
 ### Testing
 
