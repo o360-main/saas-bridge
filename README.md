@@ -112,6 +112,57 @@ $client = RateLimitedHttpClient::make()->configure([
 
 📖 **[Complete Documentation](docs/rate-limited-http-client.md)** - Configuration, API limits, monitoring, troubleshooting
 
+#### 📊 Request/Response Context - Processing Tracking System
+Enterprise-grade request/response tracking system that automatically captures Connection ID, Record ID, and Plugin Record ID from headers, tracks data processing per controller function, and auto-attaches stats to responses. Perfect for monitoring API processing and sync operations.
+
+**Quick Examples (Multiple Approaches):**
+```php
+class ProductController extends Controller
+{
+    public function sync(Request $request)
+    {
+        // Headers automatically captured: Connection-ID, Record-ID, Plugin-Record-ID
+        
+        foreach ($products as $product) {
+            try {
+                $result = $this->syncProduct($product);
+                
+                // Option 1: Request Macros (Recommended)
+                $request->trackSaasId($product->saas_id, true);
+                $request->trackSyncId($result['sync_id'], true);
+                
+                // Option 2: Static Helpers
+                RequestResponseContext::saasId($product->saas_id, true);
+                RequestResponseContext::syncId($result['sync_id'], true);
+                
+                // Option 3: Global Functions
+                track_saas_id($product->saas_id, true);
+                track_sync_id($result['sync_id'], true);
+                
+                // Option 4: Facade
+                ProcessingTracker::saasId($product->saas_id, true);
+                
+            } catch (Exception $e) {
+                $request->trackSaasId($product->saas_id, false, $e->getMessage());
+            }
+        }
+        
+        // Response automatically includes processing stats
+        return response()->json(['message' => 'Sync completed']);
+    }
+}
+
+// Auto-detect sync_id from API responses
+$request->trackApiResponse($apiResponse);
+track_api_response($apiResponse);
+
+// Track custom data processing
+track_custom('products', 'prod_123', true, null, ['sku' => 'ABC123']);
+```
+
+📖 **[Complete Documentation](docs/request-response-context.md)** - Setup, tracking methods, Redis storage, response modes  
+📖 **[All Tracking Methods](docs/processing-tracking-methods.md)** - 6 different approaches with pros/cons
+
 ---
 
 ### Testing

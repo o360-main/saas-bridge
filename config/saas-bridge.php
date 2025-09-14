@@ -116,4 +116,35 @@ return [
             'retry_after_seconds' => 120,
         ],
     ],
+
+    /*
+     * Request/Response Context Configuration
+     * Track processing data per request with connection/record IDs
+     */
+    'request_context' => [
+        // Header names to extract IDs from (in priority order)
+        'headers' => [
+            'connection_id' => ['X-Connection-ID', 'Connection-ID', 'connection-id'],
+            'record_id' => ['X-Record-ID', 'Record-ID', 'record-id'],
+            'record_log_id' => ['X-Record-Log-ID', 'Record-Log-ID', 'record-log-id'],
+        ],
+        
+        // Auto-attach processing stats to JSON responses
+        'auto_attach' => env('SAAS_CONTEXT_AUTO_ATTACH', true),
+        
+        // How to attach stats: 'header', 'body', or 'both'
+        'attach_mode' => env('SAAS_CONTEXT_ATTACH_MODE', 'header'),
+        
+        // Redis configuration for context storage
+        'redis_ttl' => env('SAAS_CONTEXT_REDIS_TTL', 3600), // 1 hour
+        'redis_key_prefix' => env('SAAS_CONTEXT_KEY_PREFIX', 'request_context'),
+        'redis_connection' => env('SAAS_CONTEXT_REDIS_CONNECTION', null),
+        
+        // Enable/disable context tracking
+        'enabled' => env('SAAS_CONTEXT_ENABLED', true),
+        
+        // Log processing stats (for monitoring/debugging)
+        'log_stats' => env('SAAS_CONTEXT_LOG_STATS', false),
+        'log_channel' => env('SAAS_CONTEXT_LOG_CHANNEL', 'default'),
+    ],
 ];
