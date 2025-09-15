@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Redis;
 class RequestResponseContext
 {
     private static ?self $instance = null;
-    
+
     private ?string $connectionId = null;
     private ?string $recordId = null;
     private ?string $recordLogId = null;
@@ -18,12 +18,12 @@ class RequestResponseContext
     private ?string $controllerAction = null;
     private array $errors = [];
     private int $processedCount = 0;
-    
+
     private function __construct()
     {
         $this->startTime = microtime(true);
     }
-    
+
     /**
      * Get singleton instance
      */
@@ -34,7 +34,7 @@ class RequestResponseContext
         }
         return self::$instance;
     }
-    
+
     /**
      * Initialize context from request headers (called from middleware)
      */
@@ -43,10 +43,10 @@ class RequestResponseContext
         $config = config('saas-bridge.request_context', []);
         $headers = $config['headers'] ?? [
             'connection_id' => ['X-Connection-ID', 'Connection-ID', 'connection-id'],
-            'record_id' => ['X-Record-ID', 'Record-ID', 'record-id'],
-            'record_log_id' => ['X-Record-Log-ID', 'Record-Log-ID', 'record-log-id']
+            'record_id' => ['X-Plugin-Record-ID', 'Plugin-Record-ID', 'plugin-record-id'],
+            'record_log_id' => ['X-Plugin-Record-Log-ID', 'Plugin-Record-Log-ID', 'plugin-record-log-id']
         ];
-        
+
         // Extract headers
         foreach ($headers['connection_id'] as $header) {
             if ($connectionId = $request->header($header)) {
@@ -54,34 +54,34 @@ class RequestResponseContext
                 break;
             }
         }
-        
+
         foreach ($headers['record_id'] as $header) {
             if ($recordId = $request->header($header)) {
                 $this->recordId = $recordId;
                 break;
             }
         }
-        
+
         foreach ($headers['record_log_id'] as $header) {
             if ($recordLogId = $request->header($header)) {
                 $this->recordLogId = $recordLogId;
                 break;
             }
         }
-        
+
         // Set controller action
         $route = $request->route();
         if ($route) {
             $action = $route->getActionName();
             $this->controllerAction = $action;
         }
-        
+
         // Store in Redis for cross-request access
         $this->storeContextInRedis();
-        
+
         return $this;
     }
-    
+
     /**
      * Track SaaS ID processing
      */
@@ -94,11 +94,11 @@ class RequestResponseContext
             'timestamp' => now()->toISOString(),
             'processed_at' => microtime(true)
         ];
-        
+
         if ($success) {
             $this->processedCount++;
         }
-        
+
         if ($error) {
             $this->errors[] = [
                 'type' => 'saas_id',
@@ -106,11 +106,11 @@ class RequestResponseContext
                 'error' => $error
             ];
         }
-        
+
         $this->updateRedisContext();
         return $this;
     }
-    
+
     /**
      * Track Sync ID processing
      */
@@ -123,11 +123,11 @@ class RequestResponseContext
             'timestamp' => now()->toISOString(),
             'processed_at' => microtime(true)
         ];
-        
+
         if ($success) {
             $this->processedCount++;
         }
-        
+
         if ($error) {
             $this->errors[] = [
                 'type' => 'sync_id',
@@ -135,11 +135,11 @@ class RequestResponseContext
                 'error' => $error
             ];
         }
-        
+
         $this->updateRedisContext();
         return $this;
     }
-    
+
     /**
      * Track Platform ID processing
      */
@@ -152,11 +152,11 @@ class RequestResponseContext
             'timestamp' => now()->toISOString(),
             'processed_at' => microtime(true)
         ];
-        
+
         if ($success) {
             $this->processedCount++;
         }
-        
+
         if ($error) {
             $this->errors[] = [
                 'type' => 'platform_id',
@@ -164,11 +164,11 @@ class RequestResponseContext
                 'error' => $error
             ];
         }
-        
+
         $this->updateRedisContext();
         return $this;
     }
-    
+
     /**
      * Track custom data processing
      */
@@ -182,11 +182,11 @@ class RequestResponseContext
             'timestamp' => now()->toISOString(),
             'processed_at' => microtime(true)
         ];
-        
+
         if ($success) {
             $this->processedCount++;
         }
-        
+
         if ($error) {
             $this->errors[] = [
                 'type' => $type,
@@ -194,11 +194,11 @@ class RequestResponseContext
                 'error' => $error
             ];
         }
-        
+
         $this->updateRedisContext();
         return $this;
     }
-    
+
     /**
      * Increment processed count
      */
@@ -208,7 +208,7 @@ class RequestResponseContext
         $this->updateRedisContext();
         return $this;
     }
-    
+
     /**
      * Add general error
      */
@@ -220,18 +220,18 @@ class RequestResponseContext
             'error' => $message,
             'timestamp' => now()->toISOString()
         ];
-        
+
         $this->updateRedisContext();
         return $this;
     }
-    
+
     /**
      * Get processing stats
      */
     public function getProcessingStats(): array
     {
         $duration = microtime(true) - $this->startTime;
-        
+
         return [
             'request_context' => [
                 'connection_id' => $this->connectionId,
@@ -251,14 +251,14 @@ class RequestResponseContext
             'errors' => $this->errors,
         ];
     }
-    
+
     /**
      * Get success count from tracking data
      */
     private function getSuccessCount(): int
     {
         $successCount = 0;
-        
+
         foreach ($this->trackingData as $type => $items) {
             if (is_array($items)) {
                 if ($type === 'custom') {
@@ -270,10 +270,10 @@ class RequestResponseContext
                 }
             }
         }
-        
+
         return $successCount;
     }
-    
+
     /**
      * Auto-attach processing stats to JSON response
      */
@@ -282,7 +282,7 @@ class RequestResponseContext
         $config = config('saas-bridge.request_context', []);
         $attachMode = $config['attach_mode'] ?? 'header'; // 'header', 'body', or 'both'
         $stats = $this->getProcessingStats();
-        
+
         if (in_array($attachMode, ['header', 'both'])) {
             $response->headers->set('X-Processing-Stats', json_encode([
                 'connection_id' => $this->connectionId,
@@ -293,10 +293,10 @@ class RequestResponseContext
                 'error_count' => $stats['processing']['error_count'],
             ]));
         }
-        
+
         if (in_array($attachMode, ['body', 'both'])) {
             $originalData = $response->getData(true);
-            
+
             if (is_array($originalData)) {
                 $originalData['_processing'] = $stats;
             } else {
@@ -305,13 +305,13 @@ class RequestResponseContext
                     '_processing' => $stats
                 ];
             }
-            
+
             $response->setData($originalData);
         }
-        
+
         return $response;
     }
-    
+
     /**
      * Store context data in Redis
      */
@@ -320,10 +320,10 @@ class RequestResponseContext
         if (!$this->connectionId) {
             return;
         }
-        
+
         $key = $this->getRedisKey();
         $ttl = config('saas-bridge.request_context.redis_ttl', 3600); // 1 hour default
-        
+
         $contextData = [
             'connection_id' => $this->connectionId,
             'record_id' => $this->recordId,
@@ -335,10 +335,10 @@ class RequestResponseContext
             'errors' => $this->errors,
             'updated_at' => now()->toISOString(),
         ];
-        
+
         Redis::setex($key, $ttl, json_encode($contextData));
     }
-    
+
     /**
      * Update Redis context
      */
@@ -346,7 +346,7 @@ class RequestResponseContext
     {
         $this->storeContextInRedis();
     }
-    
+
     /**
      * Get Redis key for context storage
      */
@@ -355,7 +355,7 @@ class RequestResponseContext
         $prefix = config('saas-bridge.request_context.redis_key_prefix', 'request_context');
         return "{$prefix}:{$this->connectionId}";
     }
-    
+
     /**
      * Load context from Redis (useful for async jobs or background tasks)
      */
@@ -363,17 +363,17 @@ class RequestResponseContext
     {
         $prefix = config('saas-bridge.request_context.redis_key_prefix', 'request_context');
         $key = "{$prefix}:{$connectionId}";
-        
+
         $data = Redis::get($key);
         if (!$data) {
             return null;
         }
-        
+
         $contextData = json_decode($data, true);
         if (!$contextData) {
             return null;
         }
-        
+
         $instance = new self();
         $instance->connectionId = $contextData['connection_id'];
         $instance->recordId = $contextData['record_id'];
@@ -383,10 +383,10 @@ class RequestResponseContext
         $instance->trackingData = $contextData['tracking_data'] ?? [];
         $instance->processedCount = $contextData['processed_count'] ?? 0;
         $instance->errors = $contextData['errors'] ?? [];
-        
+
         return $instance;
     }
-    
+
     /**
      * Get connection ID
      */
@@ -394,7 +394,7 @@ class RequestResponseContext
     {
         return $this->connectionId;
     }
-    
+
     /**
      * Get record ID
      */
@@ -402,7 +402,7 @@ class RequestResponseContext
     {
         return $this->recordId;
     }
-    
+
     /**
      * Get record log ID
      */
@@ -410,7 +410,7 @@ class RequestResponseContext
     {
         return $this->recordLogId;
     }
-    
+
     /**
      * Get controller action
      */
@@ -418,7 +418,7 @@ class RequestResponseContext
     {
         return $this->controllerAction;
     }
-    
+
     /**
      * Get processed count
      */
@@ -426,7 +426,7 @@ class RequestResponseContext
     {
         return $this->processedCount;
     }
-    
+
     /**
      * Check if context has errors
      */
@@ -434,7 +434,7 @@ class RequestResponseContext
     {
         return !empty($this->errors);
     }
-    
+
     /**
      * Get all errors
      */
@@ -442,7 +442,7 @@ class RequestResponseContext
     {
         return $this->errors;
     }
-    
+
     /**
      * Clear context (useful for testing or cleanup)
      */
@@ -453,7 +453,7 @@ class RequestResponseContext
         $this->processedCount = 0;
         return $this;
     }
-    
+
     /**
      * Reset singleton instance
      */
@@ -461,7 +461,7 @@ class RequestResponseContext
     {
         self::$instance = null;
     }
-    
+
     /**
      * Create helper function for easy access
      */
@@ -469,7 +469,7 @@ class RequestResponseContext
     {
         return self::getInstance();
     }
-    
+
     /**
      * Static helper methods for direct access without getInstance()
      */
@@ -477,41 +477,41 @@ class RequestResponseContext
     {
         self::getInstance()->trackSaasId($saasId, $success, $error);
     }
-    
+
     public static function syncId(string $syncId, bool $success = true, ?string $error = null): void
     {
         self::getInstance()->trackSyncId($syncId, $success, $error);
     }
-    
+
     public static function platformId(string $platformId, bool $success = true, ?string $error = null): void
     {
         self::getInstance()->trackPlatformId($platformId, $success, $error);
     }
-    
+
     public static function custom(string $type, string $id, bool $success = true, ?string $error = null, array $metadata = []): void
     {
         self::getInstance()->trackCustom($type, $id, $success, $error, $metadata);
     }
-    
+
     public static function processed(int $count = 1): void
     {
         self::getInstance()->incrementProcessed($count);
     }
-    
+
     public static function error(string $type, string $message, ?string $id = null): void
     {
         self::getInstance()->addError($type, $message, $id);
     }
-    
+
     public static function apiResponse(array $response, string $type = 'api_call'): void
     {
         $context = self::getInstance();
-        
+
         // Auto-detect sync_id from response
         if (isset($response['sync_id'])) {
             $context->trackSyncId($response['sync_id'], true);
         }
-        
+
         // Track the API call itself
         $context->trackCustom($type, uniqid(), true, null, [
             'response_keys' => array_keys($response),
