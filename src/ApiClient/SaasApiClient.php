@@ -17,7 +17,15 @@ class SaasApiClient
         private readonly SaasAgent $saasAgent,
         private readonly ?string $version = null
     ) {
-        $this->api = $this->saasAgent->saasApi($this->version)->timeout(10 * 60);
+        $timeout = config('saas-bridge.saas_api.timeout', 600);
+        $maxSize = config('saas-bridge.saas_api.max_response_size', 10737418240);
+        
+        $this->api = $this->saasAgent->saasApi($this->version)
+            ->timeout($timeout)
+            ->withOptions([
+                'max_decode_size' => $maxSize,
+                'stream' => false,
+            ]);
     }
 
     public function api(): \Illuminate\Http\Client\PendingRequest

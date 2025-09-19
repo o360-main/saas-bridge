@@ -147,4 +147,16 @@ return [
         'log_stats' => env('SAAS_CONTEXT_LOG_STATS', false),
         'log_channel' => env('SAAS_CONTEXT_LOG_CHANNEL', 'default'),
     ],
+
+    /*
+     * SaasApi HTTP Client Configuration
+     * HTTP client settings for SaasApiClient
+     */
+    'saas_api' => [
+        // Request timeout in seconds (10 minutes = 600 seconds)
+        'timeout' => env('SAAS_API_TIMEOUT', 600),
+        
+        // Maximum response size in bytes (10GB = 10737418240 bytes)
+        'max_response_size' => env('SAAS_API_MAX_RESPONSE_SIZE', 10737418240),
+    ],
 ];
