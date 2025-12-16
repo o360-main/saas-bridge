@@ -196,6 +196,12 @@ class SaasApiClient
         return new ModuleApi($this->api, EndPoint::order_return_item);
     }
 
+    public function order_fulfillments(): ModuleApi
+    {
+        return new ModuleApi($this->api, EndPoint::order_fulfillment);
+    }
+
+
     public function order_refund_items(): ModuleApi
     {
         return new ModuleApi($this->api, EndPoint::order_refund_item);

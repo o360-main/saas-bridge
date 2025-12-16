@@ -34,6 +34,8 @@ enum EndPoint: string
     case order_return = 'order-returns';
     case order_refund = 'order-refunds';
     case order_return_item = 'order-return-items';
+
+    case order_fulfillment = 'order-fulfillments';
     case order_refund_item = 'order-refund-items';
     case order_shipping = 'order-shippings';
     case order_payment_method = 'order-payment-methods';
